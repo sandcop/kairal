@@ -670,32 +670,43 @@
         loadPost();
 
         // ── FILTROS VISUALES (igual que en index) ─────────────────────────────────
-        (function () {
-            const FILTERS = ['none', 'night', 'sepia', 'red', 'lowlight'];
-            let menuOpen  = false;
+        <div class="filter-btn-wrap" id="filterWrap">
+        <!-- Círculos que se despliegan en arco -->
+        <button class="filter-opt" data-filter="none" data-label="Normal" onclick="setFilter('none')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+        </button>
+        <button class="filter-opt" data-filter="night" data-label="Nocturno" onclick="setFilter('night')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
+        <button class="filter-opt" data-filter="sepia" data-label="Lectura" onclick="setFilter('sepia')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+        </button>
+        <button class="filter-opt" data-filter="red" data-label="Sin luz azul" onclick="setFilter('red')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+        </button>
+        <button class="filter-opt" data-filter="lowlight" data-label="Baja luz" onclick="setFilter('lowlight')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+        </button>
+        <!-- Botón central con ícono ojo -->
+        <button class="filter-toggle" onclick="toggleFilterMenu()" aria-label="Filtros visuales">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+        </button>
+    </div>
 
-            function getInitialFilter() {
-                try { const s = localStorage.getItem('kairal-filter'); if (s && FILTERS.includes(s)) return s; } catch (e) {}
-                return 'none';
-            }
-
-            function applyFilter(filter) {
-                FILTERS.forEach(f => document.body.classList.remove('filter-' + f));
-                if (filter !== 'none') document.body.classList.add('filter-' + filter);
-                try { localStorage.setItem('kairal-filter', filter); } catch (e) {}
-                document.querySelectorAll('.filter-opt').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.filter === filter);
-                });
-            }
-
-            function toggleFilterMenu() {
-                menuOpen = !menuOpen;
-                const wrap = document.getElementById('filterWrap');
-                if (wrap) wrap.classList.toggle('open', menuOpen);
-            }
-
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.filter-btn-wrap')) {
-                    menuOpen = false;
-                    const wrap = document.getElementById('filterWrap');
-                    if (wrap) wrap.classList.re
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

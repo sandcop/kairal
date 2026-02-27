@@ -349,7 +349,7 @@
                 </div>
                 <div class="panel-contact-item">
                     <span class="panel-contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48B9B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>
-                    <span class="panel-contact-text"><button class="copy-email-btn" onclick="copyEmail()" title="Copiar correo">dra.yusneily@kairal.cl <span class="copy-hint">copiar</span></button></span>
+                    <span class="panel-contact-text"><button class="copy-email-btn" onclick="copyEmail()" title="Copiar correo"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="284c5a4906515d5b464d414451684349415a4944064b44">[email&#160;protected]</a> <span class="copy-hint">copiar</span></button></span>
                 </div>
                 <div class="panel-contact-item">
                     <span class="panel-contact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48B9B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
@@ -1069,23 +1069,13 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
         }
     </style>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ══════════════════════════════════════════════
     // GOOGLE REVIEWS - CONFIGURACIÓN
     // ══════════════════════════════════════════════
-    const GOOGLE_API_KEY = 'AIzaSyC4gtl1vR5TX6iZHIj74hMoCZmNV0ROyIQ';
-    const PLACE_ID = 'ChIJuZY7ePPEYpYR9nPzAkc72BI'; // ← Reemplazar cuando esté disponible
-
     async function loadGoogleReviews() {
-        if (PLACE_ID === 'ChIJuZY7ePPEYpYR9nPzAkc72BI') {
-            document.getElementById('reviews-loading').style.display = 'none';
-            document.getElementById('reviews-error').style.display = 'block';
-            return;
-        }
-
         try {
-            const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews,user_ratings_total&language=es&key=${GOOGLE_API_KEY}`;
-            const res = await fetch(url);
+            const res = await fetch('/.netlify/functions/reviews');
             const data = await res.json();
 
             if (data.status !== 'OK' || !data.result.reviews) {
@@ -1163,7 +1153,7 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
             <div class="footer-col">
                 <h4>Contacto</h4>
                 <p class="footer-contact-line"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48B9B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> <a href="https://wa.me/56974843834?text=Hola,%20me%20gustaría%20agendar%20una%20consulta%20con%20la%20Dra.%20Yusneily%20Sánchez" target="_blank" class="contact-link">+569 748 43 834</a></p>
-                <p class="footer-contact-line"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48B9B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> <button class="copy-email-btn" onclick="copyEmail()" title="Copiar correo">dra.yusneily@kairal.cl <span class="copy-hint">copiar</span></button></p>
+                <p class="footer-contact-line"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48B9B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> <button class="copy-email-btn" onclick="copyEmail()" title="Copiar correo"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="adc9dfcc83d4d8dec3c8c4c1d4edc6ccc4dfccc183cec1">[email&#160;protected]</a> <span class="copy-hint">copiar</span></button></p>
                 <p><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#48B9B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Antofagasta, Chile</p>
             </div>
             <div class="footer-col">
@@ -1208,19 +1198,4 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
         </button>
         <button class="filter-opt" data-filter="lowlight" data-label="Baja luz" onclick="setFilter('lowlight')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-            </svg>
-        </button>
-        <!-- Botón central con ícono ojo -->
-        <button class="filter-toggle" onclick="toggleFilterMenu()" aria-label="Filtros visuales">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-            </svg>
-        </button>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+                <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66

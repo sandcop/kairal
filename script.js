@@ -295,32 +295,18 @@
         // ══════════════════════════════════════════════
         // BREVO - EMAIL MARKETING
         // ══════════════════════════════════════════════
-        const BREVO_API_KEY = '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';
-        const BREVO_LIST_ID = 2; // ID de lista "Pacientes Kairal"
 
         async function addContactToBrevo(name, email, recurso) {
             const firstName = name.split(' ')[0];
             const lastName = name.split(' ').slice(1).join(' ') || '';
             try {
-                await fetch('https://api.brevo.com/v3/contacts', {
+                await fetch('/.netlify/functions/subscribe', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'api-key': BREVO_API_KEY
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        attributes: {
-                            FIRSTNAME: firstName,
-                            LASTNAME: lastName,
-                            RECURSO_DESCARGADO: recurso
-                        },
-                        listIds: [BREVO_LIST_ID],
-                        updateEnabled: true
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, firstName, lastName, recurso })
                 });
             } catch(e) {
-                console.log('Brevo error:', e);
+                console.log('Subscribe error:', e);
             }
         }
 

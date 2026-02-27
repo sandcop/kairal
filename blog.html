@@ -481,7 +481,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // ── HEADER: sólido desde el inicio (el blog no tiene hero de imagen) ──────
         const header = document.querySelector('header');
         header.classList.add('scrolled');
@@ -698,15 +698,4 @@
                 if (!e.target.closest('.filter-btn-wrap')) {
                     menuOpen = false;
                     const wrap = document.getElementById('filterWrap');
-                    if (wrap) wrap.classList.remove('open');
-                }
-            });
-
-            window.setFilter        = filter => { applyFilter(filter); menuOpen = false; const w = document.getElementById('filterWrap'); if (w) w.classList.remove('open'); };
-            window.toggleFilterMenu = toggleFilterMenu;
-
-            applyFilter(getInitialFilter());
-        })();
-    </script>
-</body>
-</html>
+                    if (wrap) wrap.classList.re

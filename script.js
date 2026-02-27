@@ -264,12 +264,20 @@
         }
 
         // Download Modal Functions
+        // Mapa de recursos a sus archivos
+        const RECURSOS = {
+            'Guía de Alimentos Antiinflamatorios': 'recursos-gratis/guia-antiinflamatorios.pdf',
+            'Tracker de Síntomas Diarios':         'recursos-gratis/tracker-sintomas.xlsx',
+            'Protocolo Anti-Estrés de 10 Minutos': 'recursos-gratis/protocolo-antistres.pdf'
+        };
+
         function openDownloadModal(guideTitle) {
             const modal = document.querySelector('.download-modal');
             const overlay = document.querySelector('.download-overlay');
             const titleElement = document.getElementById('guide-title');
             
             titleElement.textContent = guideTitle;
+            modal.dataset.file = RECURSOS[guideTitle] || '';
             modal.classList.add('active');
             overlay.classList.add('active');
             
@@ -284,22 +292,75 @@
             overlay.classList.remove('active');
         }
 
-        function handleDownload(event) {
+        // ══════════════════════════════════════════════
+        // BREVO - EMAIL MARKETING
+        // ══════════════════════════════════════════════
+        const BREVO_API_KEY = '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';
+        const BREVO_LIST_ID = 2; // ID de lista "Pacientes Kairal"
+
+        async function addContactToBrevo(name, email, recurso) {
+            const firstName = name.split(' ')[0];
+            const lastName = name.split(' ').slice(1).join(' ') || '';
+            try {
+                await fetch('https://api.brevo.com/v3/contacts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'api-key': BREVO_API_KEY
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        attributes: {
+                            FIRSTNAME: firstName,
+                            LASTNAME: lastName,
+                            RECURSO_DESCARGADO: recurso
+                        },
+                        listIds: [BREVO_LIST_ID],
+                        updateEnabled: true
+                    })
+                });
+            } catch(e) {
+                console.log('Brevo error:', e);
+            }
+        }
+
+        async function handleDownload(event) {
             event.preventDefault();
             
+            const modal = document.querySelector('.download-modal');
             const guideTitle = document.getElementById('guide-title').textContent;
             const name = event.target.querySelector('input[type="text"]').value;
             const email = event.target.querySelector('input[type="email"]').value;
-            
-            // Aquí iría la integración con tu backend/CRM
+            const fileUrl = modal.dataset.file || '';
 
+            const btn = event.target.querySelector('.form-submit');
+            btn.textContent = 'Procesando...';
+            btn.disabled = true;
+
+            // Agregar a Brevo y disparar automatización
+            await addContactToBrevo(name, email, guideTitle);
+
+            // Descargar el archivo
+            if (fileUrl) {
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.download = fileUrl.split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+
+            // Confirmación
+            btn.textContent = '¡Listo! Revisa tu email 🎉';
+            btn.style.background = '#48b9b2';
+            btn.disabled = false;
             
-            // Simulación de descarga exitosa
-            alert(`¡Gracias ${name}! Recibirás "${guideTitle}" en ${email} en los próximos minutos.`);
-            
-            // Limpiar formulario y cerrar modal
-            event.target.reset();
-            closeDownloadModal();
+            setTimeout(() => {
+                event.target.reset();
+                btn.textContent = 'Descargar Ahora';
+                btn.style.background = '';
+                closeDownloadModal();
+            }, 3000);
         }
 
         // AI Chat Modal Toggle

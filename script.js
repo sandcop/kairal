@@ -300,11 +300,13 @@
             const firstName = name.split(' ')[0];
             const lastName = name.split(' ').slice(1).join(' ') || '';
             try {
-                await fetch('/.netlify/functions/subscribe', {
+                const res = await fetch('/.netlify/functions/subscribe', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, firstName, lastName, recurso })
                 });
+                const data = await res.json();
+                console.log('Brevo response:', JSON.stringify(data));
             } catch(e) {
                 console.log('Subscribe error:', e);
             }

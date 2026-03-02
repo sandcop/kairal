@@ -156,8 +156,10 @@
 
         function sanityImageUrl(ref) {
             if (!ref) return 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&auto=format&fit=crop';
-            const [, id, dimensions, format] = ref.split('-');
-            return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dimensions}.${format}`;
+            const parts = ref.split('-');
+            const id = parts[1];
+            const dimensions = parts[2];
+            return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dimensions}.webp?w=800&q=75&fit=max&auto=format`;
         }
 
         function formatDate(dateStr) {

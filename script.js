@@ -155,7 +155,7 @@
         const SANITY_API_URL = `https://${SANITY_PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${SANITY_DATASET}`;
 
         function sanityImageUrl(ref) {
-            if (!ref) return 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&auto=format&fit=crop&fm=webp&q=60';
+            if (!ref) return '';
             const parts = ref.split('-');
             const id = parts[1];
             const dimensions = parts[2];
@@ -177,7 +177,7 @@
         }
 
         function buildBlogCard(post) {
-            const imageUrl = post.image?.asset?._ref ? sanityImageUrl(post.image.asset._ref) : 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&auto=format&fit=crop&fm=webp&q=60';
+            const imageUrl = post.image?.asset?._ref ? sanityImageUrl(post.image.asset._ref) : '';
             const category = post.category || 'General';
             const categoryLower = normalizeCategory(category);
             return `

@@ -938,22 +938,28 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
                 <div class="download-icon">📋</div>
                 <h3>Guía de Antiinflamatorios</h3>
                 <p>Lista completa de alimentos antiinflamatorios con recetas simples y plan de compras semanal.</p>
-                <button class="download-btn" onclick="openDownloadModal('Guía de Alimentos Antiinflamatorios')">Descargar PDF</button>
+                <button class="download-btn" onclick="handleResourceClick('Guía de Alimentos Antiinflamatorios')">Descargar PDF</button>
             </div>
 
             <div class="download-card">
                 <div class="download-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
                 <h3>Tracker de Síntomas</h3>
                 <p>Plantilla para registrar y monitorear tus síntomas diarios, patrones de sueño y energía.</p>
-                <button class="download-btn" onclick="openDownloadModal('Tracker de Síntomas Diarios')">Descargar Excel</button>
+                <button class="download-btn" onclick="handleResourceClick('Tracker de Síntomas Diarios')">Descargar Excel</button>
             </div>
 
             <div class="download-card">
                 <div class="download-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div>
                 <h3>Protocolo Anti-Estrés</h3>
                 <p>Rutina diaria de 10 minutos para reducir el cortisol y recuperar tu equilibrio interior.</p>
-                <button class="download-btn" onclick="openDownloadModal('Protocolo Anti-Estrés de 10 Minutos')">Descargar PDF</button>
+                <button class="download-btn" onclick="handleResourceClick('Protocolo Anti-Estrés de 10 Minutos')">Descargar PDF</button>
             </div>
+        </div>
+
+        <!-- Botón suscripción -->
+        <div style="text-align:center; margin-top: 2.5rem;">
+            <p style="color: rgba(255,255,255,0.85); margin-bottom: 1rem; font-size: 1rem;">¿Quieres recibir nuevos recursos y artículos directamente en tu correo?</p>
+            <button class="download-btn" style="background: linear-gradient(135deg,#F59B1B,#E88A0A); padding: 0.9rem 2.5rem; font-size: 1rem;" onclick="openSubscribeModal()">📩 Suscribirme gratis</button>
         </div>
     </section>
 
@@ -966,13 +972,34 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
             <form onsubmit="handleDownload(event)">
                 <div class="form-group">
                     <label class="form-label">Nombre Completo</label>
-                    <input type="text" class="form-input" placeholder="Juan Pérez" required>
+                    <input type="text" name="nombre" class="form-input" placeholder="Juan Pérez" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-input" placeholder="[email protected]" required>
+                    <input type="email" name="email" class="form-input" placeholder="[email protected]" required>
                 </div>
                 <button type="submit" class="form-submit">Descargar Ahora</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Subscribe Modal -->
+    <div class="subscribe-overlay" onclick="closeSubscribeModal()"></div>
+    <div class="subscribe-modal">
+        <div class="download-modal-content">
+            <button onclick="closeSubscribeModal()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#636E72;">×</button>
+            <h3>📩 Suscríbete gratis</h3>
+            <p>Recibe recursos, guías y artículos de salud funcional directamente en tu correo.</p>
+            <form onsubmit="handleSubscribe(event)">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" name="nombre" class="form-input" placeholder="Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-input" placeholder="[email protected]" required>
+                </div>
+                <button type="submit" class="form-submit">Suscribirme</button>
             </form>
         </div>
     </div>
@@ -1067,6 +1094,31 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
             color: #555;
             line-height: 1.7;
         }
+
+        /* Subscribe Modal */
+        .subscribe-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .subscribe-overlay.active { display: block; }
+        .subscribe-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 460px;
+            z-index: 1001;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .subscribe-modal.active { display: block; }
     </style>
 
     <script>

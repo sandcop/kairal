@@ -159,7 +159,8 @@
             const parts = ref.split('-');
             const id = parts[1];
             const dimensions = parts[2];
-            return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dimensions}.webp?w=800&q=75&fit=max&auto=format`;
+            const format = parts[3];
+            return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dimensions}.${format}?w=800&q=75&fit=max&auto=format&fm=webp`;
         }
 
         function formatDate(dateStr) {

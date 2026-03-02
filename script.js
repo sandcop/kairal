@@ -284,23 +284,16 @@
             document.cookie = `kairal_user=${data}; max-age=${60*60*24*365}; path=/; SameSite=Lax`;
         }
 
-        // Click en recurso — si ya suscrito descarga directo, si no muestra modal
+        // Click en recurso — descarga directo siempre
         function handleResourceClick(guideTitle) {
-            const suscriptor = getSuscriptor();
-            if (suscriptor) {
-                // Ya está suscrito — descargar directo
-                const fileUrl = RECURSOS[guideTitle];
-                if (fileUrl) {
-                    const a = document.createElement('a');
-                    a.href = fileUrl;
-                    a.download = fileUrl.split('/').pop();
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                }
-            } else {
-                // No suscrito — mostrar modal
-                openDownloadModal(guideTitle);
+            const fileUrl = RECURSOS[guideTitle];
+            if (fileUrl) {
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.download = fileUrl.split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             }
         }
 

@@ -271,25 +271,65 @@
             'Protocolo Anti-Estrés de 10 Minutos': 'recursos-gratis/protocolo-antistres.pdf'
         };
 
+        // Verificar si ya está suscrito (guardado en cookie)
+        function getSuscriptor() {
+            try {
+                const val = document.cookie.split('; ').find(r => r.startsWith('kairal_user='));
+                return val ? JSON.parse(decodeURIComponent(val.split('=')[1])) : null;
+            } catch(e) { return null; }
+        }
+
+        function setSuscriptor(name, email) {
+            const data = encodeURIComponent(JSON.stringify({ name, email }));
+            document.cookie = `kairal_user=${data}; max-age=${60*60*24*365}; path=/; SameSite=Lax`;
+        }
+
+        // Click en recurso — si ya suscrito descarga directo, si no muestra modal
+        function handleResourceClick(guideTitle) {
+            const suscriptor = getSuscriptor();
+            if (suscriptor) {
+                // Ya está suscrito — descargar directo
+                const fileUrl = RECURSOS[guideTitle];
+                if (fileUrl) {
+                    const a = document.createElement('a');
+                    a.href = fileUrl;
+                    a.download = fileUrl.split('/').pop();
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+            } else {
+                // No suscrito — mostrar modal
+                openDownloadModal(guideTitle);
+            }
+        }
+
         function openDownloadModal(guideTitle) {
             const modal = document.querySelector('.download-modal');
             const overlay = document.querySelector('.download-overlay');
             const titleElement = document.getElementById('guide-title');
-            
             titleElement.textContent = guideTitle;
             modal.dataset.file = RECURSOS[guideTitle] || '';
             modal.classList.add('active');
             overlay.classList.add('active');
-            
-            document.querySelector('.form-input').focus();
+            setTimeout(() => modal.querySelector('input[name="nombre"]')?.focus(), 100);
         }
 
         function closeDownloadModal() {
-            const modal = document.querySelector('.download-modal');
-            const overlay = document.querySelector('.download-overlay');
-            
-            modal.classList.remove('active');
-            overlay.classList.remove('active');
+            document.querySelector('.download-modal')?.classList.remove('active');
+            document.querySelector('.download-overlay')?.classList.remove('active');
+        }
+
+        // Subscribe Modal
+        function openSubscribeModal() {
+            document.querySelector('.subscribe-modal')?.classList.add('active');
+            document.querySelector('.subscribe-overlay')?.classList.add('active');
+            setTimeout(() => document.querySelector('.subscribe-modal input[name="nombre"]')?.focus(), 100);
+        }
+
+        function closeSubscribeModal() {
+            document.querySelector('.subscribe-modal')?.classList.remove('active');
+            document.querySelector('.subscribe-overlay')?.classList.remove('active');
         }
 
         // ══════════════════════════════════════════════
@@ -314,18 +354,18 @@
 
         async function handleDownload(event) {
             event.preventDefault();
-            
             const modal = document.querySelector('.download-modal');
             const guideTitle = document.getElementById('guide-title').textContent;
-            const name = event.target.querySelector('input[type="text"]').value;
-            const email = event.target.querySelector('input[type="email"]').value;
+            const name = event.target.querySelector('input[name="nombre"]').value;
+            const email = event.target.querySelector('input[name="email"]').value;
             const fileUrl = modal.dataset.file || '';
 
             const btn = event.target.querySelector('.form-submit');
             btn.textContent = 'Procesando...';
             btn.disabled = true;
 
-            // Agregar a Brevo y disparar automatización
+            // Guardar en cookie y agregar a Brevo
+            setSuscriptor(name, email);
             await addContactToBrevo(name, email, guideTitle);
 
             // Descargar el archivo
@@ -338,7 +378,6 @@
                 document.body.removeChild(a);
             }
 
-            // Confirmación
             btn.textContent = '¡Listo! Revisa tu email 🎉';
             btn.style.background = '#48b9b2';
             btn.disabled = false;
@@ -349,6 +388,30 @@
                 btn.style.background = '';
                 closeDownloadModal();
             }, 3000);
+        }
+
+        async function handleSubscribe(event) {
+            event.preventDefault();
+            const name = event.target.querySelector('input[name="nombre"]').value;
+            const email = event.target.querySelector('input[name="email"]').value;
+
+            const btn = event.target.querySelector('.form-submit');
+            btn.textContent = 'Procesando...';
+            btn.disabled = true;
+
+            setSuscriptor(name, email);
+            await addContactToBrevo(name, email, 'Suscripción directa');
+
+            btn.textContent = '¡Suscrito! 🎉';
+            btn.style.background = '#48b9b2';
+            btn.disabled = false;
+
+            setTimeout(() => {
+                event.target.reset();
+                btn.textContent = 'Suscribirme';
+                btn.style.background = '';
+                closeSubscribeModal();
+            }, 2500);
         }
 
         // AI Chat Modal Toggle

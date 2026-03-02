@@ -3599,3 +3599,38 @@ body.filter-night                  { background: #0a0a1a; }
     .filter-btn-wrap.open .filter-opt:nth-child(4) { transform: translateY(-182px) scale(1); }
     .filter-btn-wrap.open .filter-opt:nth-child(5) { transform: translateY(-226px) scale(1); }
 }
+/* Subscribe Modal */
+.subscribe-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 3000;
+}
+.subscribe-overlay.active { display: block; }
+.subscribe-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 460px;
+    z-index: 3001;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.subscribe-modal.active { display: block; }
+.subscribe-modal h3 {
+    color: #2D3436;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+.subscribe-modal p {
+    color: #636E72;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}

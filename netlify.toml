@@ -1,3 +1,19 @@
 [build]
   functions = "netlify/functions"
   publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Fuerza HTTPS siempre
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    # Evita clickjacking
+    X-Frame-Options = "SAMEORIGIN"
+    # Evita sniffing de tipo MIME
+    X-Content-Type-Options = "nosniff"
+    # Aislamiento de ventanas cruzadas
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    # Referrer policy
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # Permisos de features
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

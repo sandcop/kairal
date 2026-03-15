@@ -897,14 +897,14 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
         </div>
 
         <!-- Google Reviews Container -->
-        <div id="google-reviews-container" style="padding: 0 5% 2rem;">
+        <div id="google-reviews-container" style="padding: 0 0 2rem;">
             <div id="reviews-loading" style="text-align:center; padding: 3rem; color: #888;">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#48b9b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite; display:inline-block;">
                     <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
                 </svg>
                 <p style="margin-top:0.8rem; font-size:0.9rem;">Cargando reseñas de Google...</p>
             </div>
-            <div id="reviews-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;"></div>
+            <div id="reviews-carousel"></div>
             <div id="reviews-error" style="display:none; text-align:center; padding: 2rem;">
                 <p style="color:#888; font-size:0.9rem;">Las reseñas se mostrarán aquí próximamente.</p>
             </div>
@@ -1031,32 +1031,35 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
 
     function renderReviews(reviews, rating, total) {
         document.getElementById('reviews-loading').style.display = 'none';
-        const grid = document.getElementById('reviews-grid');
-        grid.style.display = 'grid';
+        const carousel = document.getElementById('reviews-carousel');
 
-        reviews.forEach(r => {
-            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+        const star = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>`;
+
+        function buildCard(r) {
             const initial = r.author_name ? r.author_name[0].toUpperCase() : '?';
             const photoUrl = r.profile_photo_url || null;
             const date = new Date(r.time * 1000).toLocaleDateString('es-CL', { year:'numeric', month:'long' });
-
-            grid.innerHTML += `
-                <div class="review-card">
-                    <div class="review-header">
-                        ${photoUrl
-                            ? `<img src="${photoUrl}" class="review-avatar" alt="${r.author_name}">`
-                            : `<div class="review-avatar">${initial}</div>`
-                        }
-                        <div>
-                            <div class="review-name">${r.author_name}</div>
-                            <div class="review-date">${date}</div>
-                        </div>
+            return `<div class="t-card">
+                <div class="t-stars">${star.repeat(r.rating)}</div>
+                <p class="t-text">"${r.text || 'Excelente atención.'}"</p>
+                <div class="t-author">
+                    ${photoUrl
+                        ? `<img src="${photoUrl}" class="t-avatar" style="object-fit:cover;" alt="${r.author_name}">`
+                        : `<div class="t-avatar">${initial}</div>`
+                    }
+                    <div>
+                        <p class="t-name">${r.author_name}</p>
+                        <p class="t-role">${date}</p>
                     </div>
-                    <div class="review-stars">${stars}</div>
-                    <div class="review-text">${r.text || 'Excelente atención.'}</div>
                 </div>
-            `;
-        });
+            </div>`;
+        }
+
+        const cards = [...reviews, ...reviews].map(buildCard).join('');
+        carousel.innerHTML = `
+            <div class="t-row">
+                <div class="t-track forward">${cards}</div>
+            </div>`;
 
         // Badge
         document.getElementById('badge-text').textContent = `⭐ ${rating} · ${total} reseñas en Google`;

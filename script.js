@@ -1,4 +1,3 @@
-(function() {
 // EFECTOS DE SCROLL TIPO HONOR
         
         // Intersection Observer para elementos con scroll reveal

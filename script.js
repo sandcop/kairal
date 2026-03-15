@@ -1,73 +1,4 @@
 (function() {
-        const testimonials = [
-            {
-                text: "Después de años luchando con fatiga crónica y problemas digestivos, finalmente encontré respuestas. El enfoque de la Dra. Sánchez cambió mi vida completamente. Hoy me siento con más energía que nunca.",
-                name: "María González",
-                role: "Paciente desde 2023",
-                initials: "MG"
-            },
-            {
-                text: "Lo que más valoro es la atención personalizada. No soy solo un número más. La doctora realmente se preocupa por entender mis necesidades y diseñar un plan específico para mí.",
-                name: "Carlos Ramírez",
-                role: "Paciente desde 2022",
-                initials: "CR"
-            },
-            {
-                text: "Finalmente logré equilibrar mis hormonas y recuperar mi vitalidad. El enfoque funcional me ayudó a entender la raíz de mis problemas, no solo a enmascarar los síntomas.",
-                name: "Andrea Silva",
-                role: "Paciente desde 2021",
-                initials: "AS"
-            },
-            {
-                text: "Llegué con dolores crónicos que nadie había podido resolver. Con el protocolo personalizado de la Dra. Yusneily en pocas semanas empecé a ver cambios reales y sostenibles.",
-                name: "Valentina Moreno",
-                role: "Paciente desde 2023",
-                initials: "VM"
-            },
-            {
-                text: "La medicina funcional me abrió los ojos. Por primera vez alguien me escuchó de verdad y me explicó qué estaba pasando en mi cuerpo. Perdí 8 kilos en 3 meses de forma sana.",
-                name: "Roberto Fuentes",
-                role: "Paciente desde 2022",
-                initials: "RF"
-            },
-            {
-                text: "Sufría de insomnio severo y ansiedad. Con el tratamiento integral de la Dra. Sánchez, mi calidad de sueño mejoró notablemente. Me siento como una persona nueva.",
-                name: "Claudia Herrera",
-                role: "Paciente desde 2024",
-                initials: "CH"
-            }
-        ];
-
-        const star = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>`;
-
-        function buildCard(t) {
-            return `<div class="t-card">
-                <div class="t-stars">${star.repeat(5)}</div>
-                <p class="t-text">"${t.text}"</p>
-                <div class="t-author">
-                    <div class="t-avatar">${t.initials}</div>
-                    <div>
-                        <p class="t-name">${t.name}</p>
-                        <p class="t-role">${t.role}</p>
-                    </div>
-                </div>
-            </div>`;
-        }
-
-        function buildRow(items, direction) {
-            const cards = [...items, ...items].map(buildCard).join('');
-            return `<div class="t-row">
-                <div class="t-track ${direction}">${cards}</div>
-            </div>`;
-        }
-
-        const container = document.getElementById('t-rows-container');
-        const mid = Math.ceil(testimonials.length / 2);
-        container.innerHTML =
-            buildRow(testimonials.slice(0, mid), 'forward') +
-            buildRow(testimonials.slice(mid), 'backward');
-    })();
-
 // EFECTOS DE SCROLL TIPO HONOR
         
         // Intersection Observer para elementos con scroll reveal
@@ -607,10 +538,11 @@
         let slideInterval;
 
         function showSlide(index) {
+            if (!slides[index]) return;
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
             slides[index].classList.add('active');
-            dots[index].classList.add('active');
+            if (dots[index]) dots[index].classList.add('active');
         }
 
         function changeSlide(direction) {

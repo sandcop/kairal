@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preconsulta | Dra. Yusneily Sánchez · Kairal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:       #48B9B3;
+  --teal-dark:  #35908a;
+  --teal-light: rgba(72,185,179,0.12);
+  --amber:      #F59B1B;
+  --amber-light:rgba(245,155,27,0.12);
+  --dark:       #2D3436;
+  --gray:       #636E72;
+  --bg:         #F7FAF9;
+  --white:      #ffffff;
+  --border:     rgba(72,185,179,0.2);
+  --card-shadow:0 4px 24px rgba(72,185,179,0.08);
+  --radius:     16px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #2D3436 0%, #1a2324 50%, #1e3030 100%);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(72,185,179,0.15) 0%, transparent 65%),
+              radial-gradient(ellipse at 20% 80%, rgba(245,155,27,0.1) 0%, transparent 50%);
+}
+.hero-inner {
+  position: relative;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+}
+.hero-logo {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.hero-logo svg { width:54px; height:39px; }
+.hero-brand h1 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1.2;
+}
+.hero-brand p {
+  font-size: 0.75rem;
+  color: var(--teal);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.hero h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: white;
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+.hero h2 em {
+  color: var(--amber);
+  font-style: italic;
+}
+.hero p {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+}
+.hero-wave {
+  display: block;
+  width: 100%;
+  height: 50px;
+  margin-bottom: -2px;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.progress-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+}
+.progress-inner::-webkit-scrollbar { display:none; }
+.p-step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray);
+  flex-shrink: 0;
+}
+.p-step:hover { background: var(--teal-light); color: var(--teal-dark); }
+.p-step.active { background: var(--teal); color: white; }
+.p-step.done { background: var(--teal-light); color: var(--teal-dark); }
+.p-step .num {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 800;
+  flex-shrink: 0;
+}
+.p-step:not(.active) .num { background: rgba(72,185,179,0.15); color: var(--teal-dark); }
+.p-div { width: 16px; height: 1px; background: var(--border); flex-shrink:0; }
+
+/* ── MAIN ── */
+.main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── SECTION ── */
+.section { display: none; }
+.section.active { display: block; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+.section-icon {
+  width: 48px; height: 48px;
+  background: var(--teal-light);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.section-title { font-size: 1.3rem; font-weight: 800; color: var(--dark); }
+.section-subtitle { font-size: 0.82rem; color: var(--gray); margin-top: 2px; }
+
+/* ── CARD ── */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--card-shadow);
+}
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--teal-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title::before {
+  content:'';
+  display: inline-block;
+  width: 3px; height: 16px;
+  background: var(--amber);
+  border-radius: 2px;
+}
+
+/* ── FIELDS ── */
+.field {
+  margin-bottom: 1.2rem;
+}
+.field:last-child { margin-bottom: 0; }
+
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+.field label .req { color: var(--amber); margin-left: 3px; }
+.field label .hint {
+  font-weight: 400;
+  color: var(--gray);
+  font-size: 0.78rem;
+  display: block;
+  margin-top: 2px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  color: var(--dark);
+  background: white;
+  transition: border-color .2s, box-shadow .2s;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(72,185,179,0.15);
+}
+textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+select { cursor: pointer; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media(max-width:540px){ .grid-2 { grid-template-columns: 1fr; } }
+
+/* ── RADIO / CHECK ── */
+.radio-group, .check-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.radio-item, .check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray);
+  transition: all .2s;
+  user-select: none;
+}
+.radio-item:hover, .check-item:hover {
+  border-color: var(--teal);
+  color: var(--teal-dark);
+  background: var(--teal-light);
+}
+.radio-item.selected, .check-item.selected {
+  border-color: var(--teal);
+  background: var(--teal-light);
+  color: var(--teal-dark);
+}
+.radio-item input, .check-item input {
+  width: auto; padding: 0; border: none; box-shadow: none;
+  accent-color: var(--teal);
+  width: 15px; height: 15px;
+  flex-shrink: 0;
+}
+.radio-group.col, .check-group.col { flex-direction: column; }
+.radio-group.col .radio-item,
+.check-group.col .check-item { width: 100%; }
+
+/* ── RANGE ── */
+.range-wrap { display: flex; align-items: center; gap: 14px; }
+.range-wrap input[type="range"] {
+  flex: 1; accent-color: var(--teal);
+  padding: 0; border: none; box-shadow: none; background: none;
+  height: auto;
+}
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--gray);
+  margin-top: 4px;
+}
+.range-val {
+  min-width: 80px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--teal-dark);
+}
+
+/* ── SISTEMA CHIPS ── */
+.sys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+.sys-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gray);
+  transition: all .2s;
+  user-select: none;
+}
+.sys-item:hover { border-color: var(--teal); color: var(--teal-dark); }
+.sys-item.selected {
+  border-color: var(--teal);
+  background: var(--teal-light);
+  color: var(--teal-dark);
+}
+.sys-item input {
+  accent-color: var(--teal);
+  width: 14px; height: 14px;
+  flex-shrink: 0;
+  border: none; box-shadow: none; padding: 0;
+  width: auto; height: auto;
+}
+.sys-category {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--amber);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 1rem 0 0.5rem;
+}
+.sys-category:first-child { margin-top: 0; }
+
+/* ── UPLOAD ── */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  background: var(--bg);
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--teal);
+  background: var(--teal-light);
+}
+.upload-zone input { display: none; }
+.upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.upload-zone p { font-size: 0.85rem; color: var(--gray); line-height: 1.5; }
+.upload-zone strong { color: var(--teal-dark); }
+.file-list { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 6px; }
+.file-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px;
+  background: white; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 0.82rem;
+}
+.file-item .fname { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.file-item .fsize { color: var(--gray); font-size: 0.75rem; }
+.file-item .frem {
+  background: none; border: none; cursor: pointer;
+  color: var(--gray); font-size: 1.1rem; line-height:1;
+  transition: color .2s;
+}
+.file-item .frem:hover { color: #e74c3c; }
+
+/* ── NAV BUTTONS ── */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.btn {
+  padding: 11px 26px;
+  border-radius: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  border: none;
+}
+.btn-back {
+  background: transparent;
+  color: var(--gray);
+  border: 1.5px solid var(--border);
+}
+.btn-back:hover { border-color: var(--gray); color: var(--dark); }
+.btn-next {
+  background: var(--teal);
+  color: white;
+  box-shadow: 0 4px 16px rgba(72,185,179,0.35);
+}
+.btn-next:hover { background: var(--teal-dark); transform: translateY(-1px); }
+.btn-submit {
+  background: linear-gradient(135deg, var(--amber), #e08a10);
+  color: white;
+  padding: 13px 32px;
+  font-size: 1rem;
+  box-shadow: 0 4px 20px rgba(245,155,27,0.4);
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(245,155,27,0.5); }
+.btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+/* ── RESUMEN ── */
+.summary-block {
+  background: var(--teal-light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.summary-block h4 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--teal-dark);
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media(max-width:500px){ .summary-grid { grid-template-columns: 1fr; } }
+.s-item { }
+.s-label { font-size: 0.72rem; color: var(--gray); font-weight: 600; margin-bottom: 2px; }
+.s-val { font-size: 0.85rem; font-weight: 700; color: var(--dark); word-break: break-word; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  z-index: 9999;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all .3s;
+  pointer-events: none;
+  max-width: 320px;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+#toast.ok { background: var(--teal); color: white; }
+#toast.err { background: #e74c3c; color: white; }
+
+/* ── SUCCESS ── */
+#success-screen {
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+#success-screen .tick {
+  width: 80px; height: 80px;
+  background: var(--teal-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem;
+  margin: 0 auto 1.5rem;
+}
+#success-screen h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--dark);
+  margin-bottom: 0.75rem;
+}
+#success-screen p {
+  color: var(--gray);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* ── SPINNER ── */
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── REQUIRED NOTE ── */
+.req-note {
+  font-size: 0.78rem;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+}
+.req-note span { color: var(--amber); font-weight: 700; }
+
+/* fade in sections */
+.section.active { animation: fadeIn .3s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── RESPONSIVE ── */
+@media(max-width:480px){
+  .hero-inner { padding: 2rem 1.2rem 2rem; }
+  .main { padding: 1.5rem 1rem 3rem; }
+  .card { padding: 1.2rem; }
+  .nav-buttons { flex-direction: column-reverse; gap: 10px; }
+  .nav-buttons .btn { width: 100%; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-logo">
+      <svg viewBox="0 0 55.45 39.85" xmlns="http://www.w3.org/2000/svg">
+        <circle fill="#f59b1b" cx="27.79" cy="3.98" r="3.98"/>
+        <path fill="#48b9b2" d="M0,35.93s.04-.06.06-.03c.58.72,3.49,3.79,9.6,1.54,6.94-2.55,8.16-10.56,10.63-15.98,0,0,2.82-7.46,6.26-10.06s5.84-4.79,15.84-5.56c8.46-.66,12.03-4.39,12.92-5.52.05-.07.16-.01.14.07-.39,1.32-2.16,5.61-8.84,7.56-7.95,2.32-10.91,2.82-14.85,5.77-3.94,2.96-4.93,4.93-8.73,12.81-3.8,7.88-7.53,11.12-11.12,12.46S1.39,40.67,0,35.93Z"/>
+        <path fill="#48b9b2" d="M33.65,21.45c-1.21-1.37-2.73-3.76-.48-5.34,0,0,3.1-1.62,5.35,3.03,0,0,1.76,3.11.91,8.52-.84,5.41-3.03,8.45-7.11,10.59,0,0-1.94,1.16-4.22,1.45-.04,0-.06-.06-.02-.07,1.19-.54,6.56-3.21,7.65-7.66.48-1.97.56-3.6.43-4.95-.2-2.08-1.13-4.01-2.51-5.57Z"/>
+      </svg>
+      <div class="hero-brand">
+        <h1>Kairal</h1>
+        <p>Dra. Yusneily Katherine Sánchez</p>
+      </div>
+    </div>
+    <h2>Tu bienestar<br/>comienza <em>aquí</em></h2>
+    <p>Antes de tu consulta, completa este formulario para que la Dra. Sánchez pueda conocerte mejor y preparar una atención completamente personalizada para ti.</p>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#F7FAF9" d="M0,30 C360,60 1080,0 1440,30 L1440,50 L0,50 Z"/>
+  </svg>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-inner" id="progress-bar">
+    <div class="p-step active" onclick="goTo(0)"><div class="num">1</div> Datos personales</div>
+    <div class="p-div"></div>
+    <div class="p-step" onclick="goTo(1)"><div class="num">2</div> Antecedentes</div>
+    <div class="p-div"></div>
+    <div class="p-step" onclick="goTo(2)"><div class="num">3</div> Hábitos</div>
+    <div class="p-div"></div>
+    <div class="p-step" onclick="goTo(3)"><div class="num">4</div> Síntomas</div>
+    <div class="p-div"></div>
+    <div class="p-step" onclick="goTo(4)"><div class="num">5</div> Objetivos</div>
+    <div class="p-div"></div>
+    <div class="p-step" onclick="goTo(5)"><div class="num">6</div> Exámenes</div>
+    <div class="p-div"></div>
+    <div class="p-step" onclick="goTo(6)"><div class="num">7</div> Resumen</div>
+  </div>
+</div>
+
+<!-- MAIN FORM -->
+<div class="main">
+<p class="req-note"><span>*</span> Campos obligatorios</p>
+
+<!-- ══ SEC 0: DATOS PERSONALES ══ -->
+<div class="section active" id="sec-0">
+  <div class="section-header">
+    <div class="section-icon">🌿</div>
+    <div>
+      <div class="section-title">Datos Personales</div>
+      <div class="section-subtitle">Información básica para tu ficha clínica</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Información personal</div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Nombre completo <span class="req">*</span></label>
+        <input type="text" id="nombre" placeholder="Tu nombre y apellidos" required>
+      </div>
+      <div class="field">
+        <label>RUT <span class="req">*</span></label>
+        <input type="text" id="rut" placeholder="12.345.678-9">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Edad <span class="req">*</span></label>
+        <input type="text" id="edad" placeholder="Ej: 35">
+      </div>
+      <div class="field">
+        <label>Fecha de nacimiento</label>
+        <input type="date" id="fechaNac">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Correo electrónico <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="tu@correo.cl">
+      </div>
+      <div class="field">
+        <label>Teléfono / WhatsApp <span class="req">*</span></label>
+        <input type="tel" id="telefono" placeholder="+56 9 XXXX XXXX">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Ciudad y país de residencia</label>
+        <input type="text" id="ciudad" placeholder="Ej: Antofagasta, Chile">
+      </div>
+      <div class="field">
+        <label>Ocupación</label>
+        <input type="text" id="ocupacion" placeholder="¿A qué te dedicas?">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Sexo biológico</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="sexo" value="Femenino" onchange="radioSel(this)"> Femenino</label>
+          <label class="radio-item"><input type="radio" name="sexo" value="Masculino" onchange="radioSel(this)"> Masculino</label>
+          <label class="radio-item"><input type="radio" name="sexo" value="Otro" onchange="radioSel(this)"> Otro</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Estado civil</label>
+        <select id="estadoCivil">
+          <option value="">Selecciona...</option>
+          <option>Soltero/a</option>
+          <option>Casado/a</option>
+          <option>Conviviente</option>
+          <option>Divorciado/a</option>
+          <option>Viudo/a</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Hijos (edades)
+        <span class="hint">Si tienes hijos, indica cuántos y sus edades</span>
+      </label>
+      <input type="text" id="hijos" placeholder="Ej: 2 hijos, 5 y 8 años">
+    </div>
+    <div class="field">
+      <label>¿Cómo describirías tu estado de salud en este momento? <span class="req">*</span></label>
+      <textarea id="saludActual" placeholder="Descríbelo con tus propias palabras, sin tecnicismos. ¿Cómo te has sentido últimamente?"></textarea>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <div></div>
+    <button class="btn btn-next" onclick="goTo(1)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ══ SEC 1: ANTECEDENTES ══ -->
+<div class="section" id="sec-1">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div>
+      <div class="section-title">Antecedentes Médicos</div>
+      <div class="section-subtitle">Historial de salud personal y familiar</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Historial personal</div>
+    <div class="field">
+      <label>Diagnósticos médicos actuales o pasados
+        <span class="hint">Incluye todo lo que recuerdes, aunque haya sido hace años</span>
+      </label>
+      <textarea id="diagnosticos" placeholder="Ej: hipotiroidismo, gastritis, ansiedad diagnosticada en 2020..."></textarea>
+    </div>
+    <div class="field">
+      <label>Medicamentos que tomas actualmente
+        <span class="hint">Incluye nombre, dosis y frecuencia si los recuerdas</span>
+      </label>
+      <textarea id="medicamentos" placeholder="Ej: Levotiroxina 50mcg (una vez al día en ayunas)..."></textarea>
+    </div>
+    <div class="field">
+      <label>Suplementos que consumes
+        <span class="hint">Vitaminas, minerales, colágeno, probióticos, etc.</span>
+      </label>
+      <textarea id="suplementos" placeholder="Ej: Vitamina D 2000 UI, Omega 3, Magnesio..."></textarea>
+    </div>
+    <div class="field">
+      <label>Cirugías previas</label>
+      <textarea id="cirugias" rows="2" placeholder="Ej: Apendicectomía (2015), cesárea (2019)..."></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Historial familiar</div>
+    <div class="field">
+      <label>¿Hay enfermedades frecuentes en tu familia?
+        <span class="hint">Padres, abuelos, hermanos. Ej: diabetes, hipertensión, cáncer, enfermedades autoinmunes, depresión...</span>
+      </label>
+      <textarea id="antFamiliares" placeholder="Ej: Madre con diabetes tipo 2, padre con hipertensión, abuela con Hashimoto..."></textarea>
+    </div>
+    <div class="field">
+      <label>Alergias o intolerancias conocidas</label>
+      <textarea id="alergias" rows="2" placeholder="Alergias a medicamentos, alimentos, materiales, etc."></textarea>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-back" onclick="goTo(0)">← Anterior</button>
+    <button class="btn btn-next" onclick="goTo(2)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ══ SEC 2: HÁBITOS ══ -->
+<div class="section" id="sec-2">
+  <div class="section-header">
+    <div class="section-icon">🌱</div>
+    <div>
+      <div class="section-title">Hábitos y Estilo de Vida</div>
+      <div class="section-subtitle">Alimentación, sueño, movimiento y bienestar emocional</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Alimentación</div>
+    <div class="field">
+      <label>¿Tienes alguna intolerancia o alergia alimentaria?</label>
+      <input type="text" id="intolerancias" placeholder="Ej: gluten, lactosa, frutos secos...">
+    </div>
+    <div class="field">
+      <label>¿Sigues algún patrón alimentario?</label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="patron" value="Sin restricciones" onchange="radioSel(this)"> Sin restricciones</label>
+        <label class="radio-item"><input type="radio" name="patron" value="Vegetariano" onchange="radioSel(this)"> Vegetariano</label>
+        <label class="radio-item"><input type="radio" name="patron" value="Vegano" onchange="radioSel(this)"> Vegano</label>
+        <label class="radio-item"><input type="radio" name="patron" value="Sin gluten" onchange="radioSel(this)"> Sin gluten</label>
+        <label class="radio-item"><input type="radio" name="patron" value="Cetogénica" onchange="radioSel(this)"> Cetogénica</label>
+        <label class="radio-item"><input type="radio" name="patron" value="Otro" onchange="radioSel(this)"> Otro</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>¿Con qué frecuencia consumes alimentos ultraprocesados o con alto azúcar?
+        <span class="hint">Galletas, cereales de caja, jugos en caja, snacks, golosinas, bebidas azucaradas, embutidos...</span>
+      </label>
+      <div class="radio-group col">
+        <label class="radio-item"><input type="radio" name="ultraprocesados" value="Raramente o nunca" onchange="radioSel(this)"> Raramente o nunca</label>
+        <label class="radio-item"><input type="radio" name="ultraprocesados" value="1-2 veces por semana" onchange="radioSel(this)"> 1–2 veces por semana</label>
+        <label class="radio-item"><input type="radio" name="ultraprocesados" value="3-4 veces por semana" onchange="radioSel(this)"> 3–4 veces por semana</label>
+        <label class="radio-item"><input type="radio" name="ultraprocesados" value="Todos los días" onchange="radioSel(this)"> Todos los días</label>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>¿Cuántas comidas haces al día?
+          <span class="hint">¿Sueles saltarte alguna?</span>
+        </label>
+        <input type="text" id="comidas" placeholder="Ej: 3 comidas, a veces salto el desayuno">
+      </div>
+      <div class="field">
+        <label>¿Cuánta agua tomas al día?</label>
+        <input type="text" id="agua" placeholder="Ej: 1 litro, 2 litros...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sueño</div>
+    <div class="grid-2">
+      <div class="field">
+        <label>¿Cuántas horas duermes por noche?</label>
+        <input type="text" id="hSueno" placeholder="Ej: 6–7 horas">
+      </div>
+      <div class="field">
+        <label>¿Te sientes descansado/a al despertar?</label>
+        <div class="radio-group col">
+          <label class="radio-item"><input type="radio" name="descansado" value="Sí, generalmente" onchange="radioSel(this)"> Sí, generalmente</label>
+          <label class="radio-item"><input type="radio" name="descansado" value="A veces" onchange="radioSel(this)"> A veces</label>
+          <label class="radio-item"><input type="radio" name="descansado" value="Casi nunca" onchange="radioSel(this)"> Casi nunca</label>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>¿Tienes dificultad para dormir o te despiertas en la noche?</label>
+      <textarea id="problemasSueno" rows="2" placeholder="Cuéntanos: ¿te cuesta quedarte dormido/a, te despiertas a medianoche, tienes pesadillas...?"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Estrés y bienestar emocional</div>
+    <div class="field">
+      <label>¿Cómo describirías tu nivel de estrés actual?
+        <span class="hint">1 = sin estrés · 10 = estrés muy alto</span>
+      </label>
+      <div class="range-wrap">
+        <input type="range" id="estres" min="1" max="10" value="5" oninput="updateRange(this,'estres-val')">
+        <div class="range-val" id="estres-val">5 / 10</div>
+      </div>
+      <div class="range-labels"><span>Sin estrés</span><span>Estrés muy alto</span></div>
+    </div>
+    <div class="field">
+      <label>¿Tienes alguna forma que te ayude a calmarte cuando estás estresado/a?</label>
+      <input type="text" id="tecnicasRelax" placeholder="Ej: meditación, caminata, lectura, música...">
+    </div>
+    <div class="field">
+      <label>¿Ha habido eventos recientes que hayan afectado tu bienestar emocional?</label>
+      <textarea id="eventosEmocionales" rows="2" placeholder="Pérdidas, separaciones, cambios laborales, mudanzas... Solo lo que desees compartir."></textarea>
+    </div>
+    <div class="field">
+      <label>¿Tienes tiempo para descansar y hacer cosas que disfrutas?</label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="descanso" value="Sí, regularmente" onchange="radioSel(this)"> Sí, regularmente</label>
+        <label class="radio-item"><input type="radio" name="descanso" value="A veces" onchange="radioSel(this)"> A veces</label>
+        <label class="radio-item"><input type="radio" name="descanso" value="Casi no tengo tiempo" onchange="radioSel(this)"> Casi no tengo tiempo</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Actividad física</div>
+    <div class="field">
+      <label>¿Realizas actividad física? ¿Con qué frecuencia y de qué tipo?</label>
+      <textarea id="actFisica" rows="2" placeholder="Ej: caminata 3 veces por semana, yoga los lunes, sin actividad actualmente..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-back" onclick="goTo(1)">← Anterior</button>
+    <button class="btn btn-next" onclick="goTo(3)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ══ SEC 3: SÍNTOMAS ══ -->
+<div class="section" id="sec-3">
+  <div class="section-header">
+    <div class="section-icon">🔍</div>
+    <div>
+      <div class="section-title">Evaluación por Sistemas</div>
+      <div class="section-subtitle">Marca todos los síntomas que hayas tenido recientemente</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Síntomas actuales</div>
+
+    <div class="sys-category">🔥 Inflamación / Digestión</div>
+    <div class="sys-grid" id="sg-digest">
+      <label class="sys-item"><input type="checkbox" value="Estreñimiento" onchange="checkSel(this)"> Estreñimiento</label>
+      <label class="sys-item"><input type="checkbox" value="Diarrea frecuente" onchange="checkSel(this)"> Diarrea frecuente</label>
+      <label class="sys-item"><input type="checkbox" value="Gases o hinchazón" onchange="checkSel(this)"> Gases o hinchazón</label>
+      <label class="sys-item"><input type="checkbox" value="Reflujo o acidez" onchange="checkSel(this)"> Reflujo o acidez</label>
+      <label class="sys-item"><input type="checkbox" value="Dolor abdominal" onchange="checkSel(this)"> Dolor abdominal</label>
+      <label class="sys-item"><input type="checkbox" value="Intolerancia a ciertos alimentos" onchange="checkSel(this)"> Intolerancia alimentaria</label>
+    </div>
+
+    <div class="sys-category">🧠 Sistema nervioso</div>
+    <div class="sys-grid" id="sg-nervioso">
+      <label class="sys-item"><input type="checkbox" value="Dolor de cabeza frecuente" onchange="checkSel(this)"> Dolor de cabeza</label>
+      <label class="sys-item"><input type="checkbox" value="Migrañas" onchange="checkSel(this)"> Migrañas</label>
+      <label class="sys-item"><input type="checkbox" value="Fatiga crónica" onchange="checkSel(this)"> Fatiga crónica</label>
+      <label class="sys-item"><input type="checkbox" value="Dificultad para concentrarse" onchange="checkSel(this)"> Falta de concentración</label>
+      <label class="sys-item"><input type="checkbox" value="Ansiedad" onchange="checkSel(this)"> Ansiedad</label>
+      <label class="sys-item"><input type="checkbox" value="Depresión o tristeza persistente" onchange="checkSel(this)"> Depresión / tristeza</label>
+      <label class="sys-item"><input type="checkbox" value="Mareos o vértigo" onchange="checkSel(this)"> Mareos / vértigo</label>
+      <label class="sys-item"><input type="checkbox" value="Hormigueos" onchange="checkSel(this)"> Hormigueos</label>
+    </div>
+
+    <div class="sys-category">⚖️ Hormonal / Metabólico</div>
+    <div class="sys-grid" id="sg-hormonal">
+      <label class="sys-item"><input type="checkbox" value="Síntomas premenstruales" onchange="checkSel(this)"> SPM</label>
+      <label class="sys-item"><input type="checkbox" value="Ciclo irregular" onchange="checkSel(this)"> Ciclo irregular</label>
+      <label class="sys-item"><input type="checkbox" value="Hipotiroidismo o sospecha" onchange="checkSel(this)"> Hipotiroidismo</label>
+      <label class="sys-item"><input type="checkbox" value="Resistencia a la insulina" onchange="checkSel(this)"> Resistencia insulina</label>
+      <label class="sys-item"><input type="checkbox" value="Aumento de peso inexplicado" onchange="checkSel(this)"> Subida de peso</label>
+      <label class="sys-item"><input type="checkbox" value="Dificultad para bajar de peso" onchange="checkSel(this)"> No baja de peso</label>
+      <label class="sys-item"><input type="checkbox" value="Caída de cabello" onchange="checkSel(this)"> Caída de cabello</label>
+      <label class="sys-item"><input type="checkbox" value="Intolerancia al frío o calor" onchange="checkSel(this)"> Intolerancia frío/calor</label>
+    </div>
+
+    <div class="sys-category">🛡️ Inmunológico</div>
+    <div class="sys-grid" id="sg-inmuno">
+      <label class="sys-item"><input type="checkbox" value="Enfermedades autoinmunes" onchange="checkSel(this)"> Autoinmune</label>
+      <label class="sys-item"><input type="checkbox" value="Infecciones frecuentes" onchange="checkSel(this)"> Infecciones frecuentes</label>
+      <label class="sys-item"><input type="checkbox" value="Alergias estacionales" onchange="checkSel(this)"> Alergias estacionales</label>
+      <label class="sys-item"><input type="checkbox" value="Problemas de piel (eccema, psoriasis)" onchange="checkSel(this)"> Problemas de piel</label>
+    </div>
+
+    <div class="sys-category">💪 Músculo-esquelético / Otros</div>
+    <div class="sys-grid" id="sg-musculo">
+      <label class="sys-item"><input type="checkbox" value="Dolor muscular o articular" onchange="checkSel(this)"> Dolor muscular/articular</label>
+      <label class="sys-item"><input type="checkbox" value="Dolor crónico sin diagnóstico" onchange="checkSel(this)"> Dolor sin diagnóstico</label>
+      <label class="sys-item"><input type="checkbox" value="Palpitaciones" onchange="checkSel(this)"> Palpitaciones</label>
+      <label class="sys-item"><input type="checkbox" value="Presión alta" onchange="checkSel(this)"> Presión alta</label>
+      <label class="sys-item"><input type="checkbox" value="Dificultad respiratoria" onchange="checkSel(this)"> Dificultad respiratoria</label>
+    </div>
+
+    <div class="field" style="margin-top:1.2rem">
+      <label>¿Quieres agregar algún síntoma que no aparezca en la lista?</label>
+      <textarea id="otrosSintomas" rows="2" placeholder="Describe cualquier otro síntoma relevante..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-back" onclick="goTo(2)">← Anterior</button>
+    <button class="btn btn-next" onclick="goTo(4)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ══ SEC 4: OBJETIVOS ══ -->
+<div class="section" id="sec-4">
+  <div class="section-header">
+    <div class="section-icon">✨</div>
+    <div>
+      <div class="section-title">Objetivos y Motivaciones</div>
+      <div class="section-subtitle">¿Qué esperas lograr con este proceso?</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Lo que quieres lograr</div>
+    <div class="field">
+      <label>¿Qué deseas lograr con tu consulta y tratamiento? <span class="req">*</span></label>
+      <textarea id="objetivos" placeholder="Cuéntanos con detalle qué resultado o cambio quieres ver en tu salud..."></textarea>
+    </div>
+    <div class="field">
+      <label>¿Qué te gustaría mejorar de tu salud física, emocional o mental?</label>
+      <textarea id="mejorar" placeholder="No hay respuesta incorrecta. Puedes mencionar cómo quieres sentirte, qué actividades quieres poder hacer, qué síntomas quieres eliminar..."></textarea>
+    </div>
+    <div class="field">
+      <label>¿Estás dispuesto/a a hacer cambios en tu estilo de vida?</label>
+      <div class="radio-group col">
+        <label class="radio-item"><input type="radio" name="cambios" value="Sí, estoy completamente dispuesto/a" onchange="radioSel(this)"> Sí, estoy completamente dispuesto/a</label>
+        <label class="radio-item"><input type="radio" name="cambios" value="Sí, aunque necesito apoyo para mantener los cambios" onchange="radioSel(this)"> Sí, aunque necesito apoyo para mantenerlos</label>
+        <label class="radio-item"><input type="radio" name="cambios" value="Tengo algunas limitaciones pero quiero intentarlo" onchange="radioSel(this)"> Tengo limitaciones pero quiero intentarlo</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>¿Hay algo más que quieras contarle a la Dra. Sánchez antes de tu consulta?</label>
+      <textarea id="notaExtra" placeholder="Cualquier detalle que creas importante y que no hayas podido expresar antes..."></textarea>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-back" onclick="goTo(3)">← Anterior</button>
+    <button class="btn btn-next" onclick="goTo(5)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ══ SEC 5: EXÁMENES ══ -->
+<div class="section" id="sec-5">
+  <div class="section-header">
+    <div class="section-icon">🩺</div>
+    <div>
+      <div class="section-title">Exámenes e Imágenes</div>
+      <div class="section-subtitle">Sube tus resultados para que la Dra. los revise antes de la consulta</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Adjuntar archivos</div>
+    <p style="font-size:0.82rem; color:var(--gray); margin-bottom:1.2rem; line-height:1.6;">
+      Puedes subir exámenes de sangre, imágenes (eco, TAC, RMN), informes médicos o cualquier documento relevante. Formatos aceptados: <strong>PDF, JPG, PNG</strong>. Máximo 10 MB por archivo.
+    </p>
+
+    <div class="field">
+      <label>Exámenes de laboratorio (sangre, orina, etc.)</label>
+      <div class="upload-zone" id="zone-lab" onclick="document.getElementById('files-lab').click()" ondragover="dragOver(event,'zone-lab')" ondragleave="dragLeave('zone-lab')" ondrop="dropFiles(event,'zone-lab','list-lab')">
+        <input type="file" id="files-lab" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'list-lab')">
+        <div class="upload-icon">🧪</div>
+        <p>Arrastra aquí o <strong>haz clic para seleccionar</strong></p>
+        <p style="font-size:0.75rem; margin-top:4px;">PDF · JPG · PNG</p>
+      </div>
+      <div class="file-list" id="list-lab"></div>
+    </div>
+
+    <div class="field">
+      <label>Imágenes médicas (ecografías, TAC, RMN, Rx)</label>
+      <div class="upload-zone" id="zone-img" onclick="document.getElementById('files-img').click()" ondragover="dragOver(event,'zone-img')" ondragleave="dragLeave('zone-img')" ondrop="dropFiles(event,'zone-img','list-img')">
+        <input type="file" id="files-img" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'list-img')">
+        <div class="upload-icon">🖼️</div>
+        <p>Arrastra aquí o <strong>haz clic para seleccionar</strong></p>
+        <p style="font-size:0.75rem; margin-top:4px;">PDF · JPG · PNG</p>
+      </div>
+      <div class="file-list" id="list-img"></div>
+    </div>
+
+    <div class="field">
+      <label>Otros documentos (informes, recetas, derivaciones)</label>
+      <div class="upload-zone" id="zone-otros" onclick="document.getElementById('files-otros').click()" ondragover="dragOver(event,'zone-otros')" ondragleave="dragLeave('zone-otros')" ondrop="dropFiles(event,'zone-otros','list-otros')">
+        <input type="file" id="files-otros" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'list-otros')">
+        <div class="upload-icon">📄</div>
+        <p>Arrastra aquí o <strong>haz clic para seleccionar</strong></p>
+        <p style="font-size:0.75rem; margin-top:4px;">PDF · JPG · PNG</p>
+      </div>
+      <div class="file-list" id="list-otros"></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-back" onclick="goTo(4)">← Anterior</button>
+    <button class="btn btn-next" onclick="goTo(6)">Revisar y enviar →</button>
+  </div>
+</div>
+
+<!-- ══ SEC 6: RESUMEN ══ -->
+<div class="section" id="sec-6">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <div>
+      <div class="section-title">Resumen y Envío</div>
+      <div class="section-subtitle">Revisa tu información antes de enviar</div>
+    </div>
+  </div>
+
+  <div id="summary-container"></div>
+
+  <div class="card" style="background:var(--amber-light); border-color:rgba(245,155,27,0.3);">
+    <p style="font-size:0.85rem; line-height:1.7; color:var(--dark);">
+      Al enviar este formulario, autorizas a la <strong>Dra. Yusneily Katherine Sánchez</strong> a utilizar esta información exclusivamente para fines médicos y de atención clínica, en conformidad con las normas de confidencialidad médica vigentes en Chile.
+    </p>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-back" onclick="goTo(5)">← Anterior</button>
+    <button class="btn btn-submit" id="btn-enviar" onclick="enviarFormulario()">
+      Enviar Preconsulta
+    </button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success-screen">
+  <div class="tick">🌿</div>
+  <h2>¡Tu preconsulta fue enviada!</h2>
+  <p>La Dra. Sánchez revisará tu información antes de la consulta. Pronto recibirás una confirmación en tu correo electrónico.</p>
+  <br>
+  <a href="https://wa.me/56974843834?text=Hola,%20acabo%20de%20enviar%20mi%20formulario%20de%20preconsulta" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--teal);color:white;text-decoration:none;border-radius:10px;font-weight:700;font-size:0.9rem;margin-top:0.5rem;">
+    <span>💬</span> Contactar por WhatsApp
+  </a>
+</div>
+
+</div><!-- /main -->
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────
+// REEMPLAZA con la URL de tu Apps Script desplegado
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzGkG4dZ6kQDuz0AUwGUDpOsMN9FkLnoVV6VsacU_m8Jqjyk_Bsz3R0Fi6P7Tsd4dbR/exec';
+
+// ── ARCHIVOS ─────────────────────────────────────────────
+const fileStore = { lab: [], img: [], otros: [] };
+
+function fileSelected(input, listId) {
+  const key = listId.replace('list-','');
+  Array.from(input.files).forEach(f => addFile(f, key, listId));
+  input.value = '';
+}
+function dropFiles(e, zoneId, listId) {
+  e.preventDefault();
+  dragLeave(zoneId);
+  const key = listId.replace('list-','');
+  Array.from(e.dataTransfer.files).forEach(f => addFile(f, key, listId));
+}
+function addFile(f, key, listId) {
+  if (f.size > 10 * 1024 * 1024) { toast('❌ "' + f.name + '" supera 10 MB', 'err'); return; }
+  const allowed = ['application/pdf','image/jpeg','image/png','image/jpg'];
+  if (!allowed.includes(f.type)) { toast('❌ Formato no permitido: ' + f.name, 'err'); return; }
+  fileStore[key].push(f);
+  renderFileList(key, listId);
+}
+function removeFile(key, idx, listId) {
+  fileStore[key].splice(idx, 1);
+  renderFileList(key, listId);
+}
+function renderFileList(key, listId) {
+  const list = document.getElementById(listId);
+  list.innerHTML = fileStore[key].map((f, i) =>
+    `<div class="file-item">
+      <span>${f.type === 'application/pdf' ? '📄' : '🖼️'}</span>
+      <span class="fname">${f.name}</span>
+      <span class="fsize">${(f.size/1024/1024).toFixed(1)} MB</span>
+      <button class="frem" onclick="removeFile('${key}',${i},'${listId}')">×</button>
+    </div>`
+  ).join('');
+}
+function dragOver(e, id) { e.preventDefault(); document.getElementById(id).classList.add('dragover'); }
+function dragLeave(id) { document.getElementById(id).classList.remove('dragover'); }
+
+async function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ── RADIO / CHECKBOX ─────────────────────────────────────
+function radioSel(input) {
+  const name = input.name;
+  document.querySelectorAll(`input[name="${name}"]`).forEach(i => {
+    i.closest('.radio-item')?.classList.remove('selected');
+  });
+  input.closest('.radio-item')?.classList.add('selected');
+}
+function checkSel(input) {
+  input.closest('.check-item, .sys-item')?.classList.toggle('selected', input.checked);
+}
+
+// ── RANGE ────────────────────────────────────────────────
+function updateRange(input, valId) {
+  document.getElementById(valId).textContent = input.value + ' / 10';
+}
+
+// ── NAVIGATION ───────────────────────────────────────────
+let currentSection = 0;
+const TOTAL = 7;
+
+function goTo(n) {
+  if (n < 0 || n >= TOTAL) return;
+  if (n > currentSection && !validateSection(currentSection)) return;
+
+  document.getElementById('sec-' + currentSection).classList.remove('active');
+  currentSection = n;
+  document.getElementById('sec-' + n).classList.add('active');
+  updateProgress();
+  if (n === 6) buildSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const steps = document.querySelectorAll('.p-step');
+  steps.forEach((s, i) => {
+    s.classList.remove('active','done');
+    if (i === currentSection) s.classList.add('active');
+    else if (i < currentSection) s.classList.add('done');
+  });
+}
+
+function validateSection(n) {
+  const required = {
+    0: [['nombre','Nombre completo'],['rut','RUT'],['edad','Edad'],['email','Correo electrónico'],['telefono','Teléfono'],['saludActual','Descripción de salud actual']],
+    4: [['objetivos','Objetivos de consulta']]
+  };
+  if (!required[n]) return true;
+  for (const [id, label] of required[n]) {
+    const el = document.getElementById(id);
+    if (el && !el.value.trim()) {
+      toast('⚠️ El campo "' + label + '" es obligatorio', 'err');
+      el.focus();
+      return false;
+    }
+  }
+  return true;
+}
+
+// ── RESUMEN ───────────────────────────────────────────────
+function getVal(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function getRadio(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '';
+}
+function getChecked(containerSel) {
+  return Array.from(document.querySelectorAll(containerSel + ' input:checked')).map(i => i.value).join(', ') || '—';
+}
+
+function buildSummary() {
+  const totalFiles = fileStore.lab.length + fileStore.img.length + fileStore.otros.length;
+  const sintomas = [
+    ...Array.from(document.querySelectorAll('#sg-digest input:checked')),
+    ...Array.from(document.querySelectorAll('#sg-nervioso input:checked')),
+    ...Array.from(document.querySelectorAll('#sg-hormonal input:checked')),
+    ...Array.from(document.querySelectorAll('#sg-inmuno input:checked')),
+    ...Array.from(document.querySelectorAll('#sg-musculo input:checked'))
+  ].map(i => i.value).join(', ') || '—';
+
+  const blocks = [
+    {
+      title: '🌿 Datos personales',
+      items: [
+        ['Nombre', getVal('nombre')], ['RUT', getVal('rut')],
+        ['Edad', getVal('edad')], ['Correo', getVal('email')],
+        ['Teléfono', getVal('telefono')], ['Ciudad', getVal('ciudad')],
+        ['Sexo', getRadio('sexo')], ['Estado civil', getVal('estadoCivil')],
+      ]
+    },
+    {
+      title: '📋 Antecedentes',
+      items: [
+        ['Diagnósticos', getVal('diagnosticos') || '—'],
+        ['Medicamentos', getVal('medicamentos') || '—'],
+        ['Suplementos', getVal('suplementos') || '—'],
+        ['Cirugías', getVal('cirugias') || '—'],
+        ['Antec. familiares', getVal('antFamiliares') || '—'],
+      ]
+    },
+    {
+      title: '🌱 Hábitos',
+      items: [
+        ['Patrón alimentario', getRadio('patron') || '—'],
+        ['Ultraprocesados', getRadio('ultraprocesados') || '—'],
+        ['Comidas/día', getVal('comidas') || '—'],
+        ['Agua/día', getVal('agua') || '—'],
+        ['Horas de sueño', getVal('hSueno') || '—'],
+        ['Descansado/a', getRadio('descansado') || '—'],
+        ['Nivel de estrés', document.getElementById('estres').value + '/10'],
+        ['Actividad física', getVal('actFisica') || '—'],
+      ]
+    },
+    {
+      title: '🔍 Síntomas',
+      items: [['Síntomas marcados', sintomas]]
+    },
+    {
+      title: '✨ Objetivos',
+      items: [
+        ['Objetivos', getVal('objetivos')],
+        ['Dispuesto/a a cambios', getRadio('cambios') || '—'],
+      ]
+    },
+    {
+      title: '🩺 Archivos',
+      items: [
+        ['Laboratorio', fileStore.lab.length ? fileStore.lab.map(f=>f.name).join(', ') : 'No adjuntado'],
+        ['Imágenes', fileStore.img.length ? fileStore.img.map(f=>f.name).join(', ') : 'No adjuntado'],
+        ['Otros docs', fileStore.otros.length ? fileStore.otros.map(f=>f.name).join(', ') : 'No adjuntado'],
+      ]
+    }
+  ];
+
+  document.getElementById('summary-container').innerHTML = blocks.map(b => `
+    <div class="summary-block">
+      <h4>${b.title}</h4>
+      <div class="summary-grid">
+        ${b.items.map(([l,v]) => `
+          <div class="s-item">
+            <div class="s-label">${l}</div>
+            <div class="s-val">${v || '—'}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// ── ENVÍO ──────────────────────────────────────────────────
+async function enviarFormulario() {
+  const btn = document.getElementById('btn-enviar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Enviando...';
+
+  try {
+    // Convertir archivos a base64
+    async function processFiles(arr) {
+      const result = [];
+      for (const f of arr) {
+        const data = await fileToBase64(f);
+        result.push({ name: f.name, type: f.type, data });
+      }
+      return result;
+    }
+
+    const [labFiles, imgFiles, otrosFiles] = await Promise.all([
+      processFiles(fileStore.lab),
+      processFiles(fileStore.img),
+      processFiles(fileStore.otros)
+    ]);
+
+    // Síntomas
+    const sintomas = [
+      ...Array.from(document.querySelectorAll('#sg-digest input:checked')),
+      ...Array.from(document.querySelectorAll('#sg-nervioso input:checked')),
+      ...Array.from(document.querySelectorAll('#sg-hormonal input:checked')),
+      ...Array.from(document.querySelectorAll('#sg-inmuno input:checked')),
+      ...Array.from(document.querySelectorAll('#sg-musculo input:checked'))
+    ].map(i => i.value).join(', ');
+
+    const payload = {
+      nombre:          getVal('nombre'),
+      rut:             getVal('rut'),
+      edad:            getVal('edad'),
+      fechaNac:        getVal('fechaNac'),
+      email:           getVal('email'),
+      telefono:        getVal('telefono'),
+      ciudad:          getVal('ciudad'),
+      ocupacion:       getVal('ocupacion'),
+      sexo:            getRadio('sexo'),
+      estadoCivil:     getVal('estadoCivil'),
+      hijos:           getVal('hijos'),
+      saludActual:     getVal('saludActual'),
+      diagnosticos:    getVal('diagnosticos'),
+      medicamentos:    getVal('medicamentos'),
+      suplementos:     getVal('suplementos'),
+      cirugias:        getVal('cirugias'),
+      antFamiliares:   getVal('antFamiliares'),
+      alergias:        getVal('alergias'),
+      intolerancias:   getVal('intolerancias'),
+      patronAlim:      getRadio('patron'),
+      ultraprocesados: getRadio('ultraprocesados'),
+      comidas:         getVal('comidas'),
+      agua:            getVal('agua'),
+      hSueno:          getVal('hSueno'),
+      descansado:      getRadio('descansado'),
+      problemasSueno:  getVal('problemasSueno'),
+      estres:          document.getElementById('estres').value,
+      tecnicasRelax:   getVal('tecnicasRelax'),
+      eventosEmoc:     getVal('eventosEmocionales'),
+      descanso:        getRadio('descanso'),
+      actFisica:       getVal('actFisica'),
+      sintomas:        sintomas,
+      otrosSintomas:   getVal('otrosSintomas'),
+      objetivos:       getVal('objetivos'),
+      mejorar:         getVal('mejorar'),
+      cambios:         getRadio('cambios'),
+      notaExtra:       getVal('notaExtra'),
+      archivos: {
+        laboratorio: labFiles,
+        imagenes:    imgFiles,
+        otros:       otrosFiles
+      }
+    };
+
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    const json = await res.json();
+
+    if (json.ok) {
+      document.querySelector('.main > *:not(#success-screen)').style.display = 'none';
+      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+      document.querySelector('.req-note').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      throw new Error(json.error || 'Error desconocido');
+    }
+  } catch (err) {
+    console.error(err);
+    toast('❌ Error al enviar. Intenta de nuevo o escríbenos por WhatsApp.', 'err');
+    btn.disabled = false;
+    btn.innerHTML = 'Enviar Preconsulta';
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg, type = 'ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>

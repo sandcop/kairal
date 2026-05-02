@@ -250,9 +250,9 @@
     </script>
 
     <!-- Header -->
-    <header>
+    <header id="main-header">
         <nav>
-            <div class="logo-container">
+            <a href="#inicio" class="logo-container">
                 <svg class="logo" width="50" height="36" viewBox="0 0 55.45 39.85" xmlns="http://www.w3.org/2000/svg">
                     <circle fill="#f59b1b" cx="27.79" cy="3.98" r="3.98"/>
                     <path fill="#48b9b2" d="M0,35.93s.04-.06.06-.03c.58.72,3.49,3.79,9.6,1.54,6.94-2.55,8.16-10.56,10.63-15.98,0,0,2.82-7.46,6.26-10.06s5.84-4.79,15.84-5.56c8.46-.66,12.03-4.39,12.92-5.52.05-.07.16-.01.14.07-.39,1.32-2.16,5.61-8.84,7.56-7.95,2.32-10.91,2.82-14.85,5.77-3.94,2.96-4.93,4.93-8.73,12.81-3.8,7.88-7.53,11.12-11.12,12.46S1.39,40.67,0,35.93Z"/>
@@ -262,12 +262,13 @@
                     <h1>Kairal</h1>
                     <p>Dra. Yusneily Sánchez</p>
                 </div>
-            </div>
+            </a>
             <ul class="nav-links">
-                <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#servicios">Servicios</a></li>
                 <li><a href="#sobre-mi">Sobre Mí</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
                 <li><a href="#blog">Blog</a></li>
+                <li><a href="#faq">FAQ</a></li>
             </ul>
 
             <!-- Chat Bar en el header -->
@@ -338,10 +339,12 @@
             
             <!-- Navegación (solo visible en móviles) -->
             <ul class="panel-nav">
-                <li><a href="#inicio" onclick="toggleSidePanel()"><span class="panel-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span> Inicio</a></li>
                 <li><a href="#servicios" onclick="toggleSidePanel()"><span class="panel-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg></span> Servicios</a></li>
                 <li><a href="#sobre-mi" onclick="toggleSidePanel()"><span class="panel-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span> Sobre Mí</a></li>
                 <li><a href="#blog" onclick="toggleSidePanel()"><span class="panel-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span> Blog</a></li>
+                <li><a href="#testimonios" onclick="toggleSidePanel()"><span class="panel-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></span> Testimonios</a></li>
+                <li><a href="#faq" onclick="toggleSidePanel()"><span class="panel-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></span> FAQ</a></li>
+                <li><a href="blog.html"><span class="panel-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span> Ver Blog Completo</a></li>
             </ul>
             
             <a href="https://encuadrado.com/p/dra-yusneily-katherine-sanchez" target="_blank" class="panel-cta" onclick="toggleSidePanel()">Agendar Cita</a>
@@ -499,9 +502,183 @@
                 <span class="stat-number">95%</span>
                 <span class="stat-label">Satisfacción</span>
             </div>
-            
+
         </div>
     </section>
+
+    <!-- ═══════════════════════════════════════════
+         PROBLEMA Section
+    ═══════════════════════════════════════════ -->
+    <section id="problema" class="problema-section">
+        <div class="section-header">
+            <p class="section-subtitle">¿Te suena familiar?</p>
+            <h2 class="section-title">¿Te identificas con alguno de estos síntomas?</h2>
+            <p class="section-description">El estrés crónico altera nuestra biología — lo abordamos en profundidad</p>
+        </div>
+        <div class="problema-chips-wrap">
+            <span class="problema-chip">me canso mucho sin razón</span>
+            <span class="problema-chip">no puedo bajar de peso</span>
+            <span class="problema-chip">hormonas desreguladas</span>
+            <span class="problema-chip">ansiedad y problemas digestivos</span>
+            <span class="problema-chip">inflamación crónica</span>
+            <span class="problema-chip">dolor crónico sin diagnóstico</span>
+            <span class="problema-chip">fatiga crónica</span>
+            <span class="problema-chip">estrés crónico</span>
+        </div>
+        <p class="problema-cta-text">Ofrezco un enfoque integral y personalizado para restaurar tu salud desde la raíz, no solo tratar síntomas superficiales.</p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         CAMBIO DE PARADIGMA Section
+    ═══════════════════════════════════════════ -->
+    <section id="paradigma" class="paradigma-section">
+        <div class="section-header">
+            <p class="section-subtitle">Nuestro Enfoque</p>
+            <h2 class="section-title">Medicina funcional que va más allá de los síntomas</h2>
+        </div>
+        <div class="paradigma-grid">
+            <div class="paradigma-block">
+                <div class="paradigma-num">01</div>
+                <h3 class="paradigma-label">El problema</h3>
+                <p class="paradigma-text">la salud no se trata solo de controlar síntomas</p>
+            </div>
+            <div class="paradigma-sep">→</div>
+            <div class="paradigma-block paradigma-block--highlight">
+                <div class="paradigma-num">02</div>
+                <h3 class="paradigma-label">La diferencia</h3>
+                <p class="paradigma-text">sino de descubrir qué nos quiere decir nuestro sistema corporal y tratar las causas que nos conducen al desbalance</p>
+            </div>
+            <div class="paradigma-sep">→</div>
+            <div class="paradigma-block">
+                <div class="paradigma-num">03</div>
+                <h3 class="paradigma-label">El resultado</h3>
+                <p class="paradigma-text">cuando encontramos la raíz, las soluciones dejan de apagar solo síntomas, dejan de ser temporales y se convierten en transformación real</p>
+                <p class="paradigma-note">Porque sanar no debe ser complicado, debe ser sostenible</p>
+            </div>
+        </div>
+    </section>
+
+    <style>
+    /* ═══════════ PROBLEMA ═══════════ */
+    .problema-section {
+        padding: 5rem 2rem;
+        background: #f0fafa;
+        text-align: center;
+    }
+    .problema-chips-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        justify-content: center;
+        max-width: 880px;
+        margin: 2.5rem auto 2.5rem;
+    }
+    .problema-chip {
+        display: inline-block;
+        padding: 0.55rem 1.3rem;
+        border: 1.5px solid #48b9b2;
+        border-radius: 100px;
+        color: #2D3436;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.88rem;
+        font-weight: 600;
+        background: white;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+        cursor: default;
+    }
+    .problema-chip:hover {
+        background: #48b9b2;
+        color: white;
+        transform: translateY(-2px);
+    }
+    .problema-cta-text {
+        max-width: 600px;
+        margin: 0 auto;
+        color: #636E72;
+        font-size: 1rem;
+        line-height: 1.7;
+        font-style: italic;
+    }
+
+    /* ═══════════ CAMBIO DE PARADIGMA ═══════════ */
+    .paradigma-section {
+        padding: 5rem 2rem;
+        background: linear-gradient(135deg, #1a1a2e 0%, #2D3436 100%);
+        color: white;
+        text-align: center;
+    }
+    .paradigma-section .section-subtitle { color: #f59b1b; }
+    .paradigma-section .section-title { color: white; }
+    .paradigma-section .section-description { color: rgba(255,255,255,0.65); }
+    .paradigma-grid {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 0.8rem;
+        max-width: 1080px;
+        margin: 3rem auto 0;
+        flex-wrap: wrap;
+    }
+    .paradigma-block {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(72,185,178,0.2);
+        border-radius: 20px;
+        padding: 2rem 1.8rem;
+        flex: 1;
+        min-width: 240px;
+        max-width: 310px;
+        text-align: left;
+        transition: border-color 0.2s;
+    }
+    .paradigma-block:hover { border-color: rgba(72,185,178,0.6); }
+    .paradigma-block--highlight {
+        background: rgba(72,185,178,0.1);
+        border-color: #48b9b2;
+    }
+    .paradigma-num {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: #48b9b2;
+        opacity: 0.4;
+        line-height: 1;
+        margin-bottom: 1rem;
+        font-family: 'Nunito', sans-serif;
+    }
+    .paradigma-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        color: #f59b1b;
+        margin-bottom: 0.8rem;
+        font-weight: 700;
+    }
+    .paradigma-text {
+        font-size: 0.93rem;
+        color: rgba(255,255,255,0.82);
+        line-height: 1.75;
+        margin: 0;
+    }
+    .paradigma-note {
+        margin-top: 1.2rem;
+        font-size: 0.88rem;
+        color: #48b9b2;
+        font-weight: 600;
+        font-style: italic;
+        line-height: 1.5;
+    }
+    .paradigma-sep {
+        font-size: 1.4rem;
+        color: rgba(72,185,178,0.3);
+        align-self: center;
+        padding: 0 0.3rem;
+        flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+        .paradigma-grid { flex-direction: column; align-items: stretch; }
+        .paradigma-block { max-width: 100%; }
+        .paradigma-sep { transform: rotate(90deg); text-align: center; }
+    }
+    </style>
 
     <!-- About Section -->
     <section id="sobre-mi" class="about-section">
@@ -682,69 +859,69 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
             
             
 
-<div class="education-layout">
-                <!-- Columna izquierda: Texto -->
-                <div class="education-text-column">
-                    <h3 style="font-size: 1.6rem; color: #2D3436; margin-bottom: 1.2rem; font-weight: 700;">Formación Continua en Medicina Funcional</h3>
-                    <div class="education-image" style="margin-bottom: 1.5rem; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                        <img src="formación-continua.webp" alt="Formación Continua en Medicina Funcional" style="width: 100%; height: auto; display: block;">
+            <div class="edu-timeline">
+
+                <!-- Venezuela · LEFT -->
+                <div class="edu-item edu-left">
+                    <div class="edu-card">
+                        <span class="edu-badge edu-badge--grado">Grado</span>
+                        <h3 class="edu-title">Médico Cirujano</h3>
+                        <p class="edu-institution">UNEFM · Venezuela</p>
                     </div>
-                    <div class="education-description">
-                        <p class="about-text">Mi compromiso es evolucionar con la medicina, me mantengo en formación continua en medicina funcional y preventiva, estudiar, cuestionar y profundizar es parte esencial de la atención médica personalizada.</p>
-                        <p class="about-text">Pero sobre todo escuchar, tener cercanía con mis pacientes, trabajar en conjunto y resolver sus dudas, es lo más importante en este camino.</p>
+                    <div class="edu-node">
+                        <div class="edu-dot">🇻🇪</div>
+                        <span class="edu-country-label">Venezuela</span>
+                    </div>
+                    <div class="edu-spacer"></div>
+                </div>
+
+                <!-- Perú · RIGHT -->
+                <div class="edu-item edu-right">
+                    <div class="edu-spacer"></div>
+                    <div class="edu-node">
+                        <div class="edu-dot">🇵🇪</div>
+                        <span class="edu-country-label">Perú</span>
+                    </div>
+                    <div class="edu-card">
+                        <span class="edu-badge edu-badge--curso">Curso</span>
+                        <h3 class="edu-title">Terapias PRP y Ozonoterapia</h3>
+                        <p class="edu-institution">Perú</p>
                     </div>
                 </div>
 
-                <!-- Columna derecha: Timeline -->
-                <div class="timeline-column">
-                    <div class="timeline-wrapper">
-                        <div class="timeline-vertical">
-                            <!-- Item 1: Venezuela -->
-                            <div class="timeline-vertical-item">
-                                <div class="timeline-dot" data-country="venezuela">
-                                    <div class="flag-ripple venezuela-flag"></div>
-                                </div>
-                                <div class="timeline-vertical-content">
-                                    <h3>MÉDICO CIRUJANO</h3>
-                                    <p class="timeline-institution">UNEFM VENEZUELA</p>
-                                </div>
-                            </div>
+                <!-- Colombia · LEFT -->
+                <div class="edu-item edu-left">
+                    <div class="edu-card">
+                        <span class="edu-badge edu-badge--diplomado">Diplomado</span>
+                        <h3 class="edu-title">Medicina Integrativa y Bases Homeopáticas</h3>
+                        <p class="edu-institution">Universidad del Bosque · Colombia</p>
+                    </div>
+                    <div class="edu-node">
+                        <div class="edu-dot">🇨🇴</div>
+                        <span class="edu-country-label">Colombia</span>
+                    </div>
+                    <div class="edu-spacer"></div>
+                </div>
 
-                            <!-- Item 2: Perú -->
-                            <div class="timeline-vertical-item">
-                                <div class="timeline-dot" data-country="peru">
-                                    <div class="flag-ripple peru-flag"></div>
-                                </div>
-                                <div class="timeline-vertical-content">
-                                    <h3>CURSO DE TERAPIAS PRP Y OZONOTERAPIA</h3>
-                                    <p class="timeline-institution">PERÚ</p>
-                                </div>
-                            </div>
-
-                            <!-- Item 3: Colombia -->
-                            <div class="timeline-vertical-item">
-                                <div class="timeline-dot" data-country="colombia">
-                                    <div class="flag-ripple colombia-flag"></div>
-                                </div>
-                                <div class="timeline-vertical-content">
-                                    <h3>DIPLOMADO EN MEDICINA INTEGRATIVA Y BASES HOMEOPÁTICAS</h3>
-                                    <p class="timeline-institution">UNIVERSIDAD DEL BOSQUE COLOMBIA</p>
-                                </div>
-                            </div>
-
-                            <!-- Item 4: España -->
-                            <div class="timeline-vertical-item">
-                                <div class="timeline-dot" data-country="espana">
-                                    <div class="flag-ripple espana-flag"></div>
-                                </div>
-                                <div class="timeline-vertical-content">
-                                    <h3>MÁSTER EN PSICONEUROINMUNOLOGÍA</h3>
-                                    <p class="timeline-institution">REGENERA, ESPAÑA</p>
-                                </div>
-                            </div>
-                        </div>
+                <!-- España · RIGHT · Highlight -->
+                <div class="edu-item edu-right">
+                    <div class="edu-spacer"></div>
+                    <div class="edu-node">
+                        <div class="edu-dot edu-dot--highlight">🇪🇸</div>
+                        <span class="edu-country-label edu-country-label--gold">España</span>
+                    </div>
+                    <div class="edu-card edu-card--highlight">
+                        <span class="edu-badge edu-badge--master">Máster</span>
+                        <h3 class="edu-title">Psiconeuroinmunología</h3>
+                        <p class="edu-institution">Regenera · España</p>
                     </div>
                 </div>
+
+            </div>
+
+            <div class="edu-closing-note">
+                <p>Mi compromiso es evolucionar con la medicina, me mantengo en formación continua en medicina funcional y preventiva, estudiar, cuestionar y profundizar es parte esencial de la atención médica personalizada.</p>
+                <p>Pero sobre todo escuchar, tener cercanía con mis pacientes, trabajar en conjunto y resolver sus dudas, es lo más importante en este camino.</p>
             </div>
         </div>
     </section>
@@ -839,24 +1016,24 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
 
         <div class="download-grid">
             <div class="download-card">
-                <div class="download-icon">📋</div>
-                <h3>Guía de Antiinflamatorios</h3>
-                <p>Lista completa de alimentos antiinflamatorios con recetas simples y plan de compras semanal.</p>
-                <button class="download-btn" onclick="handleResourceClick('Guía de Alimentos Antiinflamatorios')">Descargar PDF</button>
+                <div class="download-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="m9 12 2 2 4-4"/></svg></div>
+                <h3>¿Qué le está pasando a tu cuerpo?</h3>
+                <p>Test rápido de 10 minutos para identificar qué sistema necesita atención — aunque tus exámenes estén «normales».</p>
+                <a class="download-btn" href="recursos/autoevaluacion_funcional.pdf" download>Descargar PDF</a>
             </div>
 
             <div class="download-card">
-                <div class="download-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
-                <h3>Tracker de Síntomas</h3>
-                <p>Plantilla para registrar y monitorear tus síntomas diarios, patrones de sueño y energía.</p>
-                <button class="download-btn" onclick="handleResourceClick('Tracker de Síntomas Diarios')">Descargar Excel</button>
+                <div class="download-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                <h3>¿Por qué me siento tan cansado/a?</h3>
+                <p>6 hábitos cotidianos que agotan tu energía sin que lo sepas — y qué hacer en cada caso.</p>
+                <a class="download-btn" href="recursos/habitos_energia.pdf" download>Descargar PDF</a>
             </div>
 
             <div class="download-card">
-                <div class="download-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div>
-                <h3>Protocolo Anti-Estrés</h3>
-                <p>Rutina diaria de 10 minutos para reducir el cortisol y recuperar tu equilibrio interior.</p>
-                <button class="download-btn" onclick="handleResourceClick('Protocolo Anti-Estrés de 10 Minutos')">Descargar PDF</button>
+                <div class="download-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></div>
+                <h3>Qué comer para reducir la inflamación</h3>
+                <p>Guía práctica con los mejores alimentos para tu intestino, sistema inmune y niveles de energía.</p>
+                <a class="download-btn" href="recursos/lista_antiinflamatoria.pdf" download>Descargar PDF</a>
             </div>
         </div>
 
@@ -1069,6 +1246,118 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
     document.addEventListener('DOMContentLoaded', loadGoogleReviews);
     </script>
 
+    <!-- ═══════════════════════════════════════════
+         FAQ Section
+    ═══════════════════════════════════════════ -->
+    <section id="faq" class="faq-section">
+        <div class="section-header">
+            <p class="section-subtitle">FAQ</p>
+            <h2 class="section-title">Preguntas Frecuentes</h2>
+        </div>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary class="faq-question">¿La medicina funcional realmente funciona? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>Sí. La medicina funcional busca identificar y tratar la causa raíz de los síntomas, lo que permite lograr mejoras más profundas y sostenibles.</p></div></div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">¿Como es la consulta de medicina funcional? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>Se realiza una evaluación completa de tu historia, síntomas y estilo de vida, para identificar las causas de fondo y diseñar un plan personalizado.</p></div></div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">¿La consulta es online o presencial? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>La consulta es online, lo que permite atender pacientes en todo Chile.</p></div></div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">¿Cuánto dura la consulta? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>La consulta inicial suele durar entre 60 y 90 minutos, ya que se realiza un análisis detallado de tu caso.</p></div></div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">¿La medicina funcional es para mí? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>Si tienes síntomas persistentes, no has encontrado respuestas claras o quieres mejorar tu salud desde la raíz, este enfoque puede ayudarte.</p></div></div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">¿Qué pasa si ya probé otros tratamientos y no funcionaron? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>La medicina funcional aborda el problema desde otra perspectiva, enfocándose en la causa raíz, lo que puede marcar la diferencia.</p></div></div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">¿Por qué me siento cansado todo el tiempo? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>Puede estar relacionado con factores como inflamación, estrés, hormonas o problemas intestinales que afectan la energía.</p></div></div>
+            </details>
+            <details class="faq-item">
+                <summary class="faq-question">¿Por qué tengo síntomas pero mis exámenes salen normales? <span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><div class="faq-answer-inner"><p>Muchos desequilibrios funcionales no se detectan en evaluaciones convencionales, pero sí pueden evaluarse desde un enfoque más integral.</p></div></div>
+            </details>
+        </div>
+    </section>
+
+    <style>
+    /* ═══════════ FAQ ═══════════ */
+    .faq-section {
+        padding: 5rem 2rem;
+        background: #ffffff;
+    }
+    .faq-list {
+        max-width: 780px;
+        margin: 3rem auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .faq-item {
+        border: 1px solid #e8ecef;
+        border-radius: 14px;
+        background: #fafafa;
+        overflow: hidden;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .faq-item[open] {
+        border-color: #48b9b2;
+        box-shadow: 0 4px 20px rgba(72,185,178,0.12);
+        background: white;
+    }
+    .faq-question {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.5rem;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.98rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        cursor: pointer;
+        list-style: none;
+        gap: 1rem;
+        transition: color 0.2s;
+        user-select: none;
+    }
+    .faq-question::-webkit-details-marker { display: none; }
+    .faq-item[open] .faq-question { color: #48b9b2; }
+    .faq-icon {
+        font-size: 1.4rem;
+        font-weight: 300;
+        color: #48b9b2;
+        flex-shrink: 0;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        line-height: 1;
+        display: inline-block;
+    }
+    .faq-item[open] .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+        overflow: hidden;
+        /* max-height and transition controlled by JS for smooth curtain animation */
+    }
+    .faq-answer-inner {
+        padding: 0 1.5rem 1.4rem;
+        border-top: 1px solid #f0f0f0;
+    }
+    .faq-answer-inner p {
+        color: #555;
+        font-size: 0.92rem;
+        line-height: 1.75;
+        margin: 1rem 0 0;
+    }
+    </style>
+
     <!-- CTA Section -->
     <section class="cta-section" id="contacto">
         <div class="container">
@@ -1088,6 +1377,17 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
                     <path fill="#48b9b2" d="M33.65,21.45c-1.21-1.37-2.73-3.76-.48-5.34,0,0,3.10-1.62,5.35,3.03,0,0,1.76,3.11.91,8.52-.84,5.41-3.03,8.45-7.11,10.59,0,0-1.94,1.16-4.22,1.45-.04,0-.06-.06-.02-.07,1.19-.54,6.56-3.21,7.65-7.66.48-1.97.56-3.60.43-4.95-.20-2.08-1.13-4.01-2.51-5.57Z"/>
                 </svg>
                 <p>Medicina funcional que transforma vidas. Recupera tu vitalidad y alcanza tu mejor versión de salud.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Secciones</h4>
+                <nav class="footer-nav">
+                    <a href="#servicios">Servicios</a>
+                    <a href="#sobre-mi">Sobre Mí</a>
+                    <a href="#testimonios">Testimonios</a>
+                    <a href="#blog">Blog</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="blog.html">Ver Blog Completo</a>
+                </nav>
             </div>
             <div class="footer-col">
                 <h4>Contacto</h4>
@@ -1156,5 +1456,340 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="script.js"></script>
+
+    <!-- ═══════════════════════════════════════════
+         Education Timeline
+    ═══════════════════════════════════════════ -->
+    <style>
+    /* ── Timeline centrado con zigzag ── */
+    .edu-timeline {
+        position: relative;
+        max-width: 860px;
+        margin: 3.5rem auto 0;
+        padding: 1rem 0 2rem;
+    }
+    .edu-timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, transparent 0%, #48b9b2 8%, #48b9b2 92%, transparent 100%);
+        transform: translateX(-50%);
+    }
+    .edu-item {
+        display: grid;
+        grid-template-columns: 1fr 80px 1fr;
+        align-items: center;
+        margin-bottom: 2.6rem;
+        position: relative;
+    }
+    /* ── Cards ── */
+    .edu-card {
+        background: #ffffff;
+        border: 1px solid #e8ecef;
+        border-radius: 16px;
+        padding: 1.4rem 1.6rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.055);
+        position: relative;
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .edu-card:hover {
+        box-shadow: 0 10px 32px rgba(72,185,178,0.18);
+        transform: translateY(-3px);
+    }
+    .edu-card--highlight {
+        border-color: rgba(245,155,27,0.35);
+        box-shadow: 0 4px 20px rgba(245,155,27,0.12);
+    }
+    .edu-card--highlight:hover {
+        box-shadow: 0 10px 32px rgba(245,155,27,0.22);
+    }
+    /* Left card: right-aligned */
+    .edu-left .edu-card { text-align: right; }
+    /* Grid positions: left item */
+    .edu-left .edu-card  { grid-column: 1; grid-row: 1; }
+    .edu-left .edu-node  { grid-column: 2; grid-row: 1; }
+    .edu-left .edu-spacer{ grid-column: 3; grid-row: 1; }
+    /* Grid positions: right item */
+    .edu-right .edu-spacer{ grid-column: 1; grid-row: 1; }
+    .edu-right .edu-node  { grid-column: 2; grid-row: 1; }
+    .edu-right .edu-card  { grid-column: 3; grid-row: 1; text-align: left; }
+    /* Connector lines */
+    .edu-left .edu-card::after {
+        content: '';
+        position: absolute;
+        right: -18px; top: 50%;
+        width: 18px; height: 1px;
+        background: #c8e9e7;
+    }
+    .edu-right .edu-card::before {
+        content: '';
+        position: absolute;
+        left: -18px; top: 50%;
+        width: 18px; height: 1px;
+        background: #c8e9e7;
+    }
+    /* ── Badges ── */
+    .edu-badge {
+        display: inline-block;
+        font-size: 0.67rem;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 0.22rem 0.65rem;
+        border-radius: 100px;
+        margin-bottom: 0.55rem;
+    }
+    .edu-badge--grado     { background: #e0f5f3; color: #1a8a83; }
+    .edu-badge--curso     { background: #fff3e0; color: #c0710c; }
+    .edu-badge--diplomado { background: #ede7f6; color: #6a1b9a; }
+    .edu-badge--master    { background: #fff8e1; color: #c89100; }
+    /* ── Text ── */
+    .edu-title {
+        font-size: 0.97rem;
+        font-weight: 800;
+        color: #1a1a2e;
+        margin: 0 0 0.3rem;
+        line-height: 1.35;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .edu-institution {
+        font-size: 0.84rem;
+        color: #999;
+        margin: 0;
+        font-weight: 500;
+    }
+    /* ── Center dot ── */
+    .edu-node {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+    .edu-dot {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: white;
+        border: 2.5px solid #48b9b2;
+        box-shadow: 0 0 0 6px rgba(72,185,178,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        line-height: 1;
+        transition: box-shadow 0.25s;
+    }
+    .edu-dot--highlight {
+        border-color: #f59b1b;
+        box-shadow: 0 0 0 6px rgba(245,155,27,0.12);
+    }
+    /* ── Closing note ── */
+    .edu-closing-note {
+        max-width: 620px;
+        margin: 1rem auto 0;
+        text-align: center;
+        padding: 2rem 1.5rem 0;
+        border-top: 1px solid #eef2f2;
+    }
+    .edu-closing-note p {
+        color: #636e72;
+        font-size: 0.93rem;
+        line-height: 1.78;
+        margin: 0 0 0.6rem;
+        font-style: italic;
+    }
+    /* ── Country label tooltip ── */
+    .edu-node {
+        position: relative;
+        cursor: default;
+    }
+    .edu-country-label {
+        position: absolute;
+        top: 50%;
+        white-space: nowrap;
+        font-size: 0.73rem;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: #1a8a83;
+        background: rgba(255, 255, 255, 0.97);
+        padding: 0.28rem 0.75rem;
+        border-radius: 30px;
+        border: 1.5px solid rgba(72, 185, 178, 0.35);
+        box-shadow: 0 3px 12px rgba(72, 185, 178, 0.18);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.28s ease, transform 0.28s ease;
+        z-index: 20;
+    }
+    .edu-country-label--gold {
+        color: #c89100;
+        border-color: rgba(245, 155, 27, 0.35);
+        box-shadow: 0 3px 12px rgba(245, 155, 27, 0.18);
+    }
+    /* Items LEFT: la tarjeta está a la izquierda → label revela hacia la DERECHA */
+    .edu-left .edu-node .edu-country-label {
+        left: calc(100% + 10px);
+        transform: translateY(-50%) translateX(-10px);
+    }
+    .edu-left .edu-node:hover .edu-country-label {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+    /* Items RIGHT: la tarjeta está a la derecha → label revela hacia la IZQUIERDA */
+    .edu-right .edu-node .edu-country-label {
+        right: calc(100% + 10px);
+        transform: translateY(-50%) translateX(10px);
+    }
+    .edu-right .edu-node:hover .edu-country-label {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+        .edu-timeline::before { left: 26px; transform: none; }
+        .edu-item {
+            grid-template-columns: 56px 1fr;
+            margin-bottom: 1.8rem;
+        }
+        .edu-left .edu-card,
+        .edu-right .edu-card  { grid-column: 2; grid-row: 1; text-align: left; }
+        .edu-left .edu-node,
+        .edu-right .edu-node  { grid-column: 1; grid-row: 1; }
+        .edu-left .edu-spacer,
+        .edu-right .edu-spacer { display: none; }
+        .edu-left .edu-card::after,
+        .edu-right .edu-card::before { display: none; }
+        .edu-dot { width: 42px; height: 42px; font-size: 1.1rem; }
+    }
+    </style>
+
+    <!-- ═══════════════════════════════════════════
+         Header glass effect + nav underline hover
+    ═══════════════════════════════════════════ -->
+    <style>
+    /* Header: glass / blur effect */
+    #main-header {
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        transition: box-shadow 0.3s ease, background 0.3s ease;
+        border-bottom: 1px solid rgba(72, 185, 178, 0.10);
+    }
+    #main-header.scrolled {
+        box-shadow: 0 2px 24px rgba(0, 0, 0, 0.09);
+        border-bottom-color: rgba(72, 185, 178, 0.18);
+    }
+
+    /* Footer nav links */
+    .footer-nav {
+        display: block !important;
+        text-align: left !important;
+    }
+    .footer-nav a {
+        display: block !important;
+        text-align: left !important;
+        color: rgba(255, 255, 255, 0.75) !important;
+        text-decoration: none !important;
+        font-size: 0.93rem !important;
+        line-height: 1.8 !important;
+        margin-bottom: 0.4rem;
+        transition: color 0.2s ease;
+    }
+    .footer-nav a:hover {
+        color: #48b9b2 !important;
+    }
+
+    /* Logo link: sin subrayado ni color de enlace */
+    a.logo-container {
+        text-decoration: none;
+        color: inherit;
+    }
+    a.logo-container:hover {
+        text-decoration: none;
+    }
+
+    /* Nav links: underline slide-in on hover */
+    .nav-links a {
+        position: relative;
+    }
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #48b9b2;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+    .nav-links a.nav-active::after {
+        width: 100%;
+    }
+    </style>
+
+    <!-- ═══════════════════════════════════════════
+         Header scroll class + FAQ smooth curtain animation
+    ═══════════════════════════════════════════ -->
+    <script>
+    // Header: add .scrolled class on scroll
+    (function () {
+        var hdr = document.getElementById('main-header');
+        if (!hdr) return;
+        window.addEventListener('scroll', function () {
+            hdr.classList.toggle('scrolled', window.scrollY > 10);
+        }, { passive: true });
+    })();
+
+    // FAQ: smooth curtain open/close animation
+    (function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.faq-item').forEach(function (item) {
+                var summary = item.querySelector('.faq-question');
+                var body    = item.querySelector('.faq-answer');
+
+                body.style.overflow   = 'hidden';
+                body.style.transition = 'max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1)';
+                body.style.maxHeight  = '0';
+
+                summary.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    if (item.hasAttribute('open')) {
+                        // Closing: snap to current height, then animate to 0
+                        body.style.maxHeight = body.scrollHeight + 'px';
+                        requestAnimationFrame(function () {
+                            body.style.maxHeight = '0';
+                        });
+                        body.addEventListener('transitionend', function cb() {
+                            item.removeAttribute('open');
+                            body.removeEventListener('transitionend', cb);
+                        });
+                    } else {
+                        // Opening
+                        item.setAttribute('open', '');
+                        body.style.maxHeight = '0';
+                        requestAnimationFrame(function () {
+                            body.style.maxHeight = body.scrollHeight + 'px';
+                        });
+                        body.addEventListener('transitionend', function cb() {
+                            body.style.maxHeight = 'none';
+                            body.removeEventListener('transitionend', cb);
+                        });
+                    }
+                });
+            });
+        });
+    })();
+    </script>
 </body>
 </html>

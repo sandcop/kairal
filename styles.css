@@ -38,7 +38,7 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        header.scrolled .brand-text h1,
+        header.scrolled .brand-text .brand-name,
         header.scrolled .nav-links a {
             color: #2D3436;
         }
@@ -66,7 +66,8 @@
             height: 50px;
         }
 
-        .brand-text h1 {
+        .brand-text .brand-name {
+            display: block;
             font-size: 1.1rem;
             font-weight: 700;
             color: white;
@@ -2777,7 +2778,7 @@
             nav {
                 padding: 0.75rem 4%;
             }
-            .brand-text h1 { font-size: 0.9rem; }
+            .brand-text .brand-name { font-size: 0.9rem; }
             .brand-text p  { font-size: 0.7rem; }
             .logo { width: 34px; height: 34px; }
         }

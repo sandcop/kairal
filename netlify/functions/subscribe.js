@@ -1,4 +1,16 @@
 exports.handler = async function(event) {
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 204,
+            headers: {
+                'Access-Control-Allow-Origin': 'https://kairal.cl',
+                'Access-Control-Allow-Methods': 'POST',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
+            body: ''
+        };
+    }
+
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
@@ -22,6 +34,14 @@ exports.handler = async function(event) {
         return {
             statusCode: 400,
             body: JSON.stringify({ success: false, error: 'Email is required' })
+        };
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ success: false, error: 'Invalid email format' })
         };
     }
 
@@ -50,7 +70,7 @@ exports.handler = async function(event) {
         return {
             statusCode: 200,
             headers: { 
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'https://kairal.cl',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ success: true, data })

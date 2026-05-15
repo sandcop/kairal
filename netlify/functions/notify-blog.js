@@ -1,29 +1,56 @@
+const crypto = require('crypto');
+
+function verifyWebhookSignature(body, signatureHeader, secret) {
+    if (!signatureHeader || !secret) return false;
+    const parts = {};
+    signatureHeader.split(',').forEach(p => {
+        const i = p.indexOf('=');
+        parts[p.slice(0, i)] = p.slice(i + 1);
+    });
+    const ts = parts.t;
+    const sig = parts.s1;
+    if (!ts || !sig) return false;
+    const expected = crypto.createHmac('sha256', secret).update(`${ts}.${body}`).digest('hex');
+    try {
+        return crypto.timingSafeEqual(Buffer.from(sig, 'hex'), Buffer.from(expected, 'hex'));
+    } catch { return false; }
+}
+
+function esc(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
+    const webhookSecret = process.env.SANITY_WEBHOOK_SECRET;
+    if (webhookSecret) {
+        const sig = event.headers['sanity-webhook-signature'] || '';
+        if (!verifyWebhookSignature(event.body || '', sig, webhookSecret)) {
+            return { statusCode: 401, body: JSON.stringify({ error: 'Invalid webhook signature' }) };
+        }
+    }
+
     let post;
     try {
         const body = JSON.parse(event.body || '{}');
-        // Sanity envía el documento completo en el webhook
         post = body;
     } catch(err) {
         return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
     }
 
-    // Solo procesar si es una publicación nueva (no borrador)
     if (!post || !post.slug?.current) {
         return { statusCode: 200, body: JSON.stringify({ message: 'No slug, skipping' }) };
     }
 
-    const title = post.title || 'Nuevo artículo en Kairal';
-    const excerpt = post.excerpt || 'La Dra. Yusneily ha publicado un nuevo artículo sobre medicina funcional.';
-    const slug = post.slug.current;
-    const blogUrl = `https://kairal.cl/blog.html?slug=${slug}`;
+    const rawTitle = post.title || 'Nuevo artículo en Kairal';
+    const rawExcerpt = post.excerpt || 'La Dra. Yusneily ha publicado un nuevo artículo sobre medicina funcional.';
+    const rawSlug = post.slug.current;
+    const blogUrl = `https://kairal.cl/blog.html?slug=${encodeURIComponent(rawSlug)}`;
 
     try {
-        // Crear campaña en Brevo y enviarla a la lista
         const response = await fetch('https://api.brevo.com/v3/emailCampaigns', {
             method: 'POST',
             headers: {
@@ -31,8 +58,8 @@ exports.handler = async function(event) {
                 'api-key': process.env.BREVO_API_KEY
             },
             body: JSON.stringify({
-                name: `Blog: ${title}`,
-                subject: `📖 Nuevo artículo: ${title}`,
+                name: `Blog: ${rawTitle}`,
+                subject: `📖 Nuevo artículo: ${rawTitle}`,
                 sender: {
                     name: 'Dra. Yusneily Sánchez | Kairal',
                     email: 'dra.yusneily@kairal.cl'
@@ -46,8 +73,8 @@ exports.handler = async function(event) {
                             <img src="https://kairal.cl/Kairallogo-email.png" alt="Kairal" style="height:60px;">
                         </div>
                         <h1 style="color: #48B9B3; font-size: 1.8rem; margin-bottom: 10px;">Nuevo artículo para ti 📖</h1>
-                        <h2 style="color: #2D3436; font-size: 1.4rem; margin-bottom: 15px;">${title}</h2>
-                        <p style="color: #636E72; line-height: 1.8; margin-bottom: 25px;">${excerpt}</p>
+                        <h2 style="color: #2D3436; font-size: 1.4rem; margin-bottom: 15px;">${esc(rawTitle)}</h2>
+                        <p style="color: #636E72; line-height: 1.8; margin-bottom: 25px;">${esc(rawExcerpt)}</p>
                         <div style="text-align: center; margin: 30px 0;">
                             <a href="${blogUrl}" style="background: linear-gradient(135deg, #48B9B3, #2A8A85); color: white; padding: 14px 35px; border-radius: 25px; text-decoration: none; font-weight: 700; font-size: 1rem;">
                                 Leer artículo completo →
@@ -68,14 +95,13 @@ exports.handler = async function(event) {
                     </html>
                 `,
                 recipients: { listIds: [2] },
-                scheduledAt: new Date(Date.now() + 60000).toISOString() // enviar en 1 minuto
+                scheduledAt: new Date(Date.now() + 60000).toISOString()
             })
         });
 
         const data = await response.json();
         console.log('Campaign created:', JSON.stringify(data));
 
-        // Activar el envío inmediato si se creó correctamente
         if (data.id) {
             await fetch(`https://api.brevo.com/v3/emailCampaigns/${data.id}/sendNow`, {
                 method: 'POST',

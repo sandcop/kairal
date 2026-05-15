@@ -106,23 +106,27 @@
                 .trim();
         }
 
+        function escHtml(str) {
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
         function buildBlogCard(post) {
             const imageUrl = post.image?.asset?._ref ? sanityImageUrl(post.image.asset._ref) : '';
             const category = post.category || 'General';
             const categoryLower = normalizeCategory(category);
             return `
-            <div class="blog-card" data-category="${categoryLower}">
-                <img src="${imageUrl}" alt="${post.title}" class="blog-image">
+            <div class="blog-card" data-category="${escHtml(categoryLower)}">
+                <img src="${escHtml(imageUrl)}" alt="${escHtml(post.title)}" class="blog-image">
                 <div class="blog-content">
                     <div class="blog-card-header" onclick="toggleBlog(this)">
-                        <div><span class="blog-tag">${category}</span><h3>${post.title}</h3></div>
+                        <div><span class="blog-tag">${escHtml(category)}</span><h3>${escHtml(post.title)}</h3></div>
                         <span class="blog-card-toggle">▾</span>
                     </div>
                     <div class="blog-card-body">
-                        <p class="blog-excerpt">${post.excerpt || ''}</p>
+                        <p class="blog-excerpt">${escHtml(post.excerpt || '')}</p>
                         <div class="blog-meta">
                             <span class="blog-date">${formatDate(post.publishedAt)}</span>
-                            <a href="blog.html?slug=${post.slug?.current || ''}" class="read-more">Leer más →</a>
+                            <a href="blog.html?slug=${escHtml(post.slug?.current || '')}" class="read-more">Leer más →</a>
                         </div>
                     </div>
                 </div>
@@ -162,8 +166,15 @@
                     data.result.forEach(post => {
                         const div = document.createElement('div');
                         div.className = 'recent-post';
-                        div.innerHTML = `<h4 onclick="window.location='blog.html?slug=${post.slug?.current}'">${post.title}</h4>
-                            <p class="recent-post-date">${formatDate(post.publishedAt)}</p>`;
+                        const h4 = document.createElement('h4');
+                        h4.textContent = post.title;
+                        const slug = post.slug?.current || '';
+                        h4.addEventListener('click', () => { window.location = 'blog.html?slug=' + encodeURIComponent(slug); });
+                        const p = document.createElement('p');
+                        p.className = 'recent-post-date';
+                        p.textContent = formatDate(post.publishedAt);
+                        div.appendChild(h4);
+                        div.appendChild(p);
                         container.appendChild(div);
                     });
                 }
@@ -214,7 +225,7 @@
 
         function setSuscriptor(name, email) {
             const data = encodeURIComponent(JSON.stringify({ name, email }));
-            document.cookie = `kairal_user=${data}; max-age=${60*60*24*365}; path=/; SameSite=Lax`;
+            document.cookie = `kairal_user=${data}; max-age=${60*60*24*365}; path=/; SameSite=Lax; Secure`;
         }
 
         // Click en recurso — descarga directo siempre

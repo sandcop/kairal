@@ -17,3 +17,5 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     # Permisos de features
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    # Política de seguridad de contenido
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://zu3r11hb.api.sanity.io https://www.google-analytics.com https://cdn.sanity.io https://maps.googleapis.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self';"

@@ -39,9 +39,6 @@ exports.handler = async function(event) {
 
   try {
     const apiKey = (process.env.BREVO_API_KEY || '').trim();
-    console.log('API key length raw:', process.env.BREVO_API_KEY ? process.env.BREVO_API_KEY.length : 'UNDEFINED');
-    console.log('API key length trimmed:', apiKey.length);
-    console.log('API key end chars:', JSON.stringify(apiKey.slice(-5)));
     const response = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {
@@ -59,8 +56,7 @@ exports.handler = async function(event) {
     console.log('Brevo subscribe status:', response.status);
 
     if (!response.ok) {
-      const errBody = await response.text();
-      console.error('Brevo error status:', response.status, 'body:', errBody);
+      console.error('Brevo error status:', response.status);
       return {
         statusCode: 502,
         headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },

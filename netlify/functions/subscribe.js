@@ -59,7 +59,8 @@ exports.handler = async function(event) {
     console.log('Brevo subscribe status:', response.status);
 
     if (!response.ok) {
-      console.error('Brevo error status:', response.status);
+      const errBody = await response.text();
+      console.error('Brevo error status:', response.status, 'body:', errBody);
       return {
         statusCode: 502,
         headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },

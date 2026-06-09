@@ -1,3 +1,5 @@
+const { checkRateLimit, rateLimitHeaders, tooManyRequestsResponse } = require('./_lib/rate-limit');
+
 function esc(str) {
     return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
@@ -5,6 +7,15 @@ function esc(str) {
 exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
+    }
+
+    const ip = (event.headers['x-forwarded-for'] || '').split(',')[0].trim()
+             || event.headers['client-ip']
+             || '0.0.0.0';
+
+    const rateLimit = await checkRateLimit(ip, 'notify-resource');
+    if (!rateLimit.allowed) {
+        return tooManyRequestsResponse(rateLimit);
     }
 
     const authHeader = event.headers['authorization'] || '';
@@ -74,7 +85,7 @@ exports.handler = async function(event) {
         });
 
         const data = await response.json();
-        console.log('Campaign created:', JSON.stringify(data));
+        console.log('Resource campaign created, id:', data.id);
 
         if (data.id) {
             await fetch(`https://api.brevo.com/v3/emailCampaigns/${data.id}/sendNow`, {
@@ -89,10 +100,10 @@ exports.handler = async function(event) {
         };
 
     } catch(err) {
-        console.log('Error:', err.message);
+        console.error('notify-resource error:', err.message);
         return {
             statusCode: 500,
-            body: JSON.stringify({ success: false, error: err.message })
+            body: JSON.stringify({ success: false, error: 'Error al procesar la solicitud' })
         };
     }
 };

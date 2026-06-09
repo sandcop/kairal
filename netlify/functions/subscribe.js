@@ -38,6 +38,7 @@ exports.handler = async function(event) {
   const { email, firstName, lastName, recurso } = validation.data;
 
   try {
+    console.log('API key length:', process.env.BREVO_API_KEY ? process.env.BREVO_API_KEY.length : 'UNDEFINED');
     const response = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {

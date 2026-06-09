@@ -38,12 +38,15 @@ exports.handler = async function(event) {
   const { email, firstName, lastName, recurso } = validation.data;
 
   try {
-    console.log('API key length:', process.env.BREVO_API_KEY ? process.env.BREVO_API_KEY.length : 'UNDEFINED');
+    const apiKey = (process.env.BREVO_API_KEY || '').trim();
+    console.log('API key length raw:', process.env.BREVO_API_KEY ? process.env.BREVO_API_KEY.length : 'UNDEFINED');
+    console.log('API key length trimmed:', apiKey.length);
+    console.log('API key end chars:', JSON.stringify(apiKey.slice(-5)));
     const response = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': process.env.BREVO_API_KEY,
+        'api-key': apiKey,
       },
       body: JSON.stringify({
         email,

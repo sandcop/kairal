@@ -1065,7 +1065,7 @@ select { cursor: pointer; }
 <script>
 // ── CONFIG ──────────────────────────────────────────────
 // REEMPLAZA con la URL de tu Apps Script desplegado
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_3e0O58TqHkMDrsDdPpOBSehxsAMd0PvNRl9xtupnZXnUnf6nLc-j1SywtJd4B60X/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzETxZBW22UP_18QWhq_FuwzcmlGFhzp2pQMJxjMBxPkvHjF_BUW7COf82YElSj_6FL/exec';
 
 // ── ARCHIVOS ─────────────────────────────────────────────
 const fileStore = { lab: [], img: [], otros: [] };
@@ -1194,6 +1194,15 @@ function buildSummary() {
     ...Array.from(document.querySelectorAll('#sg-musculo input:checked'))
   ].map(i => i.value).join(', ') || '—';
 
+    function escHtmlVal(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
   const blocks = [
     {
       title: '🌿 Datos personales',
@@ -1255,7 +1264,7 @@ function buildSummary() {
         ${b.items.map(([l,v]) => `
           <div class="s-item">
             <div class="s-label">${l}</div>
-            <div class="s-val">${v || '—'}</div>
+            <div class="s-val">${escHtmlVal(v) || '—'}</div>
           </div>`).join('')}
       </div>
     </div>`).join('');

@@ -865,7 +865,9 @@ select { cursor: pointer; }
     <div class="sys-grid" id="sg-digest">
       <label class="sys-item"><input type="checkbox" value="Estreñimiento" onchange="checkSel(this)"> Estreñimiento</label>
       <label class="sys-item"><input type="checkbox" value="Diarrea frecuente" onchange="checkSel(this)"> Diarrea frecuente</label>
-      <label class="sys-item"><input type="checkbox" value="Gases o hinchazón" onchange="checkSel(this)"> Gases o hinchazón</label>
+      <label class="sys-item"><input type="checkbox" value="Hinchazón" onchange="checkSel(this)"> Hinchazón</label>
+      <label class="sys-item"><input type="checkbox" value="Gases de mal olor" onchange="checkSel(this)"> Gases de mal olor</label>
+      <label class="sys-item"><input type="checkbox" value="Llenura prolongada o digestión lenta" onchange="checkSel(this)"> Llenura / digestión lenta</label>
       <label class="sys-item"><input type="checkbox" value="Reflujo o acidez" onchange="checkSel(this)"> Reflujo o acidez</label>
       <label class="sys-item"><input type="checkbox" value="Dolor abdominal" onchange="checkSel(this)"> Dolor abdominal</label>
       <label class="sys-item"><input type="checkbox" value="Intolerancia a ciertos alimentos" onchange="checkSel(this)"> Intolerancia alimentaria</label>
@@ -873,8 +875,9 @@ select { cursor: pointer; }
 
     <div class="sys-category">🧠 Sistema nervioso</div>
     <div class="sys-grid" id="sg-nervioso">
-      <label class="sys-item"><input type="checkbox" value="Dolor de cabeza frecuente" onchange="checkSel(this)"> Dolor de cabeza</label>
-      <label class="sys-item"><input type="checkbox" value="Migrañas" onchange="checkSel(this)"> Migrañas</label>
+      <label class="sys-item"><input type="checkbox" value="Dolor de cabeza o migraña" onchange="checkSel(this)"> Dolor de cabeza / migraña</label>
+      <label class="sys-item"><input type="checkbox" value="Insomnio" onchange="checkSel(this)"> Insomnio</label>
+      <label class="sys-item"><input type="checkbox" value="Falta de memoria" onchange="checkSel(this)"> Falta de memoria</label>
       <label class="sys-item"><input type="checkbox" value="Fatiga crónica" onchange="checkSel(this)"> Fatiga crónica</label>
       <label class="sys-item"><input type="checkbox" value="Dificultad para concentrarse" onchange="checkSel(this)"> Falta de concentración</label>
       <label class="sys-item"><input type="checkbox" value="Ansiedad" onchange="checkSel(this)"> Ansiedad</label>
@@ -885,20 +888,22 @@ select { cursor: pointer; }
 
     <div class="sys-category">⚖️ Hormonal / Metabólico</div>
     <div class="sys-grid" id="sg-hormonal">
-      <label class="sys-item"><input type="checkbox" value="Síntomas premenstruales" onchange="checkSel(this)"> SPM</label>
-      <label class="sys-item"><input type="checkbox" value="Ciclo irregular" onchange="checkSel(this)"> Ciclo irregular</label>
-      <label class="sys-item"><input type="checkbox" value="Hipotiroidismo o sospecha" onchange="checkSel(this)"> Hipotiroidismo</label>
+      <label class="sys-item"><input type="checkbox" value="Ciclo menstrual irregular" onchange="checkSel(this)"> Ciclo menstrual irregular</label>
+      <label class="sys-item"><input type="checkbox" value="Menstruación dolorosa" onchange="checkSel(this)"> Menstruación dolorosa</label>
       <label class="sys-item"><input type="checkbox" value="Resistencia a la insulina" onchange="checkSel(this)"> Resistencia insulina</label>
-      <label class="sys-item"><input type="checkbox" value="Aumento de peso inexplicado" onchange="checkSel(this)"> Subida de peso</label>
-      <label class="sys-item"><input type="checkbox" value="Dificultad para bajar de peso" onchange="checkSel(this)"> No baja de peso</label>
+      <label class="sys-item"><input type="checkbox" value="Dificultad para bajar de peso" onchange="checkSel(this)"> Dificultad para bajar de peso</label>
+      <label class="sys-item"><input type="checkbox" value="Ansiedad por dulces" onchange="checkSel(this)"> Ansiedad por dulces</label>
+      <label class="sys-item"><input type="checkbox" value="Sobrepeso u obesidad" onchange="checkSel(this)"> Sobrepeso / obesidad</label>
+      <label class="sys-item"><input type="checkbox" value="Acné" onchange="checkSel(this)"> Acné</label>
+      <label class="sys-item"><input type="checkbox" value="Palpitaciones" onchange="checkSel(this)"> Palpitaciones</label>
+      <label class="sys-item"><input type="checkbox" value="Presión alta" onchange="checkSel(this)"> Presión alta</label>
       <label class="sys-item"><input type="checkbox" value="Caída de cabello" onchange="checkSel(this)"> Caída de cabello</label>
       <label class="sys-item"><input type="checkbox" value="Intolerancia al frío o calor" onchange="checkSel(this)"> Intolerancia frío/calor</label>
     </div>
 
     <div class="sys-category">🛡️ Inmunológico</div>
     <div class="sys-grid" id="sg-inmuno">
-      <label class="sys-item"><input type="checkbox" value="Enfermedades autoinmunes" onchange="checkSel(this)"> Autoinmune</label>
-      <label class="sys-item"><input type="checkbox" value="Infecciones frecuentes" onchange="checkSel(this)"> Infecciones frecuentes</label>
+      <label class="sys-item"><input type="checkbox" value="Infecciones respiratorias frecuentes" onchange="checkSel(this)"> Infecciones respiratorias frecuentes</label>
       <label class="sys-item"><input type="checkbox" value="Alergias estacionales" onchange="checkSel(this)"> Alergias estacionales</label>
       <label class="sys-item"><input type="checkbox" value="Problemas de piel (eccema, psoriasis)" onchange="checkSel(this)"> Problemas de piel</label>
     </div>
@@ -906,10 +911,8 @@ select { cursor: pointer; }
     <div class="sys-category">💪 Músculo-esquelético / Otros</div>
     <div class="sys-grid" id="sg-musculo">
       <label class="sys-item"><input type="checkbox" value="Dolor muscular o articular" onchange="checkSel(this)"> Dolor muscular/articular</label>
-      <label class="sys-item"><input type="checkbox" value="Dolor crónico sin diagnóstico" onchange="checkSel(this)"> Dolor sin diagnóstico</label>
-      <label class="sys-item"><input type="checkbox" value="Palpitaciones" onchange="checkSel(this)"> Palpitaciones</label>
-      <label class="sys-item"><input type="checkbox" value="Presión alta" onchange="checkSel(this)"> Presión alta</label>
-      <label class="sys-item"><input type="checkbox" value="Dificultad respiratoria" onchange="checkSel(this)"> Dificultad respiratoria</label>
+      <label class="sys-item"><input type="checkbox" value="Inflamación articular" onchange="checkSel(this)"> Inflamación articular</label>
+      <label class="sys-item"><input type="checkbox" value="Rigidez articular" onchange="checkSel(this)"> Rigidez articular</label>
     </div>
 
     <div class="field" style="margin-top:1.2rem">
@@ -1065,7 +1068,7 @@ select { cursor: pointer; }
 <script>
 // ── CONFIG ──────────────────────────────────────────────
 // REEMPLAZA con la URL de tu Apps Script desplegado
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoj9KdzuTgQkLZSNvAfoBfiV35f0m8sbIzQIa2HzrtzNWy7gjU2F_KYwLs8WsE7Dkp/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiXXDu9jm5Yt-c1AmNxhTjv17k8LeZ6XLs8Ce1xCB3Uy3m7zcsbcUUunxaVcLRGOrL/exec';
 
 // ── ARCHIVOS ─────────────────────────────────────────────
 const fileStore = { lab: [], img: [], otros: [] };

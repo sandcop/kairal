@@ -533,10 +533,7 @@
         .panel-cta:hover {
             background: linear-gradient(135deg, #E88A0A, #D67A00);
             transform: translateY(-2px);
-            
-        }
-            transform: translateY(-3px);
-            
+
         }
 
         .panel-contact {
@@ -2895,12 +2892,6 @@
         .recent-post:hover h4 { color: #48B9B3; }
         .menu-toggle:active { transform: scale(0.92); }
 
-
-        
-
-        
-        }
-
         /* Scroll horizontal suave */
         
 
@@ -3342,8 +3333,9 @@
 /* ── Móvil ─────────────────────────────────────────── */
 @media (max-width: 768px) {
     .hero-single {
-        align-items: center;
-        justify-content: center;
+        /* Contenido anclado a la zona inferior: despeja el rostro de la Dra. */
+        align-items: flex-end;
+        justify-content: flex-start;
         min-height: 100svh;
     }
 
@@ -3360,44 +3352,52 @@
 
     /* La imagen principal también se reposiciona en móvil */
     .hero-bg-img {
-        object-position: 35% center;
+        object-position: 35% top;
     }
 
-    /* Overlay más oscuro para legibilidad */
+    /* Overlay: la MISMA línea que escritorio (mismos tonos y opacidades),
+       girada a vertical — cara despejada arriba, texto sobre la zona 0.55 */
     .hero-bg-overlay {
         background: linear-gradient(
             to bottom,
-            rgba(20, 80, 76, 0.5) 0%,
-            rgba(20, 80, 76, 0.4) 60%,
-            rgba(20, 80, 76, 0.65) 100%
+            rgba(26, 122, 117, 0.25) 0%,
+            rgba(42, 138, 133, 0.20) 45%,
+            rgba(20, 80, 76, 0.55) 100%
         );
     }
 
     .hero-content-right {
-        margin: 0 auto;
-        text-align: center;
-        padding: 80px 5% 2.5rem;
+        margin: 0;
+        text-align: left;
+        padding: 0 6% 3rem;
         max-width: 100%;
         width: 100%;
-        align-self: auto;
+        align-self: flex-end;
     }
 
-    .hero-eyebrow { text-align: right; }
-    .hero-title { font-size: 2.3rem; line-height: 1.15; }
-    .hero-slide-title { font-size: 2.3rem; line-height: 1.15; }
+    .hero-eyebrow { text-align: left; margin-bottom: 0.8rem; }
+    .hero-slide { text-align: left; }
+    /* Altura holgada: los slides son absolutos y el más largo (título de
+       3 líneas + descripción) ronda los 210px en pantallas angostas; si el
+       contenedor queda corto, el texto se encima sobre los botones */
+    .hero-slides-wrap { min-height: 240px; margin-bottom: 1rem; }
+    .hero-title { font-size: 2rem; line-height: 1.15; }
+    .hero-slide-title { font-size: 2rem; line-height: 1.15; }
     .hero-desc { font-size: 0.95rem; }
+    .hero-slide-desc { font-size: 0.95rem; line-height: 1.55; }
+
+    /* Botones visibles SOLO en móvil (en escritorio el contenedor queda
+       invisible con opacity 0, como en el diseño original), en la zona
+       inferior izquierda. El !important le gana al opacity:0 del bloque
+       de animaciones que viene más abajo en este archivo. */
     .hero-btns {
-        justify-content: center;
+        opacity: 1 !important;
+        justify-content: flex-start;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         gap: 0.8rem;
     }
-    .hero-btn-primary,
-    .hero-btn-secondary {
-        width: 100%;
-        max-width: 280px;
-        text-align: center;
-    }
+    .hero-dots { justify-content: flex-start; }
 
     /* Tarjetas side by side en móvil */
     .hero-info-cards {

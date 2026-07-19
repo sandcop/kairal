@@ -711,6 +711,12 @@ function toggleBlog(header) {
             duration:  700, delay: 150,
         });
         // ── Botones ──────────────────────────────────────
+        // Anima los <a> de adentro. En escritorio el CONTENEDOR .hero-btns
+        // queda en opacity 0 (los botones no se muestran, diseño original);
+        // en móvil el CSS lo hace visible y estos <a> entran con fade.
+        // Pre-ocultar por JS (como los dots): anime aplica el valor inicial
+        // recién al arrancar tras el delay, y sin esto parpadearían.
+        document.querySelectorAll('.hero-btns a').forEach(a => { a.style.opacity = '0'; });
         anime({
             targets:   '.hero-btns a',
             translateY:[20, 0], opacity:[0, 1],

@@ -630,7 +630,6 @@ hr.rule{ border:0; height:1px; background:var(--line); margin:0; }
   </div>
 </section>
 
-<script src="25035a5f-4426-4d29-86b4-de1148000b60"></script>
 <script>
 (function(){
   var GUT = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v5a4 4 0 0 0 4 4h1a3 3 0 0 1 3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V9M9 3v4M18 21v-2"/></svg>';
@@ -894,6 +893,51 @@ function copyEmail() {
     navigator.clipboard.writeText(correo).then(marcar).catch(function () {});
   }
 }
+
+// ── Posts recientes del panel lateral ──
+// Los tres artículos del HTML son solo un respaldo: aquí se reemplazan por
+// los publicados de verdad, igual que hace la portada en script.js
+(function () {
+  var SANITY_API_URL =
+    'https://zu3r11hb.api.sanity.io/v2021-10-21/data/query/production';
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString(
+      'es-CL', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  var query = encodeURIComponent(
+    '*[_type == "post"] | order(publishedAt desc)[0...3] { title, slug, publishedAt }');
+
+  fetch(SANITY_API_URL + '?query=' + query)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!data.result || !data.result.length) return;   // deja el respaldo
+      var cont = document.querySelector('.side-panel-content');
+      if (!cont || !cont.querySelector('.panel-section-title')) return;
+
+      cont.querySelectorAll('.recent-post').forEach(function (p) { p.remove(); });
+      data.result.forEach(function (post) {
+        var div = document.createElement('div');
+        div.className = 'recent-post';
+        var h4 = document.createElement('h4');
+        h4.textContent = post.title;
+        h4.style.cursor = 'pointer';
+        var slug = (post.slug && post.slug.current) || '';
+        h4.addEventListener('click', function () {
+          window.location = 'blog.html?slug=' + encodeURIComponent(slug);
+        });
+        var p = document.createElement('p');
+        p.className = 'recent-post-date';
+        p.textContent = formatDate(post.publishedAt);
+        div.appendChild(h4);
+        div.appendChild(p);
+        cont.appendChild(div);
+      });
+    })
+    .catch(function (e) { console.log('Posts recientes panel:', e); });
+})();
 
 // Chat del header: aquí solo abre la conversación en la portada
 var headerChatInput = document.getElementById('headerChatInput');

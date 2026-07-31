@@ -5,6 +5,7 @@ const LIMITS = {
   reviews:           { max: 60, windowMs: 60 * 1000 },       // 60 per minute
   'notify-blog':     { max: 10, windowMs: 60 * 1000 },       // 10 per minute
   'notify-resource': { max: 10, windowMs: 60 * 1000 },       // 10 per minute
+  'autoeval-result': { max: 5,  windowMs: 15 * 60 * 1000 },  // 5 per 15 min
 };
 
 // Note: Netlify Blobs has no atomic increment. Concurrent requests within the same

@@ -975,64 +975,53 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
             
             
 
-            <div class="edu-timeline">
+            <div class="edu-route">
+                <span class="edu-rail" aria-hidden="true"></span>
 
-                <!-- Venezuela · LEFT -->
-                <div class="edu-item edu-left">
+                <article class="edu-stop timeline-item" style="--i:0">
+                    <div class="edu-marker">
+                        <span class="edu-flag"><svg viewBox="0 0 60 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="60" height="20" fill="#FFCC00"/><rect y="20" width="60" height="20" fill="#00247D"/><rect y="40" width="60" height="20" fill="#CF142B"/><g fill="#fff"><circle cx="19.7" cy="36.2" r="1.5"/><circle cx="21.6" cy="32.9" r="1.5"/><circle cx="24.5" cy="30.5" r="1.5"/><circle cx="28.1" cy="29.2" r="1.5"/><circle cx="31.9" cy="29.2" r="1.5"/><circle cx="35.5" cy="30.5" r="1.5"/><circle cx="38.4" cy="32.9" r="1.5"/><circle cx="40.3" cy="36.2" r="1.5"/></g></svg></span>
+                    </div>
+                    <p class="edu-country">Venezuela</p>
                     <div class="edu-card">
                         <span class="edu-badge edu-badge--grado">Grado</span>
                         <h3 class="edu-title">Médico Cirujano</h3>
-                        <p class="edu-institution">UNEFM · Venezuela</p>
+                        <p class="edu-institution">UNEFM</p>
                     </div>
-                    <div class="edu-node">
-                        <div class="edu-dot">🇻🇪</div>
-                        <span class="edu-country-label">Venezuela</span>
+                </article>
+                <article class="edu-stop timeline-item" style="--i:1">
+                    <div class="edu-marker">
+                        <span class="edu-flag"><svg viewBox="0 0 60 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="20" height="60" fill="#D91023"/><rect x="20" width="20" height="60" fill="#fff"/><rect x="40" width="20" height="60" fill="#D91023"/></svg></span>
                     </div>
-                    <div class="edu-spacer"></div>
-                </div>
-
-                <!-- Perú · RIGHT -->
-                <div class="edu-item edu-right">
-                    <div class="edu-spacer"></div>
-                    <div class="edu-node">
-                        <div class="edu-dot">🇵🇪</div>
-                        <span class="edu-country-label">Perú</span>
-                    </div>
+                    <p class="edu-country">Perú</p>
                     <div class="edu-card">
                         <span class="edu-badge edu-badge--curso">Curso</span>
                         <h3 class="edu-title">Terapias PRP y Ozonoterapia</h3>
                         <p class="edu-institution">Perú</p>
                     </div>
-                </div>
-
-                <!-- Colombia · LEFT -->
-                <div class="edu-item edu-left">
+                </article>
+                <article class="edu-stop timeline-item" style="--i:2">
+                    <div class="edu-marker">
+                        <span class="edu-flag"><svg viewBox="0 0 60 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="60" height="30" fill="#FCD116"/><rect y="30" width="60" height="15" fill="#003893"/><rect y="45" width="60" height="15" fill="#CE1126"/></svg></span>
+                    </div>
+                    <p class="edu-country">Colombia</p>
                     <div class="edu-card">
                         <span class="edu-badge edu-badge--diplomado">Diplomado</span>
                         <h3 class="edu-title">Medicina Integrativa y Bases Homeopáticas</h3>
-                        <p class="edu-institution">Universidad del Bosque · Colombia</p>
+                        <p class="edu-institution">Universidad del Bosque</p>
                     </div>
-                    <div class="edu-node">
-                        <div class="edu-dot">🇨🇴</div>
-                        <span class="edu-country-label">Colombia</span>
+                </article>
+                <article class="edu-stop edu-stop--top timeline-item" style="--i:3">
+                    <div class="edu-marker">
+                        <span class="edu-flag"><svg viewBox="0 0 60 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="60" height="15" fill="#C60B1E"/><rect y="15" width="60" height="30" fill="#FFC400"/><rect y="45" width="60" height="15" fill="#C60B1E"/></svg></span>
                     </div>
-                    <div class="edu-spacer"></div>
-                </div>
-
-                <!-- España · RIGHT · Highlight -->
-                <div class="edu-item edu-right">
-                    <div class="edu-spacer"></div>
-                    <div class="edu-node">
-                        <div class="edu-dot edu-dot--highlight">🇪🇸</div>
-                        <span class="edu-country-label edu-country-label--gold">España</span>
-                    </div>
-                    <div class="edu-card edu-card--highlight">
+                    <p class="edu-country">España</p>
+                    <div class="edu-card">
                         <span class="edu-badge edu-badge--master">Máster</span>
                         <h3 class="edu-title">Psiconeuroinmunología</h3>
-                        <p class="edu-institution">Regenera · España</p>
+                        <p class="edu-institution">Regenera</p>
                     </div>
-                </div>
-
+                </article>
             </div>
 
             <div class="edu-closing-note">
@@ -1578,211 +1567,226 @@ La pasión por la medicina funcional nace desde la necesidad de ayudar realmente
     ═══════════════════════════════════════════ -->
     <style>
     /* ── Timeline centrado con zigzag ── */
-    .edu-timeline {
+    /* ═══════════════════════════════════════════════════════════
+       Mi Trayectoria — recorrido por cuatro países
+       Las banderas van dibujadas en SVG a propósito: los emoji de
+       bandera no existen en Windows y se veían como "VE", "PE"…
+       ═══════════════════════════════════════════════════════════ */
+    .edu-route {
         position: relative;
-        max-width: 860px;
-        margin: 3.5rem auto 0;
-        padding: 1rem 0 2rem;
-    }
-    .edu-timeline::before {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(to bottom, transparent 0%, #48b9b2 8%, #48b9b2 92%, transparent 100%);
-        transform: translateX(-50%);
-    }
-    .edu-item {
         display: grid;
-        grid-template-columns: 1fr 80px 1fr;
-        align-items: center;
-        margin-bottom: 2.6rem;
-        position: relative;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        max-width: 1080px;
+        margin: 4rem auto 0;
+        padding-top: 0.5rem;
     }
-    /* ── Cards ── */
-    .edu-card {
-        background: #ffffff;
-        border: 1px solid #e8ecef;
-        border-radius: 16px;
-        padding: 1.4rem 1.6rem;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.055);
-        position: relative;
-        transition: box-shadow 0.25s ease, transform 0.25s ease;
-    }
-    .edu-card:hover {
-        box-shadow: 0 10px 32px rgba(72,185,178,0.18);
-        transform: translateY(-3px);
-    }
-    .edu-card--highlight {
-        border-color: rgba(245,155,27,0.35);
-        box-shadow: 0 4px 20px rgba(245,155,27,0.12);
-    }
-    .edu-card--highlight:hover {
-        box-shadow: 0 10px 32px rgba(245,155,27,0.22);
-    }
-    /* Left card: right-aligned */
-    .edu-left .edu-card { text-align: right; }
-    /* Grid positions: left item */
-    .edu-left .edu-card  { grid-column: 1; grid-row: 1; }
-    .edu-left .edu-node  { grid-column: 2; grid-row: 1; }
-    .edu-left .edu-spacer{ grid-column: 3; grid-row: 1; }
-    /* Grid positions: right item */
-    .edu-right .edu-spacer{ grid-column: 1; grid-row: 1; }
-    .edu-right .edu-node  { grid-column: 2; grid-row: 1; }
-    .edu-right .edu-card  { grid-column: 3; grid-row: 1; text-align: left; }
-    /* Connector lines */
-    .edu-left .edu-card::after {
-        content: '';
+
+    /* Riel: avanza de turquesa a ámbar, del inicio a la culminación */
+    .edu-rail {
         position: absolute;
-        right: -18px; top: 50%;
-        width: 18px; height: 1px;
-        background: #c8e9e7;
+        top: 32px;
+        left: 12.5%;
+        right: 12.5%;
+        height: 2px;
+        background: linear-gradient(to right, #48b9b2 0%, #8ecfc4 55%, #f59b1b 100%);
+        opacity: 0.5;
     }
-    .edu-right .edu-card::before {
-        content: '';
-        position: absolute;
-        left: -18px; top: 50%;
-        width: 18px; height: 1px;
-        background: #c8e9e7;
-    }
-    /* ── Badges ── */
-    .edu-badge {
-        display: inline-block;
-        font-size: 0.67rem;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        padding: 0.22rem 0.65rem;
-        border-radius: 100px;
-        margin-bottom: 0.55rem;
-    }
-    .edu-badge--grado     { background: #e0f5f3; color: #1a8a83; }
-    .edu-badge--curso     { background: #fff3e0; color: #c0710c; }
-    .edu-badge--diplomado { background: #ede7f6; color: #6a1b9a; }
-    .edu-badge--master    { background: #fff8e1; color: #c89100; }
-    /* ── Text ── */
-    .edu-title {
-        font-size: 0.97rem;
-        font-weight: 800;
-        color: #1a1a2e;
-        margin: 0 0 0.3rem;
-        line-height: 1.35;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-    }
-    .edu-institution {
-        font-size: 0.84rem;
-        color: #999;
-        margin: 0;
-        font-weight: 500;
-    }
-    /* ── Center dot ── */
-    .edu-node {
+
+    .edu-stop {
+        position: relative;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        text-align: center;
+        opacity: 1;
+    }
+    /* Aparece al llegar con el scroll; si el JS no corre, se ve igual */
+    .edu-stop.scroll-reveal {
+        animation: eduEntra 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+        animation-delay: calc(var(--i) * 0.12s);
+    }
+    @keyframes eduEntra {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .edu-stop.scroll-reveal { animation: none; }
+    }
+
+    /* ── Marcador con la bandera ── */
+    .edu-marker {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid rgba(72, 185, 178, 0.45);
+        display: grid;
+        place-items: center;
+        box-shadow: 0 4px 14px rgba(45, 52, 54, 0.08);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
         position: relative;
         z-index: 2;
     }
-    .edu-dot {
-        width: 52px;
-        height: 52px;
+    .edu-flag {
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
-        background: white;
-        border: 2.5px solid #48b9b2;
-        box-shadow: 0 0 0 6px rgba(72,185,178,0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.4rem;
-        line-height: 1;
-        transition: box-shadow 0.25s;
+        overflow: hidden;
+        display: block;
+        box-shadow: inset 0 0 0 1px rgba(45, 52, 54, 0.10);
     }
-    .edu-dot--highlight {
+    .edu-flag svg { width: 100%; height: 100%; display: block; }
+
+    .edu-stop:hover .edu-marker {
+        transform: translateY(-3px);
+        border-color: #48b9b2;
+        box-shadow: 0 8px 22px rgba(72, 185, 178, 0.25);
+    }
+    /* El máster cierra el recorrido: marcador en ámbar con halo */
+    .edu-stop--top .edu-marker {
         border-color: #f59b1b;
-        box-shadow: 0 0 0 6px rgba(245,155,27,0.12);
+        box-shadow: 0 0 0 6px rgba(245, 155, 27, 0.12),
+                    0 4px 16px rgba(245, 155, 27, 0.22);
     }
-    /* ── Closing note ── */
+    .edu-stop--top:hover .edu-marker {
+        border-color: #f59b1b;
+        box-shadow: 0 0 0 8px rgba(245, 155, 27, 0.16),
+                    0 10px 26px rgba(245, 155, 27, 0.3);
+    }
+
+    /* ── País: siempre visible (antes se escondía tras el cursor) ── */
+    .edu-country {
+        margin: 0.85rem 0 1.1rem;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #1a8a83;
+    }
+    .edu-stop--top .edu-country { color: #c07d0a; }
+
+    /* ── Tarjeta ── */
+    .edu-card {
+        background: #fff;
+        border: 1px solid #e8ecef;
+        border-radius: 18px;
+        padding: 1.5rem 1.3rem 1.6rem;
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 4px 18px rgba(45, 52, 54, 0.05);
+        transition: box-shadow 0.28s ease, transform 0.28s ease, border-color 0.28s ease;
+    }
+    .edu-stop:hover .edu-card {
+        transform: translateY(-4px);
+        border-color: rgba(72, 185, 178, 0.4);
+        box-shadow: 0 14px 34px rgba(72, 185, 178, 0.16);
+    }
+    .edu-card--legacy { display: none; }
+    .edu-stop--top .edu-card {
+        border-color: rgba(245, 155, 27, 0.35);
+        box-shadow: 0 6px 24px rgba(245, 155, 27, 0.14);
+    }
+    .edu-stop--top:hover .edu-card {
+        border-color: rgba(245, 155, 27, 0.6);
+        box-shadow: 0 14px 34px rgba(245, 155, 27, 0.22);
+    }
+
+    .edu-badge {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        padding: 0.3rem 0.8rem;
+        border-radius: 100px;
+        margin-bottom: 0.9rem;
+    }
+    /* Solo turquesa y ámbar, los colores de la web. El tono sube con el
+       peso de la credencial: el curso es el más discreto y el máster,
+       el único en ámbar, cierra la escala. Texto oscuro sobre el ámbar
+       porque en blanco no se leía (2,19:1). */
+    .edu-badge--curso     { background: #eef2f3; color: #586a6d; }
+    .edu-badge--grado     { background: #d9f1ef; color: #12706a; }
+    .edu-badge--diplomado { background: #b5e3df; color: #0d5b57; }
+    .edu-badge--master    { background: #f59b1b; color: #2d3436; }
+
+    .edu-title {
+        font-size: 1.02rem;
+        font-weight: 800;
+        color: #2d3436;
+        margin: 0 0 0.55rem;
+        line-height: 1.35;
+        letter-spacing: -0.1px;
+    }
+    .edu-institution {
+        font-size: 0.85rem;
+        color: #7c878a;
+        margin: 0;
+        font-weight: 600;
+        line-height: 1.45;
+    }
+
+    /* ── Cierre ── */
     .edu-closing-note {
-        max-width: 620px;
-        margin: 1rem auto 0;
+        max-width: 640px;
+        margin: 3.5rem auto 0;
         text-align: center;
-        padding: 2rem 1.5rem 0;
-        border-top: 1px solid #eef2f2;
+        padding: 2.2rem 1.5rem 0;
+        border-top: 1px solid #e8ecef;
     }
     .edu-closing-note p {
         color: #636e72;
-        font-size: 0.93rem;
-        line-height: 1.78;
-        margin: 0 0 0.6rem;
+        font-size: 0.95rem;
+        line-height: 1.8;
+        margin: 0 0 0.8rem;
         font-style: italic;
     }
-    /* ── Country label tooltip ── */
-    .edu-node {
-        position: relative;
-        cursor: default;
-    }
-    .edu-country-label {
-        position: absolute;
-        top: 50%;
-        white-space: nowrap;
-        font-size: 0.73rem;
-        font-weight: 700;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        color: #1a8a83;
-        background: rgba(255, 255, 255, 0.97);
-        padding: 0.28rem 0.75rem;
-        border-radius: 30px;
-        border: 1.5px solid rgba(72, 185, 178, 0.35);
-        box-shadow: 0 3px 12px rgba(72, 185, 178, 0.18);
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.28s ease, transform 0.28s ease;
-        z-index: 20;
-    }
-    .edu-country-label--gold {
-        color: #c89100;
-        border-color: rgba(245, 155, 27, 0.35);
-        box-shadow: 0 3px 12px rgba(245, 155, 27, 0.18);
-    }
-    /* Items LEFT: la tarjeta está a la izquierda → label revela hacia la DERECHA */
-    .edu-left .edu-node .edu-country-label {
-        left: calc(100% + 10px);
-        transform: translateY(-50%) translateX(-10px);
-    }
-    .edu-left .edu-node:hover .edu-country-label {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0);
-    }
-    /* Items RIGHT: la tarjeta está a la derecha → label revela hacia la IZQUIERDA */
-    .edu-right .edu-node .edu-country-label {
-        right: calc(100% + 10px);
-        transform: translateY(-50%) translateX(10px);
-    }
-    .edu-right .edu-node:hover .edu-country-label {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0);
+    .edu-closing-note p:last-child { margin-bottom: 0; }
+
+    /* ── Tablet: dos columnas ── */
+    @media (max-width: 900px) {
+        .edu-route { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1.5rem; }
+        .edu-rail { display: none; }
     }
 
-    /* ── Mobile ── */
-    @media (max-width: 768px) {
-        .edu-timeline::before { left: 26px; transform: none; }
-        .edu-item {
-            grid-template-columns: 56px 1fr;
-            margin-bottom: 1.8rem;
+    /* ── Móvil: lista vertical con riel a la izquierda ── */
+    @media (max-width: 560px) {
+        .edu-route {
+            grid-template-columns: 1fr;
+            gap: 1.1rem;
+            margin-top: 2.5rem;
+            padding-left: 4.5rem;
         }
-        .edu-left .edu-card,
-        .edu-right .edu-card  { grid-column: 2; grid-row: 1; text-align: left; }
-        .edu-left .edu-node,
-        .edu-right .edu-node  { grid-column: 1; grid-row: 1; }
-        .edu-left .edu-spacer,
-        .edu-right .edu-spacer { display: none; }
-        .edu-left .edu-card::after,
-        .edu-right .edu-card::before { display: none; }
-        .edu-dot { width: 42px; height: 42px; font-size: 1.1rem; }
+        .edu-rail {
+            display: block;
+            top: 24px;
+            bottom: 24px;
+            left: 32px;
+            right: auto;
+            width: 2px;
+            height: auto;
+            background: linear-gradient(to bottom, #48b9b2 0%, #8ecfc4 55%, #f59b1b 100%);
+        }
+        .edu-stop {
+            display: block;
+            text-align: left;
+        }
+        .edu-marker {
+            position: absolute;
+            left: -4.5rem;
+            top: 0;
+            width: 52px;
+            height: 52px;
+        }
+        .edu-flag { width: 36px; height: 36px; }
+        .edu-country { margin: 0 0 0.45rem; }
+        .edu-card { align-items: flex-start; padding: 1.1rem 1.2rem 1.2rem; }
+        .edu-badge { margin-bottom: 0.6rem; }
+        .edu-title { font-size: 0.97rem; }
     }
     </style>
 

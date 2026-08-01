@@ -7,7 +7,7 @@
      · el servidor   → require() desde netlify/functions/autoeval-result.js
    Así el informe en pantalla y el que llega por correo nunca se contradicen.
 
-   Criterio de redacción: describe patrones y sugiere qué evaluar. No
+   Criterio de redacción: describe patrones y orienta sobre qué hacer. No
    diagnostica, no promete resultados y no indica tratamientos ni dosis.
    ========================================================================== */
 
@@ -127,7 +127,6 @@
   //   lectura  → qué sugiere el patrón
   //   porque   → por qué importa que mejore (y qué pasa si no se atiende)
   //   acciones → pasos concretos
-  //   evaluar  → qué conviene medir con tu médica (solo en franjas altas)
   var RECOMENDACIONES = {
     dig: {
       estable: {
@@ -157,11 +156,6 @@
           'Evita automedicarte con protectores gástricos de forma prolongada: reducen la acidez que necesitas para digerir y absorber',
           'Prioriza el sueño y la gestión del estrés: el intestino responde directamente al sistema nervioso',
           'Mantén el registro de síntomas y llévalo a tu consulta: acorta mucho el diagnóstico'
-        ],
-        evaluar: [
-          'Sobrecrecimiento bacteriano, Helicobacter pylori e intolerancias reales',
-          'Marcadores de inflamación intestinal y estado del hierro y la vitamina B12',
-          'Función tiroidea, que suele acompañar a los cuadros digestivos persistentes'
         ]
       },
       alto: {
@@ -172,11 +166,6 @@
           'No inicies dietas restrictivas por tu cuenta: pueden enmascarar el diagnóstico',
           'Anota frecuencia, intensidad y relación con las comidas hasta la consulta',
           'Acude antes si aparece sangre, pérdida de peso involuntaria, vómitos persistentes o dolor nocturno que te despierta'
-        ],
-        evaluar: [
-          'Descarte de causas orgánicas antes de cualquier plan restrictivo',
-          'Estudio de la flora intestinal y de la capacidad digestiva',
-          'Perfil nutricional completo: hierro, B12, vitamina D, zinc'
         ]
       }
     },
@@ -209,11 +198,6 @@
           'Reduce temporalmente los entrenamientos de alta intensidad: hoy suman carga en vez de restarla',
           'Come con suficiente proteína y sin saltarte comidas: los bajones de glucosa amplifican el cortisol',
           'Revisa qué puedes soltar de tu agenda las próximas 4 semanas — la recuperación necesita espacio real'
-        ],
-        evaluar: [
-          'Perfil tiroideo completo, no solo TSH',
-          'Ritmo de cortisol, ferritina, vitamina B12 y vitamina D',
-          'Calidad del sueño y descarte de apnea si hay ronquido o somnolencia diurna'
         ]
       },
       alto: {
@@ -224,11 +208,6 @@
           'Protege el sueño por encima de cualquier otra prioridad mientras esperas la consulta',
           'Suspende por ahora el ejercicio extenuante y los ayunos prolongados',
           'Pide ayuda profesional sin demora si aparece desesperanza, ideas de muerte o incapacidad de funcionar en el día'
-        ],
-        evaluar: [
-          'Descarte de anemia, hipotiroidismo, déficit de B12 o vitamina D y apnea del sueño',
-          'Ritmo de cortisol y perfil hormonal completo',
-          'Evaluación del ánimo con acompañamiento profesional'
         ]
       }
     },
@@ -261,11 +240,6 @@
           'Evita el uso prolongado de antiinflamatorios sin indicación: alivian y a la vez irritan la mucosa intestinal',
           'Sostén un patrón antiinflamatorio real durante al menos 8 semanas antes de juzgar si funciona',
           'Revisa tu exposición al humo de tabaco, activa o pasiva'
-        ],
-        evaluar: [
-          'Proteína C reactiva ultrasensible, hemograma y perfil de hierro',
-          'Vitamina D y función tiroidea, incluyendo anticuerpos si hay antecedentes familiares',
-          'Estudio del intestino, que a menudo es el origen del cuadro'
         ]
       },
       alto: {
@@ -276,11 +250,6 @@
           'Lleva anotado desde cuándo, con qué frecuencia y qué lo empeora',
           'Informa antecedentes familiares de enfermedades autoinmunes o tiroideas',
           'Consulta con prioridad si hay fiebre recurrente, articulaciones hinchadas, lesiones en la piel que no ceden o pérdida de peso sin explicación'
-        ],
-        evaluar: [
-          'Marcadores inflamatorios y autoinmunes con interpretación clínica',
-          'Descarte de infección persistente y de inflamación intestinal activa',
-          'Función tiroidea completa con anticuerpos'
         ]
       }
     },
@@ -313,11 +282,6 @@
           'Reduce bebidas azucaradas y alcohol, que impactan directamente en el hígado',
           'Cuida el sueño y el estrés: ambos elevan la glucosa por sí solos, sin cambiar la comida',
           'No te guíes solo por el peso de la balanza: la cintura y la fuerza informan mucho mejor'
-        ],
-        evaluar: [
-          'Insulina y glicemia en ayunas con cálculo de HOMA-IR, y hemoglobina glicosilada',
-          'Perfil lipídico completo y enzimas hepáticas',
-          'Perímetro de cintura y composición corporal'
         ]
       },
       alto: {
@@ -328,11 +292,6 @@
           'Empieza ya con lo que no requiere autorización: fuerza, caminar después de comer y retirar bebidas azucaradas',
           'Evita las dietas extremas: la pérdida acelerada de músculo empeora el problema de fondo',
           'Informa antecedentes familiares de diabetes o de enfermedad cardiovascular temprana'
-        ],
-        evaluar: [
-          'HOMA-IR, hemoglobina glicosilada y perfil lipídico',
-          'Enzimas hepáticas y ecografía abdominal si corresponde',
-          'Presión arterial y riesgo cardiovascular global'
         ]
       }
     }

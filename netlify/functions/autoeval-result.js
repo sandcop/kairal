@@ -59,14 +59,6 @@ function bloqueSistema(d) {
       <td valign="top" style="padding:0 0 8px;color:#4a5658;font-size:15px;line-height:1.6;">${esc(a)}</td>
     </tr>`).join('');
 
-  const evaluar = (c.evaluar || []).length ? `
-    <div style="margin-top:16px;padding:14px 16px;background:#F7FAF9;border-radius:10px;">
-      <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1A7A75;">
-        Qué conviene evaluar en consulta
-      </p>
-      ${c.evaluar.map(e => `<p style="margin:0 0 6px;color:#4a5658;font-size:14px;line-height:1.55;">— ${esc(e)}</p>`).join('')}
-    </div>` : '';
-
   return `
   <tr><td style="padding:0 0 14px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
@@ -109,7 +101,6 @@ function bloqueSistema(d) {
           <strong style="color:#4a5658;">Plazo sugerido:</strong> ${esc(d.banda.plazo)}
         </p>
 
-        ${evaluar}
       </td></tr>
     </table>
   </td></tr>`;
@@ -236,11 +227,6 @@ function emailTexto(inf, nombre) {
     l.push('');
     l.push('Qué hacer:');
     (d.contenido.acciones || []).forEach(a => l.push(`  - ${a}`));
-    if ((d.contenido.evaluar || []).length) {
-      l.push('');
-      l.push('Qué conviene evaluar en consulta:');
-      d.contenido.evaluar.forEach(e => l.push(`  - ${e}`));
-    }
     l.push('');
     l.push(`Plazo sugerido: ${d.banda.plazo}`);
     l.push('');

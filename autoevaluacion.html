@@ -429,12 +429,6 @@ hr.rule{ border:0; height:1px; background:var(--line); margin:0; }
   .rec ul li::before{ content:"→"; position:absolute; left:0; color:var(--sage); font-weight:700; }
   .rec-plazo{ margin:1.2rem 0 0; font-size:.88rem; color:var(--ink-faint); }
   .rec-plazo b{ color:var(--ink-soft); }
-  .rec-evaluar{
-    margin:1.2rem 0 0; padding:1rem 1.2rem; border-radius:var(--radius-sm);
-    background:var(--surface-2); border:1px solid var(--line-soft);
-  }
-  .rec-evaluar .rec-sub{ margin-top:0; }
-  .rec-evaluar ul li::before{ content:"—"; color:var(--ink-faint); }
   @media(max-width:520px){ .rec{ padding:1.2rem 1.1rem 1.3rem; } }
 
 /* ── Header y footer: mismos estilos que la portada ── */
@@ -691,7 +685,6 @@ hr.rule{ border:0; height:1px; background:var(--line); margin:0; }
             <li>Puntaje y nivel de cada uno de los 4 sistemas</li>
             <li>Qué significa tu patrón y por qué importa que mejore</li>
             <li>Recomendaciones concretas y el plazo sugerido</li>
-            <li>Qué conviene evaluar en consulta</li>
           </ul>
 
           <form id="gate-form" novalidate>
@@ -936,11 +929,6 @@ hr.rule{ border:0; height:1px; background:var(--line); margin:0; }
     var acciones = (c.acciones || []).map(function(a){
       return '<li>' + esc(a) + '</li>';
     }).join('');
-    var evaluar = (c.evaluar || []).length
-      ? '<div class="rec-evaluar"><p class="rec-sub">Qué conviene evaluar en consulta</p><ul>' +
-        c.evaluar.map(function(e){ return '<li>' + esc(e) + '</li>'; }).join('') +
-        '</ul></div>'
-      : '';
     return '' +
       '<article class="rec" style="border-left-color:' + d.banda.color + '">' +
         '<div class="rec-head">' +
@@ -956,7 +944,6 @@ hr.rule{ border:0; height:1px; background:var(--line); margin:0; }
         '<p class="rec-sub">Qué hacer</p>' +
         '<ul>' + acciones + '</ul>' +
         '<p class="rec-plazo"><b>Plazo sugerido:</b> ' + esc(d.banda.plazo) + '</p>' +
-        evaluar +
       '</article>';
   }
 

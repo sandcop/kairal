@@ -7,3 +7,5 @@ publicar/
 .env.*
 !.env.example
 node_modules/
+# Panel de reservas empaquetado para la función de la puerta (lo arma preparar-publicacion.js)
+netlify/functions/_lib/panel-archivos.generated.js

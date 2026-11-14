@@ -32,9 +32,8 @@ const INCLUIR = [
   // Páginas
   'index.html', '404.html', 'autoevaluacion.html', 'blog.html', 'consulta-previa-ks24.html',
   'cookies.html', 'privacidad.html', 'reservar.html', 'terminos.html',
-  // Panel de reservas de la Dra. y la secretaria: no trae datos (pide una clave) y lleva noindex. Se genera con
-  // appscript-reservas/pruebas/generar-panel-sitio.js; no editar a mano.
-  'panel-reservas.html', 'panel-reservas.css', 'panel-reservas.js',
+  // (El panel de reservas NO se publica como archivo: viaja dentro de la función netlify/functions/equipo.js y solo se
+  // entrega tras el código de acceso + el del autenticador. Ver PANEL_ARCHIVOS más abajo.)
   // Estilos
   'style.css', 'autoevaluacion.css', 'blog.css', 'consulta-previa.css', 'reservar.css',
   // Scripts
@@ -56,9 +55,21 @@ const PAGINAS_SITEMAP = ['', 'reservar.html', 'autoevaluacion.html', 'blog.html'
 // Archivos de la raíz que a propósito NO se publican (para que el aviso de
 // "archivo nuevo sin decidir" no salte con ellos).
 const NO_PUBLICAR = new Set([
+  'panel-reservas.html', 'panel-reservas.css', 'panel-reservas.js',   // van dentro de la función de la puerta, no al sitio público
   'servidor-local.js', 'preparar-publicacion.js', 'abrir-sitio.bat',
   'netlify.toml', 'package.json', 'package-lock.json', 'deno.lock',
 ]);
+
+// Panel de reservas: se genera con appscript-reservas/pruebas/generar-panel-sitio.js (no editar a mano). En vez de
+// publicarlo, se mete dentro de un módulo que usa la función de la puerta (equipo.js), que solo lo entrega a quien
+// pasó el código de acceso y el del autenticador.
+const PANEL_ARCHIVOS = ['panel-reservas.html', 'panel-reservas.css', 'panel-reservas.js'];
+const PANEL_MODULO = path.join(RAIZ, 'netlify', 'functions', '_lib', 'panel-archivos.generated.js');
+function armarPanelPrivado() {
+  const contenido = {};
+  for (const f of PANEL_ARCHIVOS) contenido[f] = fs.readFileSync(path.join(RAIZ, f), 'utf8');
+  fs.writeFileSync(PANEL_MODULO, '// Generado por preparar-publicacion.js: no editar ni subir al repositorio.\nmodule.exports = ' + JSON.stringify(contenido) + ';\n');
+}
 
 // Nada de esto puede terminar en publicar/
 const PROHIBIDO = /(^|\/)(\.env|\.git|\.netlify|node_modules|netlify\/|package(-lock)?\.json$|deno\.lock$|servidor-local\.js$)|\.(md|docx?|bat|zip|log)$/i;
@@ -185,6 +196,7 @@ async function armarBlog() {
   fs.rmSync(DESTINO, { recursive: true, force: true });
   fs.mkdirSync(DESTINO);
   INCLUIR.forEach(rel => { try { copiar(rel); } catch (e) { errores.push(e.message); } });
+  try { armarPanelPrivado(); } catch (e) { errores.push('panel privado: ' + e.message); }
 
   // 2. Blog armado
   let blog = null;
@@ -207,6 +219,9 @@ async function armarBlog() {
       if (!enPublicar.has(ref)) errores.push(`${f} pide "${ref}", que no está en publicar/`);
     }
   }
+
+  // El panel no puede quedar a la vista en el sitio público
+  for (const f of PANEL_ARCHIVOS) if (enPublicar.has(f)) errores.push(`${f} quedó en publicar/: el panel solo puede ir dentro de la función de la puerta`);
 
   // 5. Páginas, estilos o scripts nuevos que nadie decidió si se publican
   const decididos = new Set(INCLUIR.filter(x => !x.endsWith('/')));

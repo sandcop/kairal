@@ -148,7 +148,11 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .menu-social svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6}
 /* el logo de WhatsApp es un glifo relleno, no de línea */
 .menu-social .ico-wsp,.footer-social .ico-wsp{fill:currentColor;stroke:none}
-html.menu-abierto{overflow:hidden}
+/* Con el menú abierto la página NO se bloquea con overflow:hidden: en Chrome para Android, si la página no se puede
+   desplazar y hay un panel visible que ocupa toda la pantalla con scroll propio (este menú), Chrome lo trata como si
+   fuera la página ("root scroller implícito"). Entonces los enlaces a secciones desplazaban el MENÚ hasta el fondo en
+   vez de la página: no llevaban a ninguna parte y el menú volvía a abrir abajo. El menú tapa todo y su
+   overscroll-behavior:contain ya evita que el dedo arrastre la página de atrás. */
 
 /* botones */
 .btn{

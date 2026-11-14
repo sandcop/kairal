@@ -2937,13 +2937,28 @@ try{
       menuBtn.setAttribute('aria-expanded', String(open));
       menuMovil.setAttribute('aria-hidden', String(!open));
       document.documentElement.classList.toggle('menu-abierto', open);
+      if (open) menuMovil.scrollTop = 0;   // siempre desde las primeras opciones
       if (open && menuCerrar) setTimeout(function(){ menuCerrar.focus({ preventScroll:true }); }, 60);
       else if (!open && abrir === undefined) menuBtn.focus({ preventScroll:true });
     }
     menuBtn.addEventListener('click', function(){ toggleMenu(); });
     if (menuCerrar) menuCerrar.addEventListener('click', function(){ toggleMenu(false); menuBtn.focus({ preventScroll:true }); });
-    menuMovil.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){ toggleMenu(false); });
+    // Un solo escuchador para todos los enlaces (también los posts que llegan después de Sanity).
+    // Los de una sección de esta misma página (#doctora…) no se dejan al salto nativo: se cierra el menú, se salta
+    // al instante mientras el menú se desvanece y se corrige si la portada termina de armarse después
+    // (kairalIrASeccion, sección 14). El salto nativo animado podía cortarse a mitad de camino en el celular.
+    menuMovil.addEventListener('click', function(e){
+      var a = e.target.closest ? e.target.closest('a') : null;
+      if (!a || !menuMovil.contains(a)) return;
+      toggleMenu(false);
+      var h = a.getAttribute('href') || '';
+      if (h.charAt(0) !== '#' || h.length < 2 || !window.kairalIrASeccion) return;
+      var id;
+      try { id = decodeURIComponent(h.slice(1)); } catch(_){ return; }
+      if (!document.getElementById(id)) return;
+      e.preventDefault();
+      try { history.pushState(null, '', h); } catch(_){}
+      window.kairalIrASeccion(id);
     });
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape') toggleMenu(false);
@@ -3343,18 +3358,16 @@ try{
    cuanto la persona empieza a desplazarse ella misma. Los enlaces del menú en la propia portada no pasan por aquí.
 ============================================================ */
 (function(){
-  var id;
-  try { id = decodeURIComponent((location.hash || '').slice(1)); } catch(e){ return; }
-  if (!id) return;
-  var detenido = false, html = document.documentElement;
-  function detener(){ detenido = true; }
-  window.addEventListener('wheel', detener, { passive:true, once:true });
-  window.addEventListener('touchmove', detener, { passive:true, once:true });
+  var html = document.documentElement, turno = 0, vigente = 0, movido = false;
+  // En cuanto la persona se desplaza ella misma, se deja de corregir (nunca se le pelea el scroll)
+  function soltar(){ vigente = 0; movido = true; }
+  window.addEventListener('wheel', soltar, { passive:true });
+  window.addEventListener('touchmove', soltar, { passive:true });
   window.addEventListener('keydown', function(e){
-    if (/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key)) detener();
-  }, { passive:true, once:true });
-  function ir(){
-    if (detenido) return;
+    if (/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key)) soltar();
+  }, { passive:true });
+  function ajustar(id, t){
+    if (t !== vigente) return;                                // otro salto lo reemplazó, o la persona se movió
     var el = document.getElementById(id);
     if (!el || el.getClientRects().length === 0) return;      // todavía oculta (las reseñas llegan después)
     var desfase = el.getBoundingClientRect().top - (parseFloat(getComputedStyle(el).scrollMarginTop) || 0);
@@ -3364,8 +3377,19 @@ try{
     el.scrollIntoView({ block:'start' });
     html.style.scrollBehavior = previo;
   }
-  var momentos = [0, 300, 700, 1200, 2000, 3000, 4500, 6500];
-  function programar(){ momentos.forEach(function(t){ setTimeout(ir, t); }); }
-  if (document.readyState === 'complete') programar();
-  else window.addEventListener('load', programar);
+  // Salta a la sección ahora y vuelve a comprobar en los momentos indicados (ms)
+  function irASeccion(id, momentos){
+    var t = vigente = ++turno;
+    (momentos || [0, 200, 500, 900, 1500, 2300]).forEach(function(ms){
+      if (ms) setTimeout(function(){ ajustar(id, t); }, ms); else ajustar(id, t);
+    });
+  }
+  window.kairalIrASeccion = irASeccion;   // lo usa el menú del celular (sección 10)
+
+  var id;
+  try { id = decodeURIComponent((location.hash || '').slice(1)); } catch(e){ return; }
+  if (!id) return;
+  var alCargar = [0, 300, 700, 1200, 2000, 3000, 4500, 6500];
+  if (document.readyState === 'complete') irASeccion(id, alCargar);
+  else window.addEventListener('load', function(){ if (!vigente && !movido) irASeccion(id, alCargar); });
 })();

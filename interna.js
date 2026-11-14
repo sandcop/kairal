@@ -44,6 +44,7 @@ try{
       menuBtn.setAttribute('aria-expanded', String(open));
       menuMovil.setAttribute('aria-hidden', String(!open));
       document.documentElement.classList.toggle('menu-abierto', open);
+      if (open) menuMovil.scrollTop = 0;   // siempre desde las primeras opciones
     };
     menuBtn.addEventListener('click', function(){ toggleMenu(); });
     if (menuCerrar) menuCerrar.addEventListener('click', function(){ toggleMenu(false); menuBtn.focus({ preventScroll: true }); });

@@ -1,0 +1,9 @@
+# Local Netlify folder
+.netlify
+# Carpeta armada por preparar-publicacion.js
+publicar/
+# Claves: nunca al repositorio
+.env
+.env.*
+!.env.example
+node_modules/

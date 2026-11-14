@@ -1,4 +1,5 @@
-const { checkRateLimit, rateLimitHeaders, tooManyRequestsResponse } = require('./_lib/rate-limit');
+const crypto = require('crypto');
+const { clientIp, checkRateLimit, rateLimitHeaders, tooManyRequestsResponse } = require('./_lib/rate-limit');
 const { subscribeSchema, validateBody } = require('./_lib/validate');
 
 const CORS_HEADERS = {
@@ -16,9 +17,7 @@ exports.handler = async function(event) {
     return { statusCode: 405, headers: { ...CORS_HEADERS }, body: 'Method Not Allowed' };
   }
 
-  const ip = (event.headers['x-forwarded-for'] || '').split(',')[0].trim()
-           || event.headers['client-ip']
-           || '0.0.0.0';
+  const ip = clientIp(event);
 
   const rateLimit = await checkRateLimit(ip, 'subscribe');
   if (!rateLimit.allowed) {
@@ -37,8 +36,27 @@ exports.handler = async function(event) {
 
   const { email, firstName, lastName, recurso } = validation.data;
 
+  // Segundo límite por correo (se guarda un hash, no la dirección): evita que
+  // se inscriba en masa la dirección de otra persona desde varias IPs.
+  const huella = crypto.createHash('sha256')
+    .update(email.trim().toLowerCase()).digest('hex').slice(0, 24);
+  const limitePorCorreo = await checkRateLimit('mail-' + huella, 'subscribe');
+  if (!limitePorCorreo.allowed) {
+    const base = tooManyRequestsResponse(limitePorCorreo);
+    return { ...base, headers: { ...base.headers, ...CORS_HEADERS } };
+  }
+
+  const apiKey = (process.env.BREVO_API_KEY || '').trim();
+  if (!apiKey) {
+    console.error('subscribe: falta BREVO_API_KEY');
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
+      body: JSON.stringify({ success: false, error: 'Servicio no disponible por ahora' }),
+    };
+  }
+
   try {
-    const apiKey = (process.env.BREVO_API_KEY || '').trim();
     const response = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {

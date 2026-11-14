@@ -1,4 +1,12 @@
-const { checkRateLimit, rateLimitHeaders, tooManyRequestsResponse } = require('./_lib/rate-limit');
+const crypto = require('crypto');
+const { clientIp, checkRateLimit, rateLimitHeaders, tooManyRequestsResponse } = require('./_lib/rate-limit');
+
+// Compara en tiempo constante (con hash para igualar largos), así la respuesta
+// no da pistas sobre cuántos caracteres de la clave se acertaron.
+function mismaClave(a, b) {
+    const h = s => crypto.createHash('sha256').update(String(s)).digest();
+    return crypto.timingSafeEqual(h(a), h(b));
+}
 
 function esc(str) {
     return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -9,18 +17,14 @@ exports.handler = async function(event) {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const ip = (event.headers['x-forwarded-for'] || '').split(',')[0].trim()
-             || event.headers['client-ip']
-             || '0.0.0.0';
-
-    const rateLimit = await checkRateLimit(ip, 'notify-resource');
+    const rateLimit = await checkRateLimit(clientIp(event), 'notify-resource');
     if (!rateLimit.allowed) {
         return tooManyRequestsResponse(rateLimit);
     }
 
     const authHeader = event.headers['authorization'] || '';
     const secret = process.env.NOTIFY_RESOURCE_SECRET;
-    if (!secret || authHeader !== `Bearer ${secret}`) {
+    if (!secret || !mismaClave(authHeader, `Bearer ${secret}`)) {
         return { statusCode: 401, body: JSON.stringify({ error: 'Unauthorized' }) };
     }
 
@@ -33,7 +37,8 @@ exports.handler = async function(event) {
 
     const rawTitle = recurso.title || 'Nuevo recurso gratuito en Kairal';
     const rawDescription = recurso.description || 'Tenemos un nuevo recurso gratuito para ti.';
-    const rawFileUrl = recurso.fileUrl || 'https://kairal.cl/#recursos';
+    // El enlace del correo solo puede apuntar al propio sitio o a los archivos de Sanity o a los archivos de Sanity
+    const rawFileUrl = /^https:\/\/(kairal\.cl|cdn\.sanity\.io)\//.test(String(recurso.fileUrl || '')) ? String(recurso.fileUrl) : 'https://kairal.cl/#recursos';
     const rawEmoji = recurso.emoji || '🎁';
 
     try {

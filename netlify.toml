@@ -1,6 +1,38 @@
 [build]
+  # La carpeta "publicar/" la arma preparar-publicacion.js con SOLO los
+  # archivos del sitio (sin documentos internos, .env ni código de funciones).
+  command = "node preparar-publicacion.js"
+  publish = "publicar"
   functions = "netlify/functions"
-  publish = "."
+
+# Blog: cada artículo vive en /blog/<slug>. Los que existían al publicar son
+# páginas ya armadas (blog/<slug>.html, tienen prioridad sobre esta regla); uno
+# publicado en Sanity después cae en blog-articulo.html y lo arma blog.js.
+[[redirects]]
+  from = "/blog/*"
+  to = "/blog-articulo.html"
+  status = 200
+
+# Direcciones antiguas de artículos (blog.html?slug=…): redirección permanente
+# a la nueva, para que Google traspase el posicionamiento.
+[[redirects]]
+  from = "/blog.html"
+  to = "/blog/:slug"
+  status = 301
+  force = true
+  query = {slug = ":slug"}
+
+# Página del sitio anterior que ya no existe: quien tenga el enlace guardado
+# llega a la sección de agenda y contacto de la portada.
+[[redirects]]
+  from = "/contacto.html"
+  to = "/#agendar"
+  status = 301
+
+[[redirects]]
+  from = "/contacto"
+  to = "/#agendar"
+  status = 301
 
 [[headers]]
   for = "/*"
@@ -16,6 +48,36 @@
     # Referrer policy
     Referrer-Policy = "strict-origin-when-cross-origin"
     # Permisos de features
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    # Política de seguridad de contenido
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://zu3r11hb.api.sanity.io https://www.google-analytics.com https://cdn.sanity.io https://maps.googleapis.com https://script.google.com https://script.googleusercontent.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self';"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+    # Política de seguridad de contenido.
+    # Las tres direcciones de accounts.google.com/gsi/ son solo para el inicio de sesión con Google del panel
+    # de reservas (panel-reservas.html); son rutas exactas, no todo el dominio de Google.
+    # Sin 'unsafe-inline' en scripts: solo corre código que viene de archivos del propio sitio (más los de Google
+     # Analytics y del inicio de sesión del panel). Un texto con código que se colara en una página (una reseña, un
+     # enlace manipulado) no se ejecutaría. Por eso las páginas no llevan <script> ni onclick="…" escritos dentro.
+     # Estilos: los bloques <style> tampoco se permiten (style-src); solo se aceptan atributos style="…" sueltos
+     # (style-src-attr), que son inofensivos para ejecutar código y que algunas bibliotecas necesitan.
+     # connect-src: Sanity (blog), Google Analytics 4 (solo con cookies aceptadas)
+    # y Apps Script (reservas y consulta previa). Ningún sitio puede meter esta
+    # página en un iframe ni la página carga iframes; los formularios solo se
+    # envían al propio sitio.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://accounts.google.com/gsi/client; style-src 'self' https://accounts.google.com/gsi/style; style-src-attr 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://zu3r11hb.api.sanity.io https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://script.google.com https://script.googleusercontent.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; frame-ancestors 'self'; form-action 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests"
+
+# Panel de reservas: la biblioteca de inicio de sesión de Google (accounts.google.com/gsi/client) crea un <style> en línea
+# para dibujar su botón. Solo esta página lo necesita, así que solo aquí se permiten estilos en línea; los scripts
+# siguen igual de estrictos (nada en línea) y el resto del sitio mantiene la política completa.
+[[headers]]
+  for = "/panel-reservas.html"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://zu3r11hb.api.sanity.io https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://script.google.com https://script.googleusercontent.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; frame-ancestors 'self'; form-action 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests"
+
+# Fuentes y librerías propias: no cambian, el navegador las guarda un año
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/vendor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

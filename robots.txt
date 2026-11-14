@@ -1,6 +1,24 @@
+# kairal.cl: el sitio es público y quiere que lo encuentren buscadores y asistentes de IA.
+# Única excepción: el formulario privado de preconsulta (los demás archivos privados llevan noindex).
+# Cada grupo repite la excepción porque un robot con grupo propio ignora el grupo "*".
+
 User-agent: *
 Allow: /
 Disallow: /consulta-previa-ks24.html
 
-# Sitemap
+# Asistentes y buscadores con IA (respuestas con enlace a la fuente)
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+Allow: /
+Disallow: /consulta-previa-ks24.html
+
 Sitemap: https://kairal.cl/sitemap.xml

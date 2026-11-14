@@ -3333,3 +3333,39 @@ try{
       console.log('Reseñas de Google:', e);
     });
 })();
+
+/* ============================================================
+   14 · LLEGAR A UNA SECCIÓN DESDE OTRA PÁGINA (index.html#faq)
+   El navegador salta a la sección en cuanto carga la página, pero entonces la portada todavía no terminó de
+   armarse: los bloques fijados por GSAP (pin) ocupan su alto un instante después, y la sección de reseñas
+   aparece recién cuando Google responde. Resultado: el salto quedaba corto (Guías, Preguntas) o no se movía
+   (Historias). Aquí se repite el salto mientras la página se termina de armar (unos segundos) y se detiene en
+   cuanto la persona empieza a desplazarse ella misma. Los enlaces del menú en la propia portada no pasan por aquí.
+============================================================ */
+(function(){
+  var id;
+  try { id = decodeURIComponent((location.hash || '').slice(1)); } catch(e){ return; }
+  if (!id) return;
+  var detenido = false, html = document.documentElement;
+  function detener(){ detenido = true; }
+  window.addEventListener('wheel', detener, { passive:true, once:true });
+  window.addEventListener('touchmove', detener, { passive:true, once:true });
+  window.addEventListener('keydown', function(e){
+    if (/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key)) detener();
+  }, { passive:true, once:true });
+  function ir(){
+    if (detenido) return;
+    var el = document.getElementById(id);
+    if (!el || el.getClientRects().length === 0) return;      // todavía oculta (las reseñas llegan después)
+    var desfase = el.getBoundingClientRect().top - (parseFloat(getComputedStyle(el).scrollMarginTop) || 0);
+    if (Math.abs(desfase) < 3) return;                       // ya está en su sitio
+    var previo = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';                       // salto instantáneo, no animado
+    el.scrollIntoView({ block:'start' });
+    html.style.scrollBehavior = previo;
+  }
+  var momentos = [0, 300, 700, 1200, 2000, 3000, 4500, 6500];
+  function programar(){ momentos.forEach(function(t){ setTimeout(ir, t); }); }
+  if (document.readyState === 'complete') programar();
+  else window.addEventListener('load', programar);
+})();

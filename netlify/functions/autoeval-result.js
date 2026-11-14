@@ -9,13 +9,13 @@
    ========================================================================== */
 
 const crypto = require('crypto');
-const { checkRateLimit, rateLimitHeaders, tooManyRequestsResponse } = require('./_lib/rate-limit');
+const { clientIp, checkRateLimit, rateLimitHeaders, tooManyRequestsResponse } = require('./_lib/rate-limit');
 const { autoevalSchema, validateBody } = require('./_lib/validate');
 const CONTENIDO = require('../../autoeval-contenido.js');
 
 const LISTA_BREVO = 2;
 const REMITENTE = { name: 'Dra. Yusneily Sánchez | Kairal', email: 'dra.yusneily@kairal.cl' };
-const AGENDA = 'https://encuadrado.com/p/dra-yusneily-katherine-sanchez';
+const AGENDA = 'https://kairal.cl/reservar.html';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': 'https://kairal.cl',
@@ -258,11 +258,7 @@ exports.handler = async function (event) {
     return { statusCode: 405, headers: { ...CORS_HEADERS }, body: 'Method Not Allowed' };
   }
 
-  // x-nf-client-connection-ip la pone Netlify y el cliente no puede falsearla.
-  // x-forwarded-for sí es manipulable, así que solo se usa como respaldo.
-  const ip = (event.headers['x-nf-client-connection-ip'] || '').trim()
-           || (event.headers['x-forwarded-for'] || '').split(',')[0].trim()
-           || event.headers['client-ip'] || '0.0.0.0';
+  const ip = clientIp(event);
 
   const rateLimit = await checkRateLimit(ip, 'autoeval-result');
   if (!rateLimit.allowed) {

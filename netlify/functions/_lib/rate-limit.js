@@ -8,6 +8,15 @@ const LIMITS = {
   'autoeval-result': { max: 5,  windowMs: 15 * 60 * 1000 },  // 5 per 15 min
 };
 
+// x-nf-client-connection-ip la pone Netlify y el cliente no puede falsearla.
+// x-forwarded-for sí es manipulable, así que solo se usa como respaldo.
+function clientIp(event) {
+  const h = event.headers || {};
+  return (h['x-nf-client-connection-ip'] || '').trim()
+      || (h['x-forwarded-for'] || '').split(',')[0].trim()
+      || h['client-ip'] || '0.0.0.0';
+}
+
 // Note: Netlify Blobs has no atomic increment. Concurrent requests within the same
 // window may both read count=N and both write count=N+1 (effective +1 instead of +2).
 // This is an accepted trade-off for this low-traffic site — the race is unlikely to
@@ -66,4 +75,4 @@ function tooManyRequestsResponse(result) {
   };
 }
 
-module.exports = { checkRateLimit, rateLimitHeaders, tooManyRequestsResponse };
+module.exports = { clientIp, checkRateLimit, rateLimitHeaders, tooManyRequestsResponse };

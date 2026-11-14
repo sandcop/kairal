@@ -3195,13 +3195,25 @@ try{
   // ref del asset viene como "image-<id>-<ancho>x<alto>-<formato>" y hay que
   // recomponerlo a mano en la URL del CDN (no hace falta pedirle la URL a la
   // API, Sanity la deriva de forma determinística a partir del ref).
-  function sanityImageUrl(ref){
-    if (!ref) return '';
+  /* Las fotos de los posts son horizontales (≈1408×768) y la tarjeta de la portada es vertical (≈400×500):
+     para llenarla el navegador agranda la foto hasta cubrir el ALTO y recorta los lados, así que necesita una foto
+     bastante más ancha que la tarjeta (≈920 px de ancho efectivo en escritorio y ≈620 en celular, multiplicado por la
+     densidad de la pantalla). Antes se pedía siempre a 600 px y calidad 75: se estiraba de 1,5 a 3 veces y se veía
+     borrosa. Ahora se ofrecen varios tamaños (hasta el original, que Sanity no agranda) y el navegador elige. */
+  var FOTO_ANCHOS = [640, 960, 1280, 1600];
+  var FOTO_SIZES = '(max-width: 920px) 640px, 940px';
+  function sanityImagen(ref){
+    if (!ref) return null;
     var partes = ref.split('-');
     var id = partes[1], dimensiones = partes[2], formato = partes[3];
-    if (!id || !dimensiones || !formato) return '';
-    return 'https://cdn.sanity.io/images/' + SANITY_PROJECT_ID + '/' + SANITY_DATASET + '/' +
-      id + '-' + dimensiones + '.' + formato + '?w=600&q=75&fit=max&auto=format&fm=webp';
+    if (!id || !dimensiones || !formato) return null;
+    var original = parseInt(dimensiones.split('x')[0], 10) || 0;
+    var base = 'https://cdn.sanity.io/images/' + SANITY_PROJECT_ID + '/' + SANITY_DATASET + '/' + id + '-' + dimensiones + '.' + formato;
+    var anchos = FOTO_ANCHOS.filter(function(w){ return !original || w <= original; });
+    if (original && (!anchos.length || original > anchos[anchos.length - 1])) anchos.push(original);   // siempre la foto original completa (pantallas retina y celulares)
+    var url = function(w){ return base + '?w=' + w + '&q=80&fit=max&auto=format'; };
+    var medio = anchos.filter(function(w){ return w <= 960; }).pop() || anchos[0];
+    return { src: url(medio), srcset: anchos.map(function(w){ return url(w) + ' ' + w + 'w'; }).join(', ') };
   }
   var fallbackSvg = '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6c4 6-2 8-2 13a6 6 0 0 0 12 0c0-2-1-3-1-3 1 6-3 8-3 8a8 8 0 0 1-6-14c0-2 0-3 0-4Z"/></svg>';
   // Una capa de la pila = la foto de ESE post (no la misma repetida): a
@@ -3209,10 +3221,12 @@ try{
   // 3 conviven en una sola tarjeta, así que cada capa sí es distinta.
   function capaFoto(post, capa){
     var refImg = post.image && post.image.asset && post.image.asset._ref;
-    var urlImg = refImg ? sanityImageUrl(refImg) : '';
-    var imgTag = urlImg
-      ? '<img src="' + escHtml(urlImg) + '" alt="' + (capa === 1 ? escHtml(post.title) : '') + '" ' +
-        (capa === 1 ? 'loading="lazy"' : 'aria-hidden="true"') +
+    var foto = sanityImagen(refImg);
+    var urlImg = foto ? foto.src : '';
+    var imgTag = foto
+      ? '<img src="' + escHtml(foto.src) + '" srcset="' + escHtml(foto.srcset) + '" sizes="' + FOTO_SIZES + '" ' +
+        'alt="' + (capa === 1 ? escHtml(post.title) : '') + '" decoding="async" ' +
+        (capa === 1 ? 'loading="lazy"' : 'loading="lazy" aria-hidden="true"') +
         '>'
       : '';
     return '<span class="blog-foto blog-foto--' + capa + (urlImg ? '' : ' sin-foto') + '">' + imgTag + fallbackSvg + '</span>';

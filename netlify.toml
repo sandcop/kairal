@@ -63,6 +63,14 @@
     # envían al propio sitio.
     Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://accounts.google.com/gsi/client; style-src 'self' https://accounts.google.com/gsi/style; style-src-attr 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://zu3r11hb.api.sanity.io https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://script.google.com https://script.googleusercontent.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; frame-ancestors 'self'; form-action 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests"
 
+# Panel de reservas: la biblioteca de inicio de sesión de Google (accounts.google.com/gsi/client) crea un <style> en línea
+# para dibujar su botón. Solo esta página lo necesita, así que solo aquí se permiten estilos en línea; los scripts
+# siguen igual de estrictos (nada en línea) y el resto del sitio mantiene la política completa.
+[[headers]]
+  for = "/panel-reservas.html"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://zu3r11hb.api.sanity.io https://cdn.sanity.io https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://script.google.com https://script.googleusercontent.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; frame-ancestors 'self'; form-action 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests"
+
 # Fuentes y librerías propias: no cambian, el navegador las guarda un año
 [[headers]]
   for = "/fonts/*"

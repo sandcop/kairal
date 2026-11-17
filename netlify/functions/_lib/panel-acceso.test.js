@@ -196,3 +196,50 @@ test('puerta: si el almacén falla, queda cerrada (no se deja pasar)', async () 
   assert.equal(r.statusCode, 503);
   assert.ok(!r.headers['Set-Cookie']);
 });
+
+/* ─── Modo «solo dirección secreta» (el panel ya exige iniciar sesión con Google) ─── */
+const SOLO = { PANEL_RUTA: RUTA, PANEL_SOLO_RUTA: 'si' };
+test('solo dirección: con la dirección correcta entrega el panel; con otra, 404', async () => {
+  const p = montar(SOLO);
+  for (const [sub, texto] of [['/', 'SECRETO-PANEL'], ['/panel-reservas.html', 'SECRETO-PANEL'], ['/panel-reservas.js', 'console.log'], ['/panel-reservas.css', 'body{}']]) {
+    const r = await p.pedir('GET', sub);
+    assert.equal(r.statusCode, 200, sub);
+    assert.ok(r.body.includes(texto), sub);
+    assert.match(r.headers['X-Robots-Tag'], /noindex/);
+    assert.match(r.headers['Cache-Control'], /no-store/);
+  }
+  const html = await p.pedir('GET', '/');
+  assert.match(html.headers['Content-Security-Policy'], /accounts\.google\.com\/gsi\/client/);
+  assert.ok(html.body.includes('href="/Kairallogo.svg"'));
+  for (const url of ['/privado/', '/privado/otra-ruta-cualquiera/', '/privado/abc123def456gh/']) {
+    const r = await p.h({ httpMethod: 'GET', rawUrl: 'https://kairal.cl' + url, headers: {} });
+    assert.equal(r.statusCode, 404);
+  }
+  assert.equal((await p.h({ httpMethod: 'GET', rawUrl: `https://kairal.cl/privado/${RUTA}`, headers: {} })).statusCode, 301);
+});
+test('solo dirección: archivos que no son del panel dan 404 y los POST no se aceptan', async () => {
+  const p = montar(SOLO);
+  assert.equal((await p.pedir('GET', '/otro-archivo.js')).statusCode, 404);
+  assert.equal((await p.pedir('GET', '/../netlify.toml')).statusCode, 404);
+  assert.equal((await p.pedir('POST', '/', { cuerpo: p.form({ clave: 'x' }) })).statusCode, 405);
+});
+test('solo dirección: sin la bandera, sin ruta válida o con datos de la puerta completa queda cerrada', async () => {
+  const casos = [
+    { PANEL_RUTA: RUTA },                                                   // falta la bandera
+    { PANEL_RUTA: RUTA, PANEL_SOLO_RUTA: 'no' },
+    { PANEL_RUTA: 'corta', PANEL_SOLO_RUTA: 'si' },                        // ruta débil
+    { PANEL_SOLO_RUTA: 'si' },                                              // sin ruta
+    { ...ENTORNO, PANEL_SOLO_RUTA: 'si' },                                  // ambigua: bandera + puerta completa
+    { PANEL_RUTA: RUTA, PANEL_SOLO_RUTA: 'si', PANEL_CLAVE: 'clave-de-prueba-1' },   // ambigua: bandera + una variable
+  ];
+  for (const env of casos) {
+    const r = await montar(env).pedir('GET', '/');
+    assert.equal(r.statusCode, 404, JSON.stringify(Object.keys(env)));
+    assert.ok(!r.body.includes('SECRETO-PANEL'));
+  }
+});
+test('puerta completa: la bandera de solo dirección no está activa si no se pone', async () => {
+  const r = await montar().pedir('GET', '/');
+  assert.ok(r.body.includes('Acceso privado'));   // sigue pidiendo clave y autenticador
+  assert.ok(!r.body.includes('SECRETO-PANEL'));
+});

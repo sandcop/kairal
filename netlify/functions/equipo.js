@@ -8,6 +8,12 @@
 // Los intentos fallidos se cuentan por IP y en total, y se bloquean. Los datos de las reservas siguen protegidos
 // aparte: el panel los pide al Apps Script con el inicio de sesión de Google.
 // Si falta cualquier variable, la puerta queda cerrada (nunca abierta).
+//
+// Modo «solo dirección secreta» (PANEL_SOLO_RUTA=si, sin PANEL_CLAVE / PANEL_TOTP_SECRET / PANEL_COOKIE_SECRET):
+// el panel se entrega a quien conozca la dirección, sin pedir clave. Sirve cuando el panel ya exige iniciar sesión
+// con una cuenta de Google autorizada (PANEL_CLIENT_ID + PANEL_CORREOS en el Apps Script): la dirección oculta
+// solo evita que la página esté a la vista de cualquiera. Con la bandera y cualquiera de las tres variables de la
+// puerta completa a la vez, la configuración es ambigua y queda cerrada.
 const A = require('./_lib/panel-acceso');
 
 const DURACION_SESION_SEG = 8 * 60 * 60;
@@ -87,14 +93,18 @@ function crearManejador({ env = process.env, ahora = () => Date.now(), obtenerSt
       cookie: env.PANEL_COOKIE_SECRET || '',
       respaldo: String(env.PANEL_RESPALDO || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean),
     };
-    const configurado = /^[a-z0-9-]{12,}$/i.test(secretos.ruta) && secretos.clave.length >= 8
+    const rutaOk = /^[a-z0-9-]{12,}$/i.test(secretos.ruta);
+    const soloRuta = String(env.PANEL_SOLO_RUTA || '').trim().toLowerCase() === 'si';
+    const hayDatosDePuerta = !!(secretos.clave || secretos.totp || secretos.cookie);
+    const configurado = rutaOk && !soloRuta && secretos.clave.length >= 8
       && secretos.totp.length >= 16 && secretos.cookie.length >= 32;
+    const abierto = rutaOk && soloRuta && !hayDatosDePuerta;   // solo dirección secreta
 
     // Dirección pedida (Netlify entrega la original en rawUrl / path)
     let ruta;
     try { ruta = new URL(event.rawUrl || ('https://x' + event.path)).pathname; } catch (_) { ruta = event.path || ''; }
     const base = `/privado/${secretos.ruta}`;
-    if (!configurado || !(ruta === base || ruta.startsWith(base + '/'))) return respuesta404();
+    if (!(configurado || abierto) || !(ruta === base || ruta.startsWith(base + '/'))) return respuesta404();
     if (ruta === base) return { statusCode: 301, headers: { Location: base + '/', ...CABECERAS_BASE }, body: '' };
     const sub = ruta.slice(base.length + 1);
     const ahoraMs = ahora();
@@ -106,9 +116,9 @@ function crearManejador({ env = process.env, ahora = () => Date.now(), obtenerSt
       return { statusCode: 303, headers: { Location: base + '/', 'Set-Cookie': `kairal_panel=; Path=${base}/; Max-Age=0; HttpOnly; Secure; SameSite=Strict`, ...CABECERAS_BASE }, body: '' };
     }
 
-    const sesion = A.cookieValida(secretos.cookie, A.leerCookies(cabeceras.cookie).kairal_panel, ahoraMs);
+    const sesion = abierto || A.cookieValida(secretos.cookie, A.leerCookies(cabeceras.cookie).kairal_panel, ahoraMs);
 
-    /* ── Entrega del panel, solo con sesión ── */
+    /* ── Entrega del panel (con sesión; en modo «solo dirección secreta», siempre) ── */
     if (metodo === 'GET' && sesion) {
       const todo = cargarArchivos();
       if (!todo) return { statusCode: 503, headers: ROBOTS_404, body: 'Panel no disponible' };
@@ -122,6 +132,8 @@ function crearManejador({ env = process.env, ahora = () => Date.now(), obtenerSt
       if (nombre.endsWith('.html')) h['Content-Security-Policy'] = CSP_PANEL;
       return { statusCode: 200, headers: h, body: cuerpo };
     }
+
+    if (abierto) return { statusCode: 405, headers: { Allow: 'GET', ...CABECERAS_BASE }, body: '' };
 
     /* ── Puerta ── */
     const puerta = (estado, datos) => ({ statusCode: estado, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Content-Security-Policy': CSP_PUERTA, ...CABECERAS_BASE }, body: paginaPuerta(datos) });

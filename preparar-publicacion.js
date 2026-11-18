@@ -42,6 +42,8 @@ const INCLUIR = [
   // Imágenes sueltas. Kairallogo-email.png lo usan los correos de Brevo y
   // kathy_slide.webp la vista previa al compartir el enlace: no borrarlos.
   'Kairallogo.svg', 'Kairallogo-email.png', 'kathy_slide.webp', 'sin_fondo.png',
+  // Foto de la Dra. en la portada (completa para escritorio, recorte vertical para el celular)
+  'dra-yusneily-sanchez.webp', 'dra-yusneily-sanchez-movil.webp',
   // Buscadores (sitemap.xml se genera más abajo, con los artículos del blog)
   'robots.txt', 'llms.txt', 'd0dcc57d47a7f173ef1568703af6e699.txt', 'd82b2bb2b43f48b9b9b4a9ceb508a43a.txt',   // llms.txt: resumen para asistentes de IA · la otra es la llave de IndexNow (Bing y otros)
   // Carpetas

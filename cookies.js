@@ -92,10 +92,29 @@ function elegir(v){
   document.dispatchEvent(new CustomEvent('kairal:cookies', { detail: v }));
 }
 
+/* El aviso espera al primer gesto (scroll, toque o tecla) para no tapar el botón de agendar de la primera pantalla.
+   No cambia lo que se guarda: antes de aceptar no se carga nada que necesite permiso (Analytics espera a «Aceptar»). */
+function alPrimerGesto(fn){
+  var hecho = false;
+  var gestos = ['pointerdown', 'touchstart', 'keydown', 'wheel'];
+  function una(){
+    if (hecho) return;
+    hecho = true;
+    gestos.forEach(function(ev){ window.removeEventListener(ev, una, true); });
+    window.removeEventListener('scroll', alDesplazar);
+    fn();
+  }
+  // solo cuenta el scroll de la página (sin captura: el de cajas internas, como el carrusel de reseñas que se mueve
+  // solo al cargar, no llega a window) y desde 40 px (el sitio se lleva solo a la parte de arriba al entrar)
+  function alDesplazar(){ if (window.scrollY > 40) una(); }
+  gestos.forEach(function(ev){ window.addEventListener(ev, una, { passive: true, capture: true }); });
+  window.addEventListener('scroll', alDesplazar, { passive: true });
+}
+
 /* ─── arranque ─── */
 var actual = leer();
 if (actual === 'medicion') cargarAnalytics();
-else if (!actual) mostrar();
+else if (!actual) alPrimerGesto(mostrar);
 
 document.addEventListener('click', function(e){
   var t = e.target.closest('[data-cookies-prefs]');

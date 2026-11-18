@@ -85,8 +85,10 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .header nav{display:flex;align-items:center;gap:1.6rem}
 .header nav a.link{font-size:.875rem;text-decoration:none;opacity:.75;transition:opacity .3s}
 .header nav a.link:hover{opacity:1}
-@media(max-width:860px){.header nav a.link{display:none}}
-@media(max-width:860px){.header nav .btn{display:none}}
+/* menú hamburguesa bajo 1000 px (antes 860): entre 880 y 999 los enlaces se partían en dos líneas y el botón de
+   sonido tapaba «Autoevaluación»; además es el mismo corte en que la portada pasa al diseño de celular */
+@media(max-width:999px){.header nav a.link{display:none}}
+@media(max-width:999px){.header nav .btn{display:none}}
 
 /* botón hamburguesa */
 .menu-btn{display:none;flex-direction:column;justify-content:center;gap:5px;width:38px;height:38px;background:none;border:none;padding:0}
@@ -94,7 +96,7 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
 .menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-@media(max-width:860px){.menu-btn{display:flex}}
+@media(max-width:999px){.menu-btn{display:flex}}
 
 /* panel de menú móvil */
 .menu-movil{
@@ -1148,6 +1150,10 @@ body.reduced .panel-raiz.abierto{filter:none}
   transition:transform .5s var(--ease-tierra),opacity .35s var(--ease-tierra),visibility 0s}
 .barra-movil .btn{height:40px;padding:0 1.15em;font-size:.84rem;box-shadow:0 4px 18px rgba(3,16,14,.28)}
 @media(max-width:920px){.barra-movil{display:flex}}
+/* portada: la barra lleva «Agendemos tu consulta» y un botón redondo de WhatsApp */
+.barra-movil{align-items:center;gap:.5rem}
+.barra-movil .bm-wa{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--arena);box-shadow:0 4px 18px rgba(3,16,14,.28)}
+.barra-movil .bm-wa svg{width:22px;height:22px;fill:var(--tinta-2)}
 
 .toggle-sonido{
   position:fixed;left:1.4rem;bottom:1.4rem;z-index:49;
@@ -1163,6 +1169,13 @@ body.reduced .panel-raiz.abierto{filter:none}
 .toggle-sonido.on .eq i:nth-child(3){animation-delay:.4s}
 @keyframes eq{0%,100%{height:3px}50%{height:10px}}
 body.reduced .toggle-sonido .eq i{animation:none}
+/* «Sonido» pasa al header (solo el ícono, junto a la hamburguesa) desde que aparece la hamburguesa (999 px): abajo
+   tapaba el texto fijo de las secciones, el pie de página y el botón «Agendemos tu consulta» de la portada */
+@media(max-width:999px){
+  .toggle-sonido{top:calc(1.1rem - 1px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
+    width:40px;height:40px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
+  .toggle-sonido .etiqueta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
 
 /* cursor custom */
 .cursor{position:fixed;z-index:120;pointer-events:none;top:0;left:0;mix-blend-mode:difference;display:none}
@@ -1198,11 +1211,7 @@ body.con-cursor,body.con-cursor a,body.con-cursor button{cursor:none}
   .blog-grid{margin-bottom:1.4rem}
   .acto-faq{padding-top:2.5rem}
   #resenas-error{padding:.4rem 0!important}
-  /* «Sonido» pasa al header (solo el ícono, junto a la hamburguesa): abajo
-     tapaba el texto fijo de las secciones y el pie de página */
-  .toggle-sonido{top:calc(1.1rem - 1px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
-    width:40px;height:40px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
-  .toggle-sonido .etiqueta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  /* («Sonido» en el header: ahora vive en su propio bloque de hasta 999 px, junto a .toggle-sonido) */
   /* el pie de página deja lugar a la barra inferior fija */
   .footer{padding-bottom:calc(2.5rem + 5.5rem + env(safe-area-inset-bottom, 0px))}
   .footer a{padding:.35rem 0;margin-bottom:.1rem}
@@ -1359,7 +1368,10 @@ html.modal-abierto{overflow:hidden}
    pintan de inmediato). Solo las frases de las pacientes se mueven, y solo con opacity/transform. La escena
    reserva su alto (las frases y el giro comparten la misma celda de la grilla), así que nada se corre.
    Cronología con arena (hero-historia.js): la primera frase se forma a los 0,9 s, una cada 3,4 s; «Son mensajes…» queda al final.
-   Sin arena (reducir movimiento / sin JS) el CSS hace un fundido simple (frases desde 1,2 s, giro a los 16 s). */
+   Sin arena (reducir movimiento / sin JS) el CSS hace un fundido simple (frases desde 1,2 s, giro a los 16 s).
+   Foto de la Dra. (18-nov): en escritorio va a la derecha, fundida con el paisaje, y el nombre firma el título; en el
+   celular la foto va arriba y un panel oscuro sube sobre ella con borde de duna (nombre, frases, «Consulta online»,
+   botón). El título «Tu cuerpo no está roto…» solo se ve en escritorio (en el celular queda para lectores y Google). */
 .hh{
   position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;
   padding:clamp(6.5rem,14vh,9rem) var(--margen-x) clamp(5.5rem,13vh,8.5rem);
@@ -1371,14 +1383,18 @@ html.modal-abierto{overflow:hidden}
 }
 .hh-polvo{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:3;pointer-events:none}
 .hh-grid{position:relative;z-index:1;display:grid;gap:clamp(2.2rem,4.5vw,4.5rem);align-items:center;width:100%;max-width:1760px;margin-inline:auto}
-@media(min-width:1000px){.hh-grid{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)}}
 .hh-contenido{max-width:46rem}
 .hh h1{font-size:clamp(2.2rem,min(5.2vw,8.4vh),5rem);color:var(--arena)}
 .hh h1 em{font-family:var(--script);font-style:normal;letter-spacing:normal;font-size:1.25em;color:var(--alba);font-weight:400}
-.hh-firma{margin-top:1.3rem;color:var(--arena);font-weight:500;font-size:clamp(.95rem,1.2vw,1.06rem);line-height:1.55}
-.hh-firma b{color:var(--alba);font-weight:600}
-.hh-firma span{color:rgba(237,229,214,.74);font-weight:400}
-.hh-bajada{margin-top:1rem;max-width:34rem;color:rgba(237,229,214,.82);font-size:clamp(1rem,1.3vw,1.15rem)}
+.hh-foto{margin:0}
+.hh-foto picture,.hh-foto img{display:block;width:100%;height:100%}
+.hh-foto img{object-fit:cover}
+.hh-duna{display:none}
+.hh-quien{color:var(--arena);line-height:1.12}
+.hh-quien b{display:block;font-weight:700;letter-spacing:-.035em}
+.hh-quien span{display:block;font-family:var(--script);font-weight:400;letter-spacing:normal}
+.hh-online{color:rgba(237,229,214,.72);font-size:.85rem}
+.hh-online b{color:var(--arena);font-weight:600}
 .hh-ctas{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem}
 
 /* la escena de las frases: una línea fina de agua y un punto de alba, y el texto que va apareciendo */
@@ -1418,34 +1434,62 @@ body.reduced .hh-escena{display:block;min-height:0}
 body.reduced .hh-voces{display:block}
 body.reduced .hh-voces li{opacity:1;animation:none;transform:none;margin:0 0 1rem}
 body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
-@media(max-width:999px){
-  .hh{align-items:stretch;padding-top:clamp(5.6rem,11vh,7rem);padding-bottom:calc(4.6rem + env(safe-area-inset-bottom, 0px))}
-  /* en el celular la historia sube entre el título y los botones: así se ve en la primera pantalla y el botón de
-     agendar sigue a la vista; la firma y la descripción quedan debajo (siguen en el HTML, en el mismo orden) */
-  .hh-grid{gap:1.4rem;grid-template-rows:auto 1fr auto}   /* título arriba, historia en el hueco del medio, botones al pie de la primera pantalla */
-  .hh-contenido{display:contents}
-  .hh-contenido .eyebrow{order:1}
-  .hh h1{order:2;margin-top:0}
-  .hh-escena{order:3}
-  .hh-ctas{order:4;margin-top:.4rem}
-  .hh-firma{order:5;margin-top:.6rem}
-  .hh-bajada{order:6;margin-top:0}
-  .hh-escena{min-height:0}   /* la caja mide lo que la frase o el cierre más altos (comparten celda): sin hueco y sin saltos */
-  /* orden de la referencia: título, línea corta ámbar, la historia (con su efecto de arena, sin la línea vertical) y los botones */
-  .hh h1::after{content:'';display:block;width:2.6rem;height:2px;background:var(--alba);margin-top:1.2rem}
-  .hh-escena{padding-left:0;border-left:0;align-content:center}
-  .hh-escena::before{display:none}
-  .hh-voces li,.hh-giro{align-self:center}   /* el texto arranca justo bajo la línea; la caja sigue reservando el alto del cierre */
-  .hh-voces li{font-size:clamp(1.4rem,6.2vw,1.75rem)}
-  .hh-giro h2{font-size:clamp(1.45rem,6.4vw,1.75rem);max-width:none}
-  /* en celular el título pierde «no está roto.» y la línea de la Dra. y la descripción salen de la vista (siguen en el HTML para lectores de pantalla y buscadores) */
-  .hh-escr{display:none}
-  .hh-e{text-transform:lowercase}
-  .hh-firma,.hh-bajada{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
-  .hh-ctas .btn{flex:1 1 15rem;justify-content:center}
+/* ── escritorio: el hero de siempre a la izquierda y la foto de la Dra. a la derecha ── */
+@media(min-width:1000px){
+  .hh-grid{position:static;grid-template-columns:minmax(0,.5fr) minmax(0,.5fr)}   /* static: la foto (z-index -1) queda bajo el texto */
+  /* la foto se funde a la izquierda con el paisaje y abajo con la sección siguiente (sin línea de corte) */
+  .hh-foto{position:absolute;top:0;right:0;bottom:0;width:64%;z-index:-1;pointer-events:none;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 34%),linear-gradient(180deg,#000 80%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(90deg,transparent 0,#000 34%),linear-gradient(180deg,#000 80%,transparent 100%);mask-composite:intersect}
+  .hh-foto picture{position:absolute;inset:0}
+  .hh-foto img{object-position:100% 0}
+  .hh h1{font-size:clamp(2.2rem,min(4.5vw,7.6vh),4.6rem)}   /* 3 líneas a 1366 px */
+  /* el nombre firma el título, en la misma columna (sobre la foto se cruzaba con el texto en pantallas altas) */
+  .hh-quien{margin-top:1.1rem;display:flex;align-items:baseline;flex-wrap:wrap;column-gap:.7rem;row-gap:.1rem}
+  .hh-quien::before{content:'';align-self:center;width:1.6rem;height:1px;background:rgba(237,229,214,.5)}
+  .hh-quien b{font-size:clamp(1.05rem,1.25vw,1.25rem)}
+  .hh-quien b br{display:none}
+  .hh-quien span{font-size:clamp(1.25rem,1.55vw,1.55rem);color:rgba(237,229,214,.82)}
+  .hh-contenido .hh-escena{margin-top:1.7rem;min-height:clamp(7rem,15vh,9rem)}
+  .hh-voces li{font-size:clamp(1.5rem,2.2vw,2.1rem)}
+  .hh-giro h2{font-size:clamp(1.4rem,2vw,1.9rem)}
+  .hh-online{margin-top:1.6rem;font-weight:500;font-size:1.02rem;color:var(--arena)}
+  .hh-online b{font-weight:500}
+  .hh-online::before{content:'';display:inline-block;vertical-align:middle;width:7px;height:7px;border-radius:50%;background:var(--bruma);box-shadow:0 0 12px rgba(127,181,171,.7);margin:-2px .65rem 0 0}
+  .hh-ctas{margin-top:1.1rem}
 }
-/* pantallas muy angostas: sin el ícono del calendario para que «Agendemos tu consulta» quepa en una línea */
-@media(max-width:360px){.hh-ctas .btn-reserva-ico{display:none}}
+/* ── celular y tablet: foto arriba y panel oscuro con borde de duna; todo en la primera pantalla ── */
+@media(max-width:999px){
+  .hh{flex-direction:column;align-items:stretch;padding:0 0 calc(1.1rem + env(safe-area-inset-bottom, 0px));background:var(--tinta)}
+  .hh-foto{position:relative;flex:1 1 0;min-height:max(30svh,190px);background:#837b76}   /* la foto se achica en pantallas bajas: el botón sigue a la vista */
+  .hh-foto picture{position:absolute;inset:0}
+  .hh-foto img{object-position:50% 0}
+  .hh-foto::before{content:'';position:absolute;inset:0 0 auto 0;height:6.5rem;z-index:1;background:linear-gradient(rgba(8,31,29,.55),rgba(8,31,29,0))}   /* que el menú se lea sobre la foto */
+  .hh-duna{display:block;position:absolute;left:0;bottom:-1px;width:100%;height:clamp(2.6rem,15vw,4.4rem);z-index:1;overflow:visible}
+  .hh-duna-relleno{fill:var(--tinta)}
+  .hh-duna-borde{fill:none;stroke:#F1EADB;stroke-width:3;vector-effect:non-scaling-stroke}
+  .hh-grid,.hh-contenido{display:contents}
+  .hh h1{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+  .hh-quien,.hh-escena,.hh-online,.hh-ctas{margin-inline:1.5rem}
+  .hh-quien{position:relative;z-index:2;margin-top:.2rem}
+  .hh-quien b{font-size:clamp(1.45rem,6.6vw,1.75rem)}
+  .hh-quien span{font-size:clamp(1.35rem,6.2vw,1.6rem);margin-top:.15rem}
+  .hh-quien::after{content:'';display:block;width:2.1rem;height:2px;background:var(--alba);margin-top:.9rem}
+  .hh-escena{margin-top:.8rem;min-height:0;padding-left:0;border-left:0}   /* mide lo que la frase o el cierre más altos: sin saltos */
+  .hh-escena::before{display:none}
+  .hh-voces li{font-size:clamp(1.15rem,5.4vw,1.35rem)}
+  .hh-giro h2{font-size:clamp(1.15rem,5.4vw,1.4rem);max-width:none}
+  .hh-online{margin-top:.9rem}
+  .hh-ctas{margin-top:.75rem;flex-wrap:nowrap;gap:.8rem}
+  .hh-ctas .btn{flex:0 0 auto;white-space:nowrap;justify-content:center}
+  .hh-ctas .btn-ghost{display:none}
+}
+@media(min-width:641px) and (max-width:999px){.hh-foto img{object-position:80% 12%}}   /* tablet: foto completa, encuadre a la Dra. */
+/* sin movimiento: en el celular solo la primera frase (apiladas empujarían el botón fuera de la primera pantalla) */
+@media(max-width:999px) and (prefers-reduced-motion:reduce){.hh-voces li:not(:first-child),.hh-giro{display:none}}
+@media(max-width:999px){body.reduced .hh-voces li:not(:first-child),body.reduced .hh-giro{display:none}}
+/* pantallas angostas: sin el ícono del calendario para que «Agendemos tu consulta» quepa en una línea */
+@media(max-width:420px){.hh-ctas .btn-reserva-ico{display:none}}
 
 /* El método Kairal: la escena ya no ocupa toda la pantalla (en una pantalla alta dejaba 350 px o más vacíos entre el
    texto de la etapa y el botón). El texto de las 4 etapas termina siempre antes de los 550 px, así que 40rem (640 px)
@@ -1467,6 +1511,7 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
 /* Con el paisaje vivo (lo activa script.js al encontrar el lienzo) el hero y «Bajo la superficie» dejan de pintar su propio fondo
    y muestran el paisaje fijo que hay detrás. Sin JavaScript conservan sus degradados de siempre. */
 html.paisaje-vivo .hh{background:none}
+@media(max-width:999px){html.paisaje-vivo .hh{background:var(--tinta)}}   /* en el celular el panel bajo la foto es sólido */
 html.paisaje-vivo .acto-raiz{background:linear-gradient(to bottom,rgba(5,21,18,0) 0,rgba(5,21,18,.4) 24vh,rgba(5,21,18,.4) 100%)}
 /* El método Kairal también se ve sobre el paisaje: velo para que el texto y la gota se lean, y fundido final al verde con que empieza «La doctora».
    El velo de «Bajo la superficie» termina en .4 y el del método empieza en .4: sin escalón (sin línea) en el empalme. */

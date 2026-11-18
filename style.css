@@ -1460,13 +1460,15 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
 }
 /* ── celular y tablet: foto arriba y panel oscuro con borde de duna; todo en la primera pantalla ── */
 @media(max-width:999px){
-  .hh{flex-direction:column;align-items:stretch;padding:0 0 calc(1.1rem + env(safe-area-inset-bottom, 0px));background:var(--tinta)}
-  .hh-foto{position:relative;flex:1 1 0;min-height:max(30svh,190px);background:#837b76}   /* la foto se achica en pantallas bajas: el botón sigue a la vista */
+  .hh{flex-direction:column;align-items:stretch;padding:0 0 calc(1.1rem + env(safe-area-inset-bottom, 0px));background:var(--tinta)}   /* sin paisaje (sin JS) el panel es sólido; con paisaje vivo es transparente (más abajo) */
+  .hh-foto{position:relative;flex:1 1 0;min-height:max(30svh,190px)}   /* la foto se achica en pantallas bajas: el botón sigue a la vista */
   .hh-foto picture{position:absolute;inset:0}
   .hh-foto img{object-position:50% 0}
   .hh-foto::before{content:'';position:absolute;inset:0 0 auto 0;height:6.5rem;z-index:1;background:linear-gradient(rgba(8,31,29,.55),rgba(8,31,29,0))}   /* que el menú se lea sobre la foto */
   .hh-duna{display:block;position:absolute;left:0;bottom:-1px;width:100%;height:clamp(2.6rem,15vw,4.4rem);z-index:1;overflow:visible}
-  .hh-duna-relleno{fill:var(--tinta)}
+  .hh-foto{--dh:clamp(2.6rem,15vw,4.4rem)}
+  .hh-foto picture{clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--dh) + var(--dh)*0.909), 100.00% calc(100% - var(--dh) + var(--dh)*0.909), 94.29% calc(100% - var(--dh) + var(--dh)*0.832), 88.68% calc(100% - var(--dh) + var(--dh)*0.757), 83.19% calc(100% - var(--dh) + var(--dh)*0.683), 77.78% calc(100% - var(--dh) + var(--dh)*0.612), 72.48% calc(100% - var(--dh) + var(--dh)*0.543), 67.25% calc(100% - var(--dh) + var(--dh)*0.477), 62.11% calc(100% - var(--dh) + var(--dh)*0.414), 57.05% calc(100% - var(--dh) + var(--dh)*0.355), 52.05% calc(100% - var(--dh) + var(--dh)*0.300), 47.12% calc(100% - var(--dh) + var(--dh)*0.250), 42.24% calc(100% - var(--dh) + var(--dh)*0.205), 37.42% calc(100% - var(--dh) + var(--dh)*0.165), 32.64% calc(100% - var(--dh) + var(--dh)*0.131), 27.90% calc(100% - var(--dh) + var(--dh)*0.103), 23.20% calc(100% - var(--dh) + var(--dh)*0.082), 18.52% calc(100% - var(--dh) + var(--dh)*0.068), 13.87% calc(100% - var(--dh) + var(--dh)*0.062), 9.24% calc(100% - var(--dh) + var(--dh)*0.063), 4.62% calc(100% - var(--dh) + var(--dh)*0.073), 0.00% calc(100% - var(--dh) + var(--dh)*0.091))}   /* la foto se recorta por la duna: debajo se ve el paisaje */
+  .hh-duna-relleno{fill:none}
   .hh-duna-borde{fill:none;stroke:#F1EADB;stroke-width:3;vector-effect:non-scaling-stroke}
   .hh-grid,.hh-contenido{display:contents}
   .hh h1{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
@@ -1511,7 +1513,7 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
 /* Con el paisaje vivo (lo activa script.js al encontrar el lienzo) el hero y «Bajo la superficie» dejan de pintar su propio fondo
    y muestran el paisaje fijo que hay detrás. Sin JavaScript conservan sus degradados de siempre. */
 html.paisaje-vivo .hh{background:none}
-@media(max-width:999px){html.paisaje-vivo .hh{background:var(--tinta)}}   /* en el celular el panel bajo la foto es sólido */
+@media(max-width:999px){html.paisaje-vivo .hh{background:linear-gradient(180deg,rgba(8,31,29,0) 35%,rgba(8,31,29,.34) 70%,rgba(8,31,29,0) 100%)}}   /* en el celular el panel deja ver el paisaje; un velo suave abajo cuida la lectura */
 html.paisaje-vivo .acto-raiz{background:linear-gradient(to bottom,rgba(5,21,18,0) 0,rgba(5,21,18,.4) 24vh,rgba(5,21,18,.4) 100%)}
 /* El método Kairal también se ve sobre el paisaje: velo para que el texto y la gota se lean, y fundido final al verde con que empieza «La doctora».
    El velo de «Bajo la superficie» termina en .4 y el del método empieza en .4: sin escalón (sin línea) en el empalme. */

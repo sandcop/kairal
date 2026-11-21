@@ -1918,21 +1918,54 @@ if (window.matchMedia('(pointer:fine)').matches && !reduced){
     src.connect(lp); lp.connect(gain); gain.connect(actx.destination);
     src.start();
   }
+  function poner(on){
+    encendido = on;
+    gain.gain.cancelScheduledValues(actx.currentTime);
+    gain.gain.linearRampToValueAtTime(on ? 0.06 : 0, actx.currentTime + 1.2);
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.querySelector('.etiqueta').textContent = on ? 'Sonido on' : 'Sonido';
+  }
+  // Si la persona lo apaga, se respeta durante esa visita (sessionStorage); en la siguiente vuelve a encenderse solo.
+  var APAGADO = 'kairal_sonido_off';
+  function apagadoAntes(){ try { return sessionStorage.getItem(APAGADO) === '1'; } catch(e) { return false; } }
+  function recordarApagado(v){ try { if (v) sessionStorage.setItem(APAGADO, '1'); else sessionStorage.removeItem(APAGADO); } catch(e) {} }
+
   btn.addEventListener('click', function(){
     try{
       if (!actx) crear();
       if (actx.state === 'suspended') actx.resume();
-      encendido = !encendido;
-      gain.gain.cancelScheduledValues(actx.currentTime);
-      gain.gain.linearRampToValueAtTime(encendido ? 0.06 : 0, actx.currentTime + 1.2);
-      btn.classList.toggle('on', encendido);
-      btn.setAttribute('aria-pressed', String(encendido));
-      btn.querySelector('.etiqueta').textContent = encendido ? 'Sonido on' : 'Sonido';
+      poner(!encendido);
+      recordarApagado(!encendido);
     }catch(err){
       console.warn('Kairal: sonido ambiental no disponible en este navegador.', err);
       btn.style.display = 'none';
     }
   });
+
+  // Sonido encendido al entrar. Los navegadores no dejan sonar nada antes del primer toque, clic o tecla,
+  // así que se intenta ya y, si no se puede, arranca con el primer gesto de la persona (un scroll solo no cuenta).
+  if (!apagadoAntes()){
+    var gestos = ['pointerup', 'touchend', 'keydown', 'click'];
+    var listo = false;
+    var quitar = function(){ gestos.forEach(function(g){ window.removeEventListener(g, intentar, true); }); };
+    var intentar = function(e){
+      if (listo) return;
+      // si el primer toque es sobre el propio botón, que decida él (evita encender y apagar de golpe)
+      if (e && e.target && btn.contains(e.target)){ quitar(); return; }
+      try{
+        if (!actx) crear();
+        var r = actx.resume();
+        var revisar = function(){
+          if (listo || actx.state !== 'running' || apagadoAntes()) return;
+          listo = true; quitar(); poner(true);
+        };
+        if (r && r.then) r.then(revisar, function(){}); else revisar();
+      }catch(err){ quitar(); }
+    };
+    gestos.forEach(function(g){ window.addEventListener(g, intentar, { capture: true, passive: true }); });
+    intentar();   // por si el navegador ya permite sonido (por ejemplo, quien visita seguido)
+  }
 })();
 
 /* ============================================================

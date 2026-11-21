@@ -363,7 +363,8 @@ body.reduced .raiz-invita-punto{animation:none}
 .raiz-texto.visible .raiz-volver{pointer-events:auto}
 .raiz-volver:hover,.raiz-volver:focus-visible{color:var(--alba)}
 
-@media(max-width:920px){
+/* (también en pantallas verticales de escritorio o iPad Pro: con la escena fija a una pantalla alta quedaban cientos de píxeles vacíos entre el texto y el botón) */
+@media(max-width:920px),(min-width:921px) and (orientation:portrait){
   /* En el celular la sección ya NO mide una pantalla fija: antes el título, la frase y el
      botón se quedaban con casi todo el alto y el dibujo recibía 45 px en iPhone, 21 px en
      Android y 0 px en iPhone SE. Ahora el dibujo ocupa todo el ancho, con su propia altura

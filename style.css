@@ -1012,8 +1012,17 @@ body.reduced .faq-item summary::before{transition:none}
 /* ============ FOOTER ============ */
 .footer{background:#051512;padding:4rem 0 2.5rem;font-size:.92rem}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem}
-@media(max-width:860px){.footer-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.footer-grid{grid-template-columns:1fr}}
+/* Pantallas chicas: la marca ocupa todo el ancho, «Recorrido» y «Contacto» van lado a lado y «Más» (la lista larga)
+   se reparte en 2 columnas, para que el pie no sea una sola columna interminable. */
+@media(max-width:860px){
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem 1.5rem}
+  .footer-grid>div:nth-child(1){grid-column:1/-1}
+  .footer-grid>div:nth-child(2){order:2}
+  .footer-grid>div:nth-child(4){order:3}
+  .footer-grid>div:nth-child(3){order:4;grid-column:1/-1;column-count:2;column-gap:1.5rem}
+  .footer-grid>div:nth-child(3) h4{column-span:all}
+  .footer-grid>div:nth-child(3) a{break-inside:avoid}
+}
 .footer h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bruma);margin-bottom:1rem;font-weight:500}
 .footer a{display:block;text-decoration:none;opacity:.7;margin-bottom:.5rem;transition:opacity .3s}
 .footer-social{display:flex;gap:.7rem;margin-top:1.3rem}

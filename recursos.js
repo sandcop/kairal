@@ -130,3 +130,37 @@ form.addEventListener('submit', function(e){
   }).then(listo, listo);
 });
 })();
+
+/* Tarjetas apiladas (celular): mientras la siguiente guía sube y se posa sobre la anterior, la anterior
+   se encoge un poco (solo transform). El apilado en sí lo hace el CSS con position:sticky. */
+(function(){
+'use strict';
+var tarjetas = Array.prototype.slice.call(document.querySelectorAll('.recursos-grid .recurso'));
+if (tarjetas.length < 2 || !window.matchMedia) return;
+var movil = window.matchMedia('(max-width:920px)');
+var quieto = window.matchMedia('(prefers-reduced-motion:reduce)');
+var visible = false, pendiente = false;
+
+function reiniciar(){ tarjetas.forEach(function(t){ t.style.transform = ''; }); }
+
+function pintar(){
+  pendiente = false;
+  if (!movil.matches || quieto.matches){ reiniciar(); return; }
+  for (var i = 0; i < tarjetas.length - 1; i++){
+    var sig = tarjetas[i + 1];
+    var top = parseFloat(getComputedStyle(sig).top) || 0;       // dónde se posa la siguiente
+    var alto = tarjetas[i].offsetHeight || 1;
+    var avance = 1 - Math.min(1, Math.max(0, (sig.getBoundingClientRect().top - top) / alto));
+    tarjetas[i].style.transform = avance > 0 ? 'scale(' + (1 - 0.06 * avance).toFixed(4) + ')' : '';
+  }
+}
+function pedir(){ if (!pendiente && visible){ pendiente = true; requestAnimationFrame(pintar); } }
+
+var grid = tarjetas[0].parentNode;
+if ('IntersectionObserver' in window){
+  new IntersectionObserver(function(es){ visible = es[0].isIntersecting; if (visible) pedir(); }, { rootMargin: '50% 0px 50% 0px' }).observe(grid);
+} else { visible = true; }
+window.addEventListener('scroll', pedir, { passive: true });
+window.addEventListener('resize', function(){ pedir(); }, { passive: true });
+if (movil.addEventListener) movil.addEventListener('change', function(){ pedir(); });
+})();

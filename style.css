@@ -999,6 +999,12 @@ body.reduced .faq-item summary::before{transition:none}
   .acto-cta{min-height:clamp(34rem,80svh,48rem)}
   .cta-copy{padding:5rem var(--margen-x) 7.5rem}
 }
+/* celular y tablet: el bloque parte arriba con un aire justo. Antes se centraba en una pantalla completa y dejaba
+   unos 170 px vacíos sobre el título; abajo queda el lugar de las flores */
+@media(max-width:999px){
+  .acto-cta{min-height:0;align-items:flex-start}
+  .cta-copy{padding:3.5rem var(--margen-x) 9rem}
+}
 .cta-copy h2{font-size:clamp(2.4rem,5.6vw,5.2rem);color:var(--arena)}
 .cta-copy h2 em{font-family:var(--script);font-style:normal;letter-spacing:normal;font-size:1.25em;color:var(--alba)}
 .cta-copy p{margin:1.4rem 0 2.4rem;max-width:36rem;color:rgba(237,229,214,.85)}

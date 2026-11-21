@@ -900,6 +900,7 @@ if (gsapOK){
     var tarjetas = Array.prototype.slice.call(document.querySelectorAll('.tarjeta-etapa'));
     var nums = Array.prototype.slice.call(document.querySelectorAll('.numeros-etapa button'));
     var mostrada = [false,false,false,false];
+    var primeraVez = true;
     tarjetas.forEach(function(t){ splitWords(t.querySelector('h3')); });
     // filter:blur por palabra obliga a repintar el texto en cada cuadro: en
     // celulares/equipos modestos las palabras entran solo con opacidad y altura
@@ -933,7 +934,12 @@ if (gsapOK){
       update: function(p){
         var s = clamp(Math.floor(p*4), 0, 3);
         var t = p*4 - s;
-        var visible = (t >= 0.46 && t <= 0.97) ? s : -1;
+        // La primera tarjeta aparece apenas llegas a la sección, como el texto del resto del sitio; antes
+        // esperaba a que la gota cayera y salpicara (~1,6 s). Desde la segunda etapa, la tarjeta sigue
+        // naciendo en el impacto de su gota.
+        if (s > 0) primeraVez = false;
+        var desde = (primeraVez && s === 0) ? 0 : 0.46;
+        var visible = (t >= desde && t <= 0.97) ? s : -1;
         tarjetas.forEach(function(_, i){
           if (i === visible && !mostrada[i]){ mostrada[i] = true; entra(i); }
           if (i !== visible && mostrada[i]){ mostrada[i] = false; sale(i); }

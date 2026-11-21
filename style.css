@@ -1313,6 +1313,16 @@ html.tier-bajo .fab-raiz{background:rgba(8,31,29,.62)}
 .recurso .btn{margin-top:auto;font-size:.9rem;padding:.85em 1.5em}
 .recurso .btn svg{width:1.05em;height:1.05em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:920px){.recursos-grid{grid-template-columns:1fr}}
+/* Guías apiladas (celular): cada tarjeta cae sobre la anterior y la anterior se asienta un poco hacia atrás.
+   El apilado es position:sticky; recursos.js solo reduce la escala de las que quedan debajo (transform). */
+@media(max-width:920px){
+  .recursos-grid{gap:1.8rem}
+  .recurso{position:sticky;top:5.4rem;transform-origin:50% 0;background:#102F2C;box-shadow:0 14px 34px rgba(3,14,12,.4)}
+  .recurso:nth-child(2){top:6.4rem}
+  .recurso:nth-child(3){top:7.4rem}
+  .recurso:hover{transform:none}
+}
+@media(max-width:920px) and (prefers-reduced-motion:reduce){.recurso{position:relative;top:auto}}
 
 /* ventana para dejar el correo */
 .rec-modal{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:1.2rem;background:rgba(5,21,18,.72);

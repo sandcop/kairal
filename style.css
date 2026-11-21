@@ -1158,24 +1158,24 @@ body.reduced .panel-raiz.abierto{filter:none}
 .barra-movil .bm-wa svg{width:22px;height:22px;fill:var(--tinta-2)}
 
 .toggle-sonido{
-  position:fixed;left:1.4rem;bottom:1.4rem;z-index:49;
+  position:fixed;left:1.2rem;bottom:1.2rem;z-index:49;
   background:rgba(8,31,29,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border:1px solid rgba(127,181,171,.25);border-radius:999px;
-  color:var(--bruma);font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
-  padding:.55em 1.1em;display:flex;align-items:center;gap:.6em;
+  color:var(--bruma);font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;
+  padding:.4em .9em;display:flex;align-items:center;gap:.5em;
 }
-.toggle-sonido .eq{display:flex;gap:2px;align-items:flex-end;height:10px}
+.toggle-sonido .eq{display:flex;gap:2px;align-items:flex-end;height:8px}
 .toggle-sonido .eq i{width:2px;background:var(--bruma);height:3px;transition:height .3s}
 .toggle-sonido.on .eq i{animation:eq 1s ease-in-out infinite}
 .toggle-sonido.on .eq i:nth-child(2){animation-delay:.2s}
 .toggle-sonido.on .eq i:nth-child(3){animation-delay:.4s}
-@keyframes eq{0%,100%{height:3px}50%{height:10px}}
+@keyframes eq{0%,100%{height:3px}50%{height:8px}}
 body.reduced .toggle-sonido .eq i{animation:none}
 /* «Sonido» pasa al header (solo el ícono, junto a la hamburguesa) desde que aparece la hamburguesa (999 px): abajo
    tapaba el texto fijo de las secciones, el pie de página y el botón «Agendemos tu consulta» de la portada */
 @media(max-width:999px){
-  .toggle-sonido{top:calc(1.1rem - 1px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
-    width:40px;height:40px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
+  .toggle-sonido{top:calc(.7rem + 3px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
+    width:32px;height:32px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
   .toggle-sonido .etiqueta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
 

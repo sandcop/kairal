@@ -1423,7 +1423,7 @@ html.modal-abierto{overflow:hidden}
 .hh-online{color:rgba(237,229,214,.72);font-size:.85rem}
 .hh-online b{color:var(--arena);font-weight:600}
 .hh-sede i{font-style:normal}
-@media(max-width:999px){.hh-sede{display:block;margin-top:.1rem}.hh-sede i{display:none}}
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){.hh-sede{display:block;margin-top:.1rem}.hh-sede i{display:none}}
 .hh-ctas{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem}
 
 /* la escena de las frases: una línea fina de agua y un punto de alba, y el texto que va apareciendo */
@@ -1464,7 +1464,7 @@ body.reduced .hh-voces{display:block}
 body.reduced .hh-voces li{opacity:1;animation:none;transform:none;margin:0 0 1rem}
 body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
 /* ── escritorio: el hero de siempre a la izquierda y la foto de la Dra. a la derecha ── */
-@media(min-width:1000px){
+@media(min-width:1000px) and (orientation:landscape){
   .hh-grid{position:static;grid-template-columns:minmax(0,.5fr) minmax(0,.5fr)}   /* static: la foto (z-index -1) queda bajo el texto */
   /* la foto se funde a la izquierda con el paisaje y abajo con la sección siguiente (sin línea de corte) */
   .hh-foto{position:absolute;top:0;right:0;bottom:0;width:64%;z-index:-1;pointer-events:none;
@@ -1488,7 +1488,8 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
   .hh-ctas{margin-top:1.1rem}
 }
 /* ── celular y tablet: foto arriba y panel oscuro con borde de duna; todo en la primera pantalla ── */
-@media(max-width:999px){
+/* (en pantallas verticales de escritorio o iPad Pro la foto horizontal quedaba recortada sin rostro: usan este mismo diseño) */
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){
   .hh{flex-direction:column;align-items:stretch;padding:0 0 calc(1.1rem + env(safe-area-inset-bottom, 0px));background:var(--tinta)}   /* sin paisaje (sin JS) el panel es sólido; con paisaje vivo es transparente (más abajo) */
   .hh-foto{position:relative;flex:1 1 0;min-height:max(30svh,190px)}   /* la foto se achica en pantallas bajas: el botón sigue a la vista */
   .hh-foto picture{position:absolute;inset:0}
@@ -1515,10 +1516,12 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
   .hh-ctas .btn{flex:0 0 auto;white-space:nowrap;justify-content:center}
   .hh-ctas .btn-ghost{display:none}
 }
-@media(min-width:641px) and (max-width:999px){.hh-foto img{object-position:80% 12%}}   /* tablet: foto completa, encuadre a la Dra. */
+@media(min-width:641px) and (max-width:999px),(min-width:1000px) and (orientation:portrait){.hh-foto img{object-position:80% 12%}}   /* tablet: foto completa, encuadre a la Dra. */
+/* en vertical el sonido va bajo el menú (abajo a la izquierda taparía el botón de agendar) */
+@media(min-width:1000px) and (orientation:portrait){.toggle-sonido{top:4.6rem;bottom:auto}}
 /* sin movimiento: en el celular solo la primera frase (apiladas empujarían el botón fuera de la primera pantalla) */
-@media(max-width:999px) and (prefers-reduced-motion:reduce){.hh-voces li:not(:first-child),.hh-giro{display:none}}
-@media(max-width:999px){body.reduced .hh-voces li:not(:first-child),body.reduced .hh-giro{display:none}}
+@media(max-width:999px) and (prefers-reduced-motion:reduce),(min-width:1000px) and (orientation:portrait) and (prefers-reduced-motion:reduce){.hh-voces li:not(:first-child),.hh-giro{display:none}}
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){body.reduced .hh-voces li:not(:first-child),body.reduced .hh-giro{display:none}}
 /* pantallas angostas: sin el ícono del calendario para que «Agendemos tu consulta» quepa en una línea */
 @media(max-width:420px){.hh-ctas .btn-reserva-ico{display:none}}
 
@@ -1542,7 +1545,7 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
 /* Con el paisaje vivo (lo activa script.js al encontrar el lienzo) el hero y «Bajo la superficie» dejan de pintar su propio fondo
    y muestran el paisaje fijo que hay detrás. Sin JavaScript conservan sus degradados de siempre. */
 html.paisaje-vivo .hh{background:none}
-@media(max-width:999px){html.paisaje-vivo .hh{background:linear-gradient(180deg,rgba(8,31,29,0) 35%,rgba(8,31,29,.34) 70%,rgba(8,31,29,0) 100%)}}   /* en el celular el panel deja ver el paisaje; un velo suave abajo cuida la lectura */
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){html.paisaje-vivo .hh{background:linear-gradient(180deg,rgba(8,31,29,0) 35%,rgba(8,31,29,.34) 70%,rgba(8,31,29,0) 100%)}}   /* en el celular el panel deja ver el paisaje; un velo suave abajo cuida la lectura */
 html.paisaje-vivo .acto-raiz{background:linear-gradient(to bottom,rgba(5,21,18,0) 0,rgba(5,21,18,.4) 24vh,rgba(5,21,18,.4) 100%)}
 /* El método Kairal también se ve sobre el paisaje: velo para que el texto y la gota se lean, y fundido final al verde con que empieza «La doctora».
    El velo de «Bajo la superficie» termina en .4 y el del método empieza en .4: sin escalón (sin línea) en el empalme. */

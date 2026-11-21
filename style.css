@@ -62,7 +62,7 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .header{
   position:fixed;top:0;left:0;right:0;z-index:50;
   display:flex;align-items:center;justify-content:space-between;
-  padding:1.1rem var(--margen-x);
+  padding:.7rem var(--margen-x);
   transition:background .5s var(--ease-tierra),-webkit-backdrop-filter .5s,backdrop-filter .5s,box-shadow .5s,transform .5s var(--ease-tierra);
 }
 .header.solido{background:rgba(8,31,29,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(127,181,171,.12)}
@@ -85,6 +85,8 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .header nav{display:flex;align-items:center;gap:1.6rem}
 .header nav a.link{font-size:.875rem;text-decoration:none;opacity:.75;transition:opacity .3s}
 .header nav a.link:hover{opacity:1}
+/* botón del menú más bajo para que la barra sea fina (antes medía 57 px y la barra 92 px) */
+.header nav .btn{padding:.6em 1.35em;font-size:.84rem}
 /* menú hamburguesa bajo 1000 px (antes 860): entre 880 y 999 los enlaces se partían en dos líneas y el botón de
    sonido tapaba «Autoevaluación»; además es el mismo corte en que la portada pasa al diseño de celular */
 @media(max-width:999px){.header nav a.link{display:none}}
@@ -112,7 +114,7 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .menu-movil::-webkit-scrollbar{display:none}
 .menu-movil.abierto{opacity:1;visibility:visible}
 /* X de cierre: misma posición que la hamburguesa del header (el panel la tapa) */
-.menu-cerrar{position:fixed;z-index:2;top:calc(1.1rem + env(safe-area-inset-top, 0px));right:var(--margen-x);width:44px;height:44px;margin:-3px;
+.menu-cerrar{position:fixed;z-index:2;top:calc(.7rem + env(safe-area-inset-top, 0px));right:var(--margen-x);width:44px;height:44px;margin:-3px;
   display:grid;place-items:center;padding:0;background:none;border:1px solid rgba(127,181,171,.3);border-radius:50%;color:var(--arena);cursor:pointer;
   transition:background .3s,border-color .3s,transform .4s var(--ease-tierra)}
 .menu-cerrar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
@@ -1156,24 +1158,24 @@ body.reduced .panel-raiz.abierto{filter:none}
 .barra-movil .bm-wa svg{width:22px;height:22px;fill:var(--tinta-2)}
 
 .toggle-sonido{
-  position:fixed;left:1.4rem;bottom:1.4rem;z-index:49;
+  position:fixed;left:1.2rem;bottom:1.2rem;z-index:49;
   background:rgba(8,31,29,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border:1px solid rgba(127,181,171,.25);border-radius:999px;
-  color:var(--bruma);font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
-  padding:.55em 1.1em;display:flex;align-items:center;gap:.6em;
+  color:var(--bruma);font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;
+  padding:.4em .9em;display:flex;align-items:center;gap:.5em;
 }
-.toggle-sonido .eq{display:flex;gap:2px;align-items:flex-end;height:10px}
+.toggle-sonido .eq{display:flex;gap:2px;align-items:flex-end;height:8px}
 .toggle-sonido .eq i{width:2px;background:var(--bruma);height:3px;transition:height .3s}
 .toggle-sonido.on .eq i{animation:eq 1s ease-in-out infinite}
 .toggle-sonido.on .eq i:nth-child(2){animation-delay:.2s}
 .toggle-sonido.on .eq i:nth-child(3){animation-delay:.4s}
-@keyframes eq{0%,100%{height:3px}50%{height:10px}}
+@keyframes eq{0%,100%{height:3px}50%{height:8px}}
 body.reduced .toggle-sonido .eq i{animation:none}
 /* «Sonido» pasa al header (solo el ícono, junto a la hamburguesa) desde que aparece la hamburguesa (999 px): abajo
    tapaba el texto fijo de las secciones, el pie de página y el botón «Agendemos tu consulta» de la portada */
 @media(max-width:999px){
-  .toggle-sonido{top:calc(1.1rem - 1px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
-    width:40px;height:40px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
+  .toggle-sonido{top:calc(.7rem + 3px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
+    width:32px;height:32px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
   .toggle-sonido .etiqueta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
 

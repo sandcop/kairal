@@ -1,0 +1,48 @@
+/* ============================================================
+   MI SEGUIMIENTO · espacio privado del paciente
+   Se apoya en style.css, autoevaluacion.css y reservar.css (clases rv-*); aquí solo lo propio.
+   ============================================================ */
+.rv-campo input[type="password"],.rv-campo select,.rv-campo textarea{
+  width:100%;padding:.8rem 1rem;border-radius:14px;border:1.5px solid rgba(14,124,107,.25);background:rgba(255,255,255,.9);
+  font:inherit;color:var(--texto-oscuro);outline:none}
+.rv-campo textarea{min-height:5rem;resize:vertical}
+.rv-campo select:focus,.rv-campo textarea:focus,.rv-campo input[type="password"]:focus{border-color:var(--alba);box-shadow:0 0 0 4px rgba(242,166,90,.2);background:#fff}
+
+.sg-barra{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.sg-hola{font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.02em;color:var(--texto-oscuro)}
+.sg-menu{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.2rem}
+.sg-menu button{padding:.55rem 1rem;border-radius:999px;border:1.5px solid rgba(14,124,107,.25);background:rgba(255,255,255,.7);font:inherit;font-size:.92rem;font-weight:500;color:var(--texto-oscuro);cursor:pointer}
+.sg-menu button[aria-current="page"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.sg-menu button:focus-visible,.sg-salir:focus-visible{outline:3px solid var(--alba);outline-offset:2px}
+.sg-salir{background:none;border:0;font:inherit;font-size:.9rem;color:rgba(26,36,33,.7);text-decoration:underline;cursor:pointer}
+
+.sg-aviso-seguridad{margin:0 0 1.2rem;padding:.9rem 1.1rem;border-radius:14px;background:#FBF0E1;border:1px solid rgba(242,166,90,.5);color:#6A3E10;font-size:.9rem}
+.sg-ok{margin:.8rem 0 0;padding:.7rem 1rem;border-radius:12px;background:#E5F4EF;border:1px solid rgba(14,124,107,.35);color:#0B5A4C;font-size:.92rem}
+.sg-alerta{margin:.8rem 0 0;padding:.8rem 1rem;border-radius:12px;background:#F9E8EF;border:1px solid rgba(199,92,132,.45);color:#7A1F45;font-size:.92rem}
+
+.sg-dia{margin-bottom:1rem}
+.sg-yaanotados{margin-top:.8rem}
+.sg-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.sg-chip{padding:.45rem .9rem;border-radius:999px;border:1.5px solid rgba(14,124,107,.25);background:rgba(255,255,255,.7);font:inherit;font-size:.9rem;color:var(--texto-oscuro);cursor:pointer}
+.sg-chip:focus-visible{outline:3px solid var(--alba);outline-offset:2px}
+.sg-dia h3{margin:0 0 .8rem;font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--texto-oscuro)}
+.sg-sintomas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 1rem;margin:0 0 1rem}
+@media(max-width:560px){.sg-sintomas{grid-template-columns:minmax(0,1fr)}}
+.sg-sintomas .rv-campo{margin:0}
+.sg-sintomas label{font-size:.85rem}
+
+.sg-guia{margin:0 0 .8rem;border:1px solid rgba(14,124,107,.18);border-radius:16px;background:rgba(255,255,255,.7);overflow:hidden}
+.sg-guia summary{padding:1rem 1.2rem;font-family:var(--display);font-weight:700;font-size:1.05rem;cursor:pointer;color:var(--texto-oscuro)}
+.sg-guia summary:focus-visible{outline:3px solid var(--alba);outline-offset:-3px}
+.sg-guia-cuerpo{padding:0 1.2rem 1.1rem}
+.sg-guia-cuerpo p,.sg-guia-cuerpo li{font-size:.95rem;line-height:1.65;color:rgba(26,36,33,.82)}
+.sg-guia-cuerpo ul{margin:.4rem 0 .8rem 1.2rem}
+.sg-guia-aviso{padding:.8rem 1rem;border-radius:12px;background:#FBF0E1;color:#6A3E10}
+
+.sg-resumen{list-style:none;margin:0 0 1.2rem}
+.sg-resumen li{padding:.6rem 0;border-top:1px solid rgba(14,124,107,.12);font-size:.95rem}
+.sg-consent{display:flex;gap:.7rem;align-items:flex-start;margin:0 0 1.1rem;font-size:.95rem}
+.sg-consent input{margin-top:.25rem;width:1.1rem;height:1.1rem;flex:none}
+.sg-boton:disabled{opacity:.5;cursor:not-allowed}
+.sg-lista-envios{list-style:none;margin:.4rem 0 0;font-size:.9rem;color:rgba(26,36,33,.7)}
+.sg-peligro{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid rgba(199,92,132,.3)}

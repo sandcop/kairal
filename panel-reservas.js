@@ -2,7 +2,7 @@
 window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEKU61qyeH74B1SWiE0AvljFKnzwW3vRvSEbawevV91WTPPIwuO/exec";
 (function () {
   'use strict';
-  var S = { sesion: null, items: [], hoy: '', desfase: 0, pestana: 'confirmar', q: '', estado: '', cargando: false, abiertas: {} };
+  var S = { sesion: null, items: [], hoy: '', desfase: 0, pestana: 'confirmar', tarjeta: false, seguimiento: false, q: '', estado: '', cargando: false, abiertas: {} };
   var $ = function (id) { return document.getElementById(id); };
 
   // ── DOM seguro: todo lo que viene de pacientes se inserta como TEXTO, nunca como HTML ──
@@ -35,7 +35,11 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     meet: '<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/>',
     nota: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
     reloj: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-    vacio: '<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>'
+    vacio: '<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
+    pacientes: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.5"/><path d="M5.5 17c.8-2 2-3 3.5-3s2.7 1 3.5 3M15 10h3M15 13h3"/>',
+    avisos: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 20a2 2 0 0 0 3.4 0"/>',
+    seguimientos: '<path d="M9 4h6a2 2 0 0 1 2 2v14H7V6a2 2 0 0 1 2-2z"/><path d="M10 9h4M10 13h4M10 17h2"/>',
+    control: '<path d="M12 21a9 9 0 1 1 9-9"/><path d="M12 7v5l3 2M17 17l2 2 3-3"/>'
   };
   function icono(n) {
     var s = document.createElement('span'); s.className = 'ico'; s.setAttribute('aria-hidden', 'true');
@@ -144,7 +148,12 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     try { if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect(); } catch (e) {}
     irAEntrada('');
   });
-  $('btnActualizar').addEventListener('click', function () { cargar(true); });
+  $('btnActualizar').addEventListener('click', function () {
+    // «Actualizar» explícito repinta Pacientes y Avisos (este último solo si no hay un aviso a medio escribir)
+    if (S.pestana === 'pacientes' || S.pestana === 'seguimientos') S.vista = '';
+    else if (S.pestana === 'avisos' && !(($('avTitulo') || {}).value) && !(($('avTexto') || {}).value)) S.vista = '';
+    cargar(true);
+  });
 
   // ── Datos ──
   function cargar(manual) {
@@ -158,7 +167,7 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
         falloCarga('No pude cargar las reservas: ' + (r.mensaje || 'el servidor respondió con un error') + ' Prueba con "Actualizar".');
         return;
       }
-      S.items = r.items; S.hoy = r.hoy; S.desfase = r.ahora - Date.now();
+      S.items = r.items; S.tarjeta = r.tarjeta === true; S.seguimiento = r.seguimiento === true; S.hoy = r.hoy; S.desfase = r.ahora - Date.now();
       $('usuario').textContent = r.usuario || '';
       $('avatarUsuario').textContent = String(r.usuario || '').charAt(0).toUpperCase();
       var h = new Date(r.ahora);
@@ -188,11 +197,11 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     if (r.estado === 'Retenida' && !esVencida(r)) return 'retenidas';
     return 'historial';
   }
-  var PESTANAS = [['confirmar', 'Por confirmar'], ['proximas', 'Próximas'], ['retenidas', 'Retenidas'], ['historial', 'Historial'], ['calendario', 'Calendario']];
-  var TITULOS = { confirmar: 'Por confirmar', proximas: 'Próximas consultas', retenidas: 'Horas retenidas', historial: 'Historial', calendario: 'Calendario' };
+  var PESTANAS = [['confirmar', 'Por confirmar', 'Confirmar'], ['proximas', 'Próximas', 'Próximas'], ['retenidas', 'Retenidas', 'Retenidas'], ['historial', 'Historial', 'Historial'], ['calendario', 'Calendario', 'Agenda'], ['pacientes', 'Pacientes', 'Pacientes'], ['avisos', 'Avisos', 'Avisos'], ['seguimientos', 'Seguimientos', 'Seguim.']];
+  var TITULOS = { confirmar: 'Por confirmar', proximas: 'Próximas consultas', retenidas: 'Horas retenidas', historial: 'Historial', calendario: 'Calendario', pacientes: 'Pacientes con tarjeta', avisos: 'Avisos a pacientes', seguimientos: 'Seguimientos enviados por pacientes' };
 
   function pintar() {
-    var conteo = { confirmar: 0, proximas: 0, retenidas: 0, historial: 0, calendario: '' }, hoyN = 0;
+    var conteo = { confirmar: 0, proximas: 0, retenidas: 0, historial: 0, calendario: '', pacientes: '', avisos: '', seguimientos: '' }, hoyN = 0;
     S.items.forEach(function (r) { conteo[pestanaDe(r)]++; if (r.estado === 'Confirmada' && r.dia === S.hoy) hoyN++; });
 
     var res = $('resumen'); vaciar(res);
@@ -202,12 +211,17 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
         [icono(d[4]), el('b', { texto: String(d[1]) }), el('span', { clase: 'dato-txt', texto: d[0] })]));
     });
 
+    // Pacientes y Avisos solo existen si la tarjeta está activa (panelDatos trae tarjeta: true)
+    if (!S.tarjeta && (S.pestana === 'pacientes' || S.pestana === 'avisos')) S.pestana = 'confirmar';
+    if (!S.seguimiento && S.pestana === 'seguimientos') S.pestana = 'confirmar';
     var pe = $('pestanas'); vaciar(pe);
     PESTANAS.forEach(function (p) {
+      if (!S.tarjeta && (p[0] === 'pacientes' || p[0] === 'avisos')) return;
+      if (!S.seguimiento && p[0] === 'seguimientos') return;
       var activa = S.pestana === p[0] && !S.q;
       pe.appendChild(el('button', { type: 'button', role: 'tab', 'aria-selected': String(activa), clase: 'pestana' + (activa ? ' activa' : '') + (p[0] === 'confirmar' && conteo.confirmar ? ' urgente' : ''),
         click: function () { S.pestana = p[0]; S.q = ''; $('buscar').value = ''; pintar(); window.scrollTo(0, 0); } },
-        [icono(p[0]), el('span', { clase: 'pestana-txt', texto: p[1] }), p[0] === 'calendario' ? '' : el('span', { clase: 'n' + (conteo[p[0]] ? '' : ' cero'), texto: String(conteo[p[0]]) })]));
+        [icono(p[0]), el('span', { clase: 'pestana-txt', texto: p[1] }), el('span', { clase: 'pestana-corto', texto: p[2] }), conteo[p[0]] === '' ? '' : el('span', { clase: 'n' + (conteo[p[0]] ? '' : ' cero'), texto: String(conteo[p[0]]) })]));
     });
     $('tituloVista').textContent = S.q ? 'Búsqueda' : TITULOS[S.pestana];
     $('fechaHoy').textContent = fechaLarga(S.hoy) + (hoyN ? ' · ' + hoyN + (hoyN === 1 ? ' consulta hoy' : ' consultas hoy') : '');
@@ -221,6 +235,15 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
         .forEach(function (o) { fe.appendChild(el('option', { value: o[0], texto: o[1] })); });
     }
 
+    var enExtra = (S.pestana === 'pacientes' || S.pestana === 'avisos' || S.pestana === 'seguimientos') && !S.q;
+    $('extra').classList.toggle('oculto', !enExtra);
+    if (enExtra) {
+      ['lista', 'calendario', 'resumen', 'filtros'].forEach(function (id) { $(id).classList.add('oculto'); });
+      fe.classList.add('oculto');
+      // Solo al entrar a la pestaña: la recarga automática de cada minuto no debe borrar un aviso a medio escribir
+      if (S.vista !== S.pestana) { S.vista = S.pestana; if (S.pestana === 'pacientes') pintarPacientes(); else if (S.pestana === 'seguimientos') pintarSeguimientos(); else pintarAvisos(); }
+      return;
+    }
     var enCal = S.pestana === 'calendario' && !S.q;
     $('lista').classList.toggle('oculto', enCal); $('calendario').classList.toggle('oculto', !enCal); $('resumen').classList.toggle('oculto', enCal); $('filtros').classList.toggle('oculto', enCal);
     if (enCal) { fe.classList.add('oculto'); pintarCalendario(); return; }
@@ -284,6 +307,7 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     if (r.telefono) c.push(el('a', { href: r.wsp, target: '_blank', rel: 'noopener noreferrer', clase: 'chip wsp' }, [icono('wsp'), el('span', { texto: 'WhatsApp +' + r.telefono })]));
     if (r.correo) c.push(el('a', { href: 'mailto:' + r.correo, clase: 'chip' }, [icono('correo'), el('span', { texto: r.correo })]));
     if (r.meet && r.estado === 'Confirmada') c.push(el('a', { href: r.meet, target: '_blank', rel: 'noopener noreferrer', clase: 'chip meet' }, [icono('meet'), el('span', { texto: 'Abrir Meet' })]));
+    if (r.control) c.push(el('span', { clase: 'chip' }, [icono('control'), el('span', { texto: r.control === 'sin' ? 'Sin control programado' : 'Control: ' + fechaCorta(r.control) })]));
     if (c.length) hijos.push(el('div', { clase: 'contacto' }, c));
 
     var acc = [];
@@ -302,6 +326,7 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     if (r.acciones.indexOf('cancelar') >= 0) acc.push(el('button', { type: 'button', clase: 'btn btn-sec', texto: 'Cancelar reserva', click: function () { pedirCancelar(r); } }));
     if (r.acciones.indexOf('reembolsada') >= 0) acc.push(el('button', { type: 'button', clase: 'btn btn-ok', texto: 'Marcar reembolsada', click: function () {
       pedir('¿Ya devolviste el dinero?', 'Se le envía a ' + r.nombre + ' un correo avisando que el reembolso fue realizado. El dinero lo devuelves tú desde tu banco: aquí solo se registra y se avisa.', 'Sí, ya lo devolví y avisar', 'ok', function () { hacer(r, 'reembolsada'); }); } }));
+    if (S.tarjeta && r.puedeControl) acc.push(el('button', { type: 'button', clase: 'btn btn-sec', texto: r.control ? 'Cambiar próximo control' : 'Próximo control', click: function () { pedirControl(r); } }));
     if (acc.length) hijos.push(el('div', { clase: 'acciones' }, acc));
 
     if (r.notas) hijos.push(el('div', { clase: 'notatxt', texto: r.notas }));
@@ -338,6 +363,21 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
         el('button', { type: 'button', clase: 'btn btn-sec', texto: 'Volver', click: cerrar })])]));
     m.classList.remove('oculto'); si.focus();
   }
+
+  // Próximo control: el aviso «te toca tu control» sale ese día (si no tiene otra hora y aceptó avisos)
+  function pedirControl(r) {
+    var m = $('modal'); vaciar(m);
+    function cerrar() { m.classList.add('oculto'); vaciar(m); }
+    var botones = [['4', '4 semanas'], ['6', '6 semanas'], ['8', '8 semanas'], ['12', '12 semanas'], ['sin', 'Sin control']].map(function (o) {
+      return el('button', { type: 'button', clase: 'btn ' + (o[0] === 'sin' ? 'btn-sec' : 'btn-ok'), texto: o[1], click: function () { cerrar(); hacer(r, 'control', o[0]); } });
+    });
+    m.appendChild(el('div', { clase: 'cuadro' }, [el('h3', { texto: 'Próximo control de ' + r.nombre }),
+      el('p', { texto: 'Se cuenta desde el día de su consulta. Ese día le llega el aviso «te toca tu control», solo si no tiene otra hora reservada y aceptó avisos en su tarjeta.' }),
+      el('div', { clase: 'ctrl-opc' }, botones),
+      el('div', { clase: 'fila col' }, [el('button', { type: 'button', clase: 'btn btn-sec', texto: 'Volver', click: cerrar })])]));
+    m.classList.remove('oculto'); botones[0].focus();
+  }
+
 
   // Pagó fuera de plazo (o se encontró el pago después de rechazarlo): confirmar en su hora o en otra
   function pedirReactivar(r) {
@@ -419,6 +459,136 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
       S.agendaError = ''; S.agenda = r; pintar();
     }, function () { S.cargandoAgenda = false; mostrar('No pude cargar el calendario. Revisa tu conexión.', true); });
   }
+  // ── Tarjeta de paciente: pacientes ──
+  function avisoExtra(x, r, textoApagada) {
+    vaciar(x);
+    if (!r.ok) { x.appendChild(el('p', { clase: 'vacio' }, [el('span', { texto: r.mensaje || 'No pude cargar esta sección.' })])); return true; }
+    if (!r.activa) { x.appendChild(el('p', { clase: 'extra-aviso', texto: textoApagada })); return true; }
+    return false;
+  }
+  var APAGADA = 'La tarjeta de paciente todavía no está activa: falta la propiedad TARJETA_SECRETO en Apps Script.';
+  function pintarPacientes() {
+    var x = $('extra'); vaciar(x); esqueletos(x, 2);
+    llamar('panelPacientes', [S.sesion], function (r) {
+      if (S.pestana !== 'pacientes') return;   // cambió de pestaña mientras cargaba
+      if (sesionCaida(r) || avisoExtra(x, r, APAGADA)) return;
+      if (!r.pacientes.length) { x.appendChild(el('p', { clase: 'vacio' }, [icono('vacio'), el('span', { texto: 'Aún no hay pacientes con tarjeta. Se crea sola al confirmar su primera reserva.' })])); return; }
+      x.appendChild(el('h2', { clase: 'dia', texto: r.pacientes.length + (r.pacientes.length === 1 ? ' paciente con tarjeta' : ' pacientes con tarjeta') }));
+      r.pacientes.forEach(function (p) {
+        var chips = [
+          el('span', { clase: 'chip', texto: p.controles + (p.controles === 1 ? ' control' : ' controles') }),
+          el('span', { clase: 'chip', texto: p.control === 'sin' ? 'Sin control' : (p.control ? 'Control: ' + fechaCorta(p.control) + (p.controlAvisado ? ' (avisado)' : '') : 'Control sin definir') }),
+          el('span', { clase: 'chip', texto: p.avisos ? 'Acepta avisos' : 'Sin avisos' })
+        ];
+        if (p.wallet === 'habilitada') chips.push(el('span', { clase: 'chip', texto: 'Wallet habilitada' }));
+        x.appendChild(el('article', { clase: 'pac' }, [
+          el('p', { clase: 'pac-nombre', texto: p.nombre }),
+          el('div', { clase: 'pac-acc' }, [
+            el('button', { type: 'button', clase: 'btn btn-sec', texto: 'Enviar enlace', click: function () {
+              pedir('Enviar un enlace nuevo a ' + p.nombre, 'Le llega por correo un enlace nuevo a su tarjeta. Los que ya tenga siguen funcionando.', 'Sí, enviar', 'ok', function () { accionPaciente(p, 'enviar_enlace'); }); } }),
+            el('button', { type: 'button', clase: 'btn btn-peligro', texto: 'Cambiar enlace', click: function () {
+              pedir('Cambiar el enlace de ' + p.nombre, 'Úsalo si perdió su teléfono: todos sus enlaces anteriores dejan de funcionar y le llega uno nuevo por correo.', 'Sí, cambiar', 'peligro', function () { accionPaciente(p, 'cambiar_enlace'); }); } })
+          ]),
+          el('p', { clase: 'pac-meta', texto: p.correo }),
+          el('div', { clase: 'contacto' }, chips)
+        ]));
+      });
+    });
+  }
+  function accionPaciente(p, accion) {
+    llamar('panelPacienteAccion', [S.sesion, p.id, accion], function (res) { if (sesionCaida(res)) return; mostrar(res.mensaje, !res.ok); if (res.ok) pintarPacientes(); });
+  }
+
+  // ── Seguimientos que envían los pacientes (solo lectura) ──
+  var INTENSIDAD = ['Sin síntomas', 'Leve', 'Moderado', 'Importante'];
+  function pintarSeguimientos() {
+    var x = $('extra'); vaciar(x); esqueletos(x, 2);
+    llamar('panelSeguimientos', [S.sesion], function (r) {
+      if (S.pestana !== 'seguimientos') return;
+      if (sesionCaida(r) || avisoExtra(x, r, 'El seguimiento todavía no está activo: ejecuta seguimientoPreparar() en Apps Script.')) return;
+      x.appendChild(el('p', { clase: 'extra-aviso', texto: 'Aquí solo aparece lo que cada paciente decidió enviarte. Lo que anota sin enviar no lo ves.' }));
+      if (!r.envios.length) { x.appendChild(el('p', { clase: 'vacio seg-vacio' }, [icono('vacio'), el('span', { texto: 'Aún no hay envíos.' })])); return; }
+      // r.dias: cuántos días tiene cada alimento (el último es el de descanso)
+      r.envios.forEach(function (e) { x.appendChild(articuloSeguimiento(e, r.dias || 4)); });
+    });
+  }
+  function articuloSeguimiento(e, dias) {
+    var porAlimento = {}, orden = [];
+    e.diario.forEach(function (d) { if (!porAlimento[d.alimento]) { porAlimento[d.alimento] = []; orden.push(d.alimento); } porAlimento[d.alimento].push(d); });
+    var cuerpo = [];
+    // Una copia dañada o incompleta se avisa, en vez de mostrarse vacía
+    if (e.ilegible) cuerpo.push(el('p', { clase: 'seg-nota', texto: 'No se pudo leer este envío. Pídele al paciente que lo envíe de nuevo.' }));
+    orden.forEach(function (alimento) {
+      cuerpo.push(el('h3', { clase: 'seg-alimento', texto: alimento }));
+      porAlimento[alimento].sort(function (a, b) { return a.dia - b.dia; }).forEach(function (d) {
+        var sint = Object.keys(d.sintomas || {}).filter(function (k) { return d.sintomas[k] > 0; })
+          .map(function (k) { return k + ': ' + INTENSIDAD[d.sintomas[k]]; }).join(' · ');
+        var linea = (d.dia === dias ? 'Día de descanso' : 'Día ' + d.dia) + (d.cantidad ? ' · ' + d.cantidad : '') + ' · ' + (sint || 'sin síntomas');
+        cuerpo.push(el('p', { clase: 'seg-dia', texto: linea }));
+        if (d.nota) cuerpo.push(el('p', { clase: 'seg-nota', texto: 'Nota: ' + d.nota }));
+      });
+    });
+    var art = el('article', { clase: 'pac seg-envio' }, [
+      el('p', { clase: 'pac-nombre', texto: e.nombre }),
+      el('button', { type: 'button', clase: 'btn btn-sec', texto: 'Descargar PDF', click: function () {
+        var cadena = [], n = art.parentNode;
+        while (n && n !== document.body) { cadena.push(n); n.classList.add('cadena-imp'); n = n.parentNode; }
+        art.classList.add('imprimir'); document.body.classList.add('imprimiendo-seg');
+        var limpiar = function () {
+          art.classList.remove('imprimir'); document.body.classList.remove('imprimiendo-seg');
+          cadena.forEach(function (x) { x.classList.remove('cadena-imp'); });
+          ['afterprint', 'focus', 'pointerdown'].forEach(function (ev) { window.removeEventListener(ev, limpiar); });
+        };
+        window.addEventListener('afterprint', limpiar);
+        // respaldo: si afterprint no llega, se limpia al volver el foco o al tocar la página
+        setTimeout(function () { window.addEventListener('focus', limpiar); window.addEventListener('pointerdown', limpiar); }, 1500);
+        window.print();
+      } }),
+      el('p', { clase: 'pac-meta', texto: e.correo + ' · Enviado el ' + fechaHora(e.fecha) }),
+      el('p', { clase: 'pac-meta', texto: 'Autorizó el envío: «' + e.consentimiento + '»' }),
+      el('div', { clase: 'seg-detalle' }, cuerpo)
+    ]);
+    return art;
+  }
+
+  // ── Tarjeta de paciente: avisos ──
+  function fechaHora(ms) { var d = new Date(ms); return d.getDate() + ' ' + MESES[d.getMonth()].slice(0, 3) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+  function pintarAvisos() {
+    var x = $('extra'); vaciar(x); esqueletos(x, 2);
+    llamar('panelAvisos', [S.sesion], function (r) {
+      if (S.pestana !== 'avisos') return;   // cambió de pestaña mientras cargaba
+      if (sesionCaida(r) || avisoExtra(x, r, APAGADA)) return;
+      var titulo = el('input', { id: 'avTitulo', maxlength: '40', placeholder: 'Ej.: Nueva guía de desayunos' });
+      var texto = el('textarea', { id: 'avTexto', maxlength: '120', rows: '3', placeholder: 'Ej.: Ya está en tu tarjeta: ideas de desayunos antiinflamatorios.' });
+      var enlace = el('input', { id: 'avEnlace', maxlength: '300', placeholder: 'https://kairal.cl/tarjeta.html (opcional)' });
+      var pt = el('b', { texto: 'Título del aviso' }), px = el('span', { texto: 'Texto del aviso' });
+      function previa() { pt.textContent = titulo.value || 'Título del aviso'; px.textContent = texto.value || 'Texto del aviso'; }
+      titulo.addEventListener('input', previa); texto.addEventListener('input', previa);
+      var n = r.destinatarias;
+      var enviar = el('button', { type: 'button', id: 'avEnviar', clase: 'btn btn-ok', texto: 'Enviar a ' + n + (n === 1 ? ' paciente' : ' pacientes'), click: function () {
+        pedir('¿Enviar este aviso?', 'Les llega a las ' + n + ' pacientes que aceptaron avisos, por Google Wallet y por aviso web. Solo puedes enviar uno cada 24 horas.', 'Sí, enviar', 'ok', function () {
+          llamar('panelAvisoEnviar', [S.sesion, titulo.value, texto.value, enlace.value], function (res) { if (sesionCaida(res)) return; mostrar(res.mensaje, !res.ok); if (res.ok) pintarAvisos(); });
+        });
+      } });
+      enviar.disabled = !r.puedeEnviar || !n;
+      var nota = !n ? 'Todavía ninguna paciente aceptó recibir avisos.'
+        : (!r.puedeEnviar ? 'Podrás enviar el siguiente aviso el ' + fechaHora(r.proximoEnvio) + ' (Google limita las notificaciones).' : 'Solo pacientes que aceptaron avisos. Un aviso cada 24 horas.');
+      x.appendChild(el('div', { clase: 'av-form' }, [
+        el('label', { 'for': 'avTitulo', texto: 'Título (máx. 40)' }), titulo,
+        el('label', { 'for': 'avTexto', texto: 'Texto (máx. 120)' }), texto,
+        el('label', { 'for': 'avEnlace', texto: 'Enlace (opcional, de kairal.cl)' }), enlace,
+        el('p', { clase: 'meta', texto: 'Así se verá en el teléfono:' }), el('div', { clase: 'av-prev' }, [pt, px]),
+        el('p', { clase: 'meta', texto: nota }), enviar]));
+      x.appendChild(el('h2', { clase: 'dia', texto: 'Enviados' }));
+      if (!r.historial.length) x.appendChild(el('p', { clase: 'vacio' }, [el('span', { texto: 'Todavía no has enviado avisos.' })]));
+      r.historial.forEach(function (a) {
+        x.appendChild(el('div', { clase: 'av-hist' }, [el('b', { texto: a.titulo }), el('p', { clase: 'meta', texto: a.texto }),
+          el('p', { clase: 'meta', texto: fechaHora(a.fecha) + ' · ' + a.destinatarias + ' pacientes · ' + a.push + ' web · ' + a.wallet + ' Wallet' + (a.usuario ? ' · ' + a.usuario : '') })]));
+      });
+    });
+  }
+
+
   function pintarCalendario() {
     var cont = $('calendario'); vaciar(cont);
     if (!S.agenda && S.agendaError) { cont.appendChild(el('p', { clase: 'vacio' }, [el('span', { texto: S.agendaError })])); return; }

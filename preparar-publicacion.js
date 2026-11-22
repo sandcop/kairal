@@ -31,14 +31,14 @@ const SITIO = 'https://kairal.cl';
 const INCLUIR = [
   // Páginas
   'index.html', '404.html', 'autoevaluacion.html', 'blog.html', 'consulta-previa-ks24.html',
-  'cookies.html', 'privacidad.html', 'reservar.html', 'terminos.html', 'primera-consulta.html', 'que-tratamos.html', 'examenes.html',
+  'cookies.html', 'privacidad.html', 'reservar.html', 'seguimiento.html', 'terminos.html', 'primera-consulta.html', 'que-tratamos.html', 'examenes.html',
   // (El panel de reservas NO se publica como archivo: viaja dentro de la función netlify/functions/equipo.js y solo se
   // entrega tras el código de acceso + el del autenticador. Ver PANEL_ARCHIVOS más abajo.)
   // Estilos
-  'style.css', 'autoevaluacion.css', 'blog.css', 'consulta-previa.css', 'reservar.css',
+  'style.css', 'autoevaluacion.css', 'blog.css', 'consulta-previa.css', 'reservar.css', 'seguimiento.css',
   // Scripts
   'inicio-arriba.js', 'script.js', 'hero-historia.js', 'scroll-suave.js', 'interna.js', 'blog.js', 'cookies.js', 'recursos.js',
-  'reservar.js', 'autoevaluacion.js', 'autoeval-contenido.js', 'consulta-previa.js',
+  'reservar.js', 'seguimiento.js', 'seguimiento-guias.js', 'autoevaluacion.js', 'autoeval-contenido.js', 'consulta-previa.js',
   // Imágenes sueltas. Kairallogo-email.png lo usan los correos de Brevo y
   // kathy_slide.webp la vista previa al compartir el enlace: no borrarlos.
   'Kairallogo.svg', 'Kairallogo-email.png', 'kathy_slide.webp', 'sin_fondo.png',

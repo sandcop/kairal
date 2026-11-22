@@ -122,4 +122,22 @@ document.addEventListener('click', function(e){
   e.preventDefault();
   mostrar();
 });
+
+/* Eventos de medición: cuántas personas tocan reservar, llamar o escribir por WhatsApp, y cuántas retienen una hora.
+   Solo se envían si la persona aceptó la medición (gaCargado). No llevan ningún dato personal ni de salud:
+   solo el nombre del evento y la página donde ocurrió. */
+function evento(nombre){
+  if (!gaCargado || typeof window.gtag !== 'function') return;
+  try { window.gtag('event', nombre, { pagina: location.pathname }); } catch(e) {}
+}
+window.kairalEvento = evento;
+
+document.addEventListener('click', function(e){
+  var a = e.target.closest && e.target.closest('a[href]');
+  if (!a) return;
+  var h = a.getAttribute('href') || '';
+  if (h.indexOf('tel:') === 0) evento('clic_llamar');
+  else if (h.indexOf('wa.me/') !== -1) evento('clic_whatsapp');
+  else if (/(^|\/)reservar\.html(\?|#|$)/.test(h)) evento('clic_reservar');
+}, true);
 })();

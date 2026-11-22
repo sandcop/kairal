@@ -239,6 +239,7 @@ function pintarNueva(r){
     }).then(function(res){
       if (res.ok && res.token){
         token = res.token;
+        if (window.kairalEvento) window.kairalEvento('reserva_retenida');
         history.replaceState(null, '', 'reservar.html?t=' + encodeURIComponent(token));
         return vistaEstado();
       }

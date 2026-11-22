@@ -62,7 +62,7 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .header{
   position:fixed;top:0;left:0;right:0;z-index:50;
   display:flex;align-items:center;justify-content:space-between;
-  padding:1.1rem var(--margen-x);
+  padding:.7rem var(--margen-x);
   transition:background .5s var(--ease-tierra),-webkit-backdrop-filter .5s,backdrop-filter .5s,box-shadow .5s,transform .5s var(--ease-tierra);
 }
 .header.solido{background:rgba(8,31,29,.72);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 1px 0 rgba(127,181,171,.12)}
@@ -85,6 +85,8 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .header nav{display:flex;align-items:center;gap:1.6rem}
 .header nav a.link{font-size:.875rem;text-decoration:none;opacity:.75;transition:opacity .3s}
 .header nav a.link:hover{opacity:1}
+/* botón del menú más bajo para que la barra sea fina (antes medía 57 px y la barra 92 px) */
+.header nav .btn{padding:.6em 1.35em;font-size:.84rem}
 /* menú hamburguesa bajo 1000 px (antes 860): entre 880 y 999 los enlaces se partían en dos líneas y el botón de
    sonido tapaba «Autoevaluación»; además es el mismo corte en que la portada pasa al diseño de celular */
 @media(max-width:999px){.header nav a.link{display:none}}
@@ -112,7 +114,7 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .menu-movil::-webkit-scrollbar{display:none}
 .menu-movil.abierto{opacity:1;visibility:visible}
 /* X de cierre: misma posición que la hamburguesa del header (el panel la tapa) */
-.menu-cerrar{position:fixed;z-index:2;top:calc(1.1rem + env(safe-area-inset-top, 0px));right:var(--margen-x);width:44px;height:44px;margin:-3px;
+.menu-cerrar{position:fixed;z-index:2;top:calc(.7rem + env(safe-area-inset-top, 0px));right:var(--margen-x);width:44px;height:44px;margin:-3px;
   display:grid;place-items:center;padding:0;background:none;border:1px solid rgba(127,181,171,.3);border-radius:50%;color:var(--arena);cursor:pointer;
   transition:background .3s,border-color .3s,transform .4s var(--ease-tierra)}
 .menu-cerrar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
@@ -144,7 +146,7 @@ body.reduced .rev .w{opacity:1;transform:none;filter:none}
 .menu-social{display:flex;gap:1.2rem}
 .menu-social a{
   width:46px;height:46px;border-radius:50%;border:1px solid rgba(127,181,171,.35);
-  display:flex;align-items:center;justify-content:center;color:var(--bruma);transition:all .3s;
+  display:flex;align-items:center;justify-content:center;color:var(--bruma);transition:border-color .3s,background-color .3s,color .3s;
 }
 .menu-social a:hover{border-color:var(--bruma);background:rgba(127,181,171,.1);color:var(--arena)}
 .menu-social svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6}
@@ -361,7 +363,8 @@ body.reduced .raiz-invita-punto{animation:none}
 .raiz-texto.visible .raiz-volver{pointer-events:auto}
 .raiz-volver:hover,.raiz-volver:focus-visible{color:var(--alba)}
 
-@media(max-width:920px){
+/* (también en pantallas verticales de escritorio o iPad Pro: con la escena fija a una pantalla alta quedaban cientos de píxeles vacíos entre el texto y el botón) */
+@media(max-width:920px),(min-width:921px) and (orientation:portrait){
   /* En el celular la sección ya NO mide una pantalla fija: antes el título, la frase y el
      botón se quedaban con casi todo el alto y el dibujo recibía 45 px en iPhone, 21 px en
      Android y 0 px en iPhone SE. Ahora el dibujo ocupa todo el ancho, con su propia altura
@@ -644,6 +647,11 @@ body.reduced .motor-polvo{display:none}
 /* Letras sueltas para la dispersión del cierre (ver dispersarEtiqueta) */
 .motor-permanente-letra{display:inline-block;white-space:pre}
 .motor-permanente-palabra{display:inline-block;white-space:nowrap}
+/* la palabra del centro se toca y muestra la definición de la medicina funcional, como las demás áreas */
+.motor-permanente{pointer-events:auto;cursor:pointer;transition:color .25s}
+.motor-permanente:hover{color:var(--teal)}
+.motor-permanente.activa{color:var(--texto-oscuro);font-weight:600}
+.motor-permanente:focus-visible{outline:2px solid var(--alba);outline-offset:8px;border-radius:6px}
 /* salto de línea solo para mobile: ahí los nombres de dos palabras van una arriba y otra abajo */
 .m-br{display:none}
 .motor-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -997,6 +1005,12 @@ body.reduced .faq-item summary::before{transition:none}
   .acto-cta{min-height:clamp(34rem,80svh,48rem)}
   .cta-copy{padding:5rem var(--margen-x) 7.5rem}
 }
+/* celular y tablet: el bloque parte arriba con un aire justo. Antes se centraba en una pantalla completa y dejaba
+   unos 170 px vacíos sobre el título; abajo queda el lugar de las flores */
+@media(max-width:999px){
+  .acto-cta{min-height:0;align-items:flex-start}
+  .cta-copy{padding:3.5rem var(--margen-x) 9rem}
+}
 .cta-copy h2{font-size:clamp(2.4rem,5.6vw,5.2rem);color:var(--arena)}
 .cta-copy h2 em{font-family:var(--script);font-style:normal;letter-spacing:normal;font-size:1.25em;color:var(--alba)}
 .cta-copy p{margin:1.4rem 0 2.4rem;max-width:36rem;color:rgba(237,229,214,.85)}
@@ -1010,8 +1024,17 @@ body.reduced .faq-item summary::before{transition:none}
 /* ============ FOOTER ============ */
 .footer{background:#051512;padding:4rem 0 2.5rem;font-size:.92rem}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2.5rem}
-@media(max-width:860px){.footer-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:520px){.footer-grid{grid-template-columns:1fr}}
+/* Pantallas chicas: la marca ocupa todo el ancho, «Recorrido» y «Contacto» van lado a lado y «Más» (la lista larga)
+   se reparte en 2 columnas, para que el pie no sea una sola columna interminable. */
+@media(max-width:860px){
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem 1.5rem}
+  .footer-grid>div:nth-child(1){grid-column:1/-1}
+  .footer-grid>div:nth-child(2){order:2}
+  .footer-grid>div:nth-child(4){order:3}
+  .footer-grid>div:nth-child(3){order:4;grid-column:1/-1;column-count:2;column-gap:1.5rem}
+  .footer-grid>div:nth-child(3) h4{column-span:all}
+  .footer-grid>div:nth-child(3) a{break-inside:avoid}
+}
 .footer h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bruma);margin-bottom:1rem;font-weight:500}
 .footer a{display:block;text-decoration:none;opacity:.7;margin-bottom:.5rem;transition:opacity .3s}
 .footer-social{display:flex;gap:.7rem;margin-top:1.3rem}
@@ -1031,7 +1054,7 @@ body.reduced .faq-item summary::before{transition:none}
   display:flex;flex-direction:column;gap:.9rem;
 }
 @media(max-width:920px){.actos-nav{display:none}}
-.actos-nav a{width:8px;height:8px;border-radius:50%;background:rgba(237,229,214,.45);box-shadow:0 0 0 1px rgba(8,31,29,.4);transition:all .4s var(--ease-tierra);position:relative}
+.actos-nav a{width:8px;height:8px;border-radius:50%;background:rgba(237,229,214,.45);box-shadow:0 0 0 1px rgba(8,31,29,.4);transition:background-color .4s var(--ease-tierra),transform .4s var(--ease-tierra),box-shadow .4s var(--ease-tierra);position:relative}
 /* el aro oscuro hace que los puntos (y el amarillo) se vean también sobre los fondos claros */
 .actos-nav a.activo{background:var(--alba);transform:scale(1.4);box-shadow:0 0 0 1.5px rgba(8,31,29,.55)}
 .actos-nav a:focus-visible{outline:2px solid var(--alba);outline-offset:4px}
@@ -1124,7 +1147,7 @@ body.reduced .panel-raiz.abierto{filter:none}
 .raiz-chips button{
   font-family:var(--mono);font-size:.7rem;letter-spacing:.03em;
   padding:.5em .85em;border-radius:999px;border:1px solid rgba(127,181,171,.3);
-  background:transparent;color:var(--bruma);transition:all .25s;
+  background:transparent;color:var(--bruma);transition:border-color .25s,color .25s,background-color .25s;
 }
 .raiz-chips button:hover{border-color:var(--bruma);color:var(--arena);background:rgba(127,181,171,.08)}
 .raiz-form{display:flex;gap:.6rem;padding:.9rem 1.1rem;border-top:1px solid rgba(127,181,171,.15)}
@@ -1156,24 +1179,24 @@ body.reduced .panel-raiz.abierto{filter:none}
 .barra-movil .bm-wa svg{width:22px;height:22px;fill:var(--tinta-2)}
 
 .toggle-sonido{
-  position:fixed;left:1.4rem;bottom:1.4rem;z-index:49;
+  position:fixed;left:1.2rem;bottom:1.2rem;z-index:49;
   background:rgba(8,31,29,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border:1px solid rgba(127,181,171,.25);border-radius:999px;
-  color:var(--bruma);font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
-  padding:.55em 1.1em;display:flex;align-items:center;gap:.6em;
+  color:var(--bruma);font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;
+  padding:.4em .9em;display:flex;align-items:center;gap:.5em;
 }
-.toggle-sonido .eq{display:flex;gap:2px;align-items:flex-end;height:10px}
+.toggle-sonido .eq{display:flex;gap:2px;align-items:flex-end;height:8px}
 .toggle-sonido .eq i{width:2px;background:var(--bruma);height:3px;transition:height .3s}
 .toggle-sonido.on .eq i{animation:eq 1s ease-in-out infinite}
 .toggle-sonido.on .eq i:nth-child(2){animation-delay:.2s}
 .toggle-sonido.on .eq i:nth-child(3){animation-delay:.4s}
-@keyframes eq{0%,100%{height:3px}50%{height:10px}}
+@keyframes eq{0%,100%{height:3px}50%{height:8px}}
 body.reduced .toggle-sonido .eq i{animation:none}
 /* «Sonido» pasa al header (solo el ícono, junto a la hamburguesa) desde que aparece la hamburguesa (999 px): abajo
    tapaba el texto fijo de las secciones, el pie de página y el botón «Agendemos tu consulta» de la portada */
 @media(max-width:999px){
-  .toggle-sonido{top:calc(1.1rem - 1px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
-    width:40px;height:40px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
+  .toggle-sonido{top:calc(.7rem + 3px);bottom:auto;left:auto;right:calc(var(--margen-x) + 38px + .7rem);z-index:51;
+    width:32px;height:32px;padding:0;justify-content:center;background:rgba(8,31,29,.55)}
   .toggle-sonido .etiqueta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
 
@@ -1313,6 +1336,16 @@ html.tier-bajo .fab-raiz{background:rgba(8,31,29,.62)}
 .recurso .btn{margin-top:auto;font-size:.9rem;padding:.85em 1.5em}
 .recurso .btn svg{width:1.05em;height:1.05em;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:920px){.recursos-grid{grid-template-columns:1fr}}
+/* Guías apiladas (celular): cada tarjeta cae sobre la anterior y la anterior se asienta un poco hacia atrás.
+   El apilado es position:sticky; recursos.js solo reduce la escala de las que quedan debajo (transform). */
+@media(max-width:920px){
+  .recursos-grid{gap:1.8rem}
+  .recurso{position:sticky;top:5.4rem;transform-origin:50% 0;background:#102F2C;box-shadow:0 14px 34px rgba(3,14,12,.4)}
+  .recurso:nth-child(2){top:6.4rem}
+  .recurso:nth-child(3){top:7.4rem}
+  .recurso:hover{transform:none;background:#102F2C}   /* sin esto el :hover base las vuelve translúcidas y se ven las de atrás */
+}
+@media(max-width:920px) and (prefers-reduced-motion:reduce){.recurso{position:relative;top:auto}}
 
 /* ventana para dejar el correo */
 .rec-modal{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:1.2rem;background:rgba(5,21,18,.72);
@@ -1332,7 +1365,7 @@ html.tier-bajo .fab-raiz{background:rgba(8,31,29,.62)}
 .rec-label span{text-transform:none;letter-spacing:0;opacity:.7}
 .rec-input{width:100%;padding:.8rem 1rem;border-radius:14px;border:1px solid rgba(127,181,171,.3);background:rgba(255,255,255,.06);color:var(--arena);font:inherit;font-size:1rem;transition:border-color .25s,background .25s}
 .rec-input::placeholder{color:rgba(237,229,214,.4)}
-.rec-input:focus{outline:none;border-color:var(--alba);background:rgba(255,255,255,.09)}
+.rec-input:focus{outline:none;border-color:var(--alba);background:rgba(255,255,255,.09);box-shadow:0 0 0 3px rgba(242,166,90,.3)}
 .rec-input.err{border-color:var(--flor)}
 .rec-check{display:flex;gap:.7rem;align-items:flex-start;margin-top:1.1rem;font-size:.82rem;line-height:1.5;color:rgba(237,229,214,.75);cursor:pointer}
 .rec-check input{flex:none;width:1.35rem;height:1.35rem;margin-top:.05rem;accent-color:var(--alba)}
@@ -1395,6 +1428,8 @@ html.modal-abierto{overflow:hidden}
 .hh-quien span{display:block;font-family:var(--script);font-weight:400;letter-spacing:normal}
 .hh-online{color:rgba(237,229,214,.72);font-size:.85rem}
 .hh-online b{color:var(--arena);font-weight:600}
+.hh-sede i{font-style:normal}
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){.hh-sede{display:block;margin-top:.1rem}.hh-sede i{display:none}}
 .hh-ctas{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem}
 
 /* la escena de las frases: una línea fina de agua y un punto de alba, y el texto que va apareciendo */
@@ -1435,7 +1470,7 @@ body.reduced .hh-voces{display:block}
 body.reduced .hh-voces li{opacity:1;animation:none;transform:none;margin:0 0 1rem}
 body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
 /* ── escritorio: el hero de siempre a la izquierda y la foto de la Dra. a la derecha ── */
-@media(min-width:1000px){
+@media(min-width:1000px) and (orientation:landscape){
   .hh-grid{position:static;grid-template-columns:minmax(0,.5fr) minmax(0,.5fr)}   /* static: la foto (z-index -1) queda bajo el texto */
   /* la foto se funde a la izquierda con el paisaje y abajo con la sección siguiente (sin línea de corte) */
   .hh-foto{position:absolute;top:0;right:0;bottom:0;width:64%;z-index:-1;pointer-events:none;
@@ -1459,7 +1494,8 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
   .hh-ctas{margin-top:1.1rem}
 }
 /* ── celular y tablet: foto arriba y panel oscuro con borde de duna; todo en la primera pantalla ── */
-@media(max-width:999px){
+/* (en pantallas verticales de escritorio o iPad Pro la foto horizontal quedaba recortada sin rostro: usan este mismo diseño) */
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){
   .hh{flex-direction:column;align-items:stretch;padding:0 0 calc(1.1rem + env(safe-area-inset-bottom, 0px));background:var(--tinta)}   /* sin paisaje (sin JS) el panel es sólido; con paisaje vivo es transparente (más abajo) */
   .hh-foto{position:relative;flex:1 1 0;min-height:max(30svh,190px)}   /* la foto se achica en pantallas bajas: el botón sigue a la vista */
   .hh-foto picture{position:absolute;inset:0}
@@ -1486,10 +1522,12 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
   .hh-ctas .btn{flex:0 0 auto;white-space:nowrap;justify-content:center}
   .hh-ctas .btn-ghost{display:none}
 }
-@media(min-width:641px) and (max-width:999px){.hh-foto img{object-position:80% 12%}}   /* tablet: foto completa, encuadre a la Dra. */
+@media(min-width:641px) and (max-width:999px),(min-width:1000px) and (orientation:portrait){.hh-foto img{object-position:80% 12%}}   /* tablet: foto completa, encuadre a la Dra. */
+/* en vertical el sonido va bajo el menú (abajo a la izquierda taparía el botón de agendar) */
+@media(min-width:1000px) and (orientation:portrait){.toggle-sonido{top:4.6rem;bottom:auto}}
 /* sin movimiento: en el celular solo la primera frase (apiladas empujarían el botón fuera de la primera pantalla) */
-@media(max-width:999px) and (prefers-reduced-motion:reduce){.hh-voces li:not(:first-child),.hh-giro{display:none}}
-@media(max-width:999px){body.reduced .hh-voces li:not(:first-child),body.reduced .hh-giro{display:none}}
+@media(max-width:999px) and (prefers-reduced-motion:reduce),(min-width:1000px) and (orientation:portrait) and (prefers-reduced-motion:reduce){.hh-voces li:not(:first-child),.hh-giro{display:none}}
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){body.reduced .hh-voces li:not(:first-child),body.reduced .hh-giro{display:none}}
 /* pantallas angostas: sin el ícono del calendario para que «Agendemos tu consulta» quepa en una línea */
 @media(max-width:420px){.hh-ctas .btn-reserva-ico{display:none}}
 
@@ -1513,10 +1551,12 @@ body.reduced .hh-giro{opacity:1;animation:none;transform:none;margin-top:1.8rem}
 /* Con el paisaje vivo (lo activa script.js al encontrar el lienzo) el hero y «Bajo la superficie» dejan de pintar su propio fondo
    y muestran el paisaje fijo que hay detrás. Sin JavaScript conservan sus degradados de siempre. */
 html.paisaje-vivo .hh{background:none}
-@media(max-width:999px){html.paisaje-vivo .hh{background:linear-gradient(180deg,rgba(8,31,29,0) 35%,rgba(8,31,29,.34) 70%,rgba(8,31,29,0) 100%)}}   /* en el celular el panel deja ver el paisaje; un velo suave abajo cuida la lectura */
+@media(max-width:999px),(min-width:1000px) and (orientation:portrait){html.paisaje-vivo .hh{background:linear-gradient(180deg,rgba(8,31,29,0) 35%,rgba(8,31,29,.34) 70%,rgba(8,31,29,0) 100%)}}   /* en el celular el panel deja ver el paisaje; un velo suave abajo cuida la lectura */
 html.paisaje-vivo .acto-raiz{background:linear-gradient(to bottom,rgba(5,21,18,0) 0,rgba(5,21,18,.4) 24vh,rgba(5,21,18,.4) 100%)}
 /* El método Kairal también se ve sobre el paisaje: velo para que el texto y la gota se lean, y fundido final al verde con que empieza «La doctora».
    El velo de «Bajo la superficie» termina en .4 y el del método empieza en .4: sin escalón (sin línea) en el empalme. */
+/* en vertical la escena del método es más baja: el texto de las etapas y el dibujo terminan antes de los 30rem, y a pantalla alta sobraban ~150 px antes del botón */
+@media(min-width:921px) and (orientation:portrait){.metodo-escena{height:min(100svh,30rem);min-height:480px}}
 html.paisaje-vivo .acto-metodo{background:linear-gradient(to bottom,rgba(5,21,18,.4) 0,rgba(5,21,18,.22) 30vh,rgba(5,21,18,.2) calc(100% - 26vh),#0c2b28 100%)}
 
 /* Al llegar por un enlace del menú, el título de estas secciones queda libre del menú fijo (antes la etiqueta pequeña de arriba daba ese espacio) */

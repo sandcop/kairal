@@ -900,6 +900,7 @@ if (gsapOK){
     var tarjetas = Array.prototype.slice.call(document.querySelectorAll('.tarjeta-etapa'));
     var nums = Array.prototype.slice.call(document.querySelectorAll('.numeros-etapa button'));
     var mostrada = [false,false,false,false];
+    var primeraVez = true;
     tarjetas.forEach(function(t){ splitWords(t.querySelector('h3')); });
     // filter:blur por palabra obliga a repintar el texto en cada cuadro: en
     // celulares/equipos modestos las palabras entran solo con opacidad y altura
@@ -933,7 +934,12 @@ if (gsapOK){
       update: function(p){
         var s = clamp(Math.floor(p*4), 0, 3);
         var t = p*4 - s;
-        var visible = (t >= 0.46 && t <= 0.97) ? s : -1;
+        // La primera tarjeta aparece apenas llegas a la sección, como el texto del resto del sitio; antes
+        // esperaba a que la gota cayera y salpicara (~1,6 s). Desde la segunda etapa, la tarjeta sigue
+        // naciendo en el impacto de su gota.
+        if (s > 0) primeraVez = false;
+        var desde = (primeraVez && s === 0) ? 0 : 0.46;
+        var visible = (t >= desde && t <= 0.97) ? s : -1;
         tarjetas.forEach(function(_, i){
           if (i === visible && !mostrada[i]){ mostrada[i] = true; entra(i); }
           if (i !== visible && mostrada[i]){ mostrada[i] = false; sale(i); }
@@ -1918,21 +1924,54 @@ if (window.matchMedia('(pointer:fine)').matches && !reduced){
     src.connect(lp); lp.connect(gain); gain.connect(actx.destination);
     src.start();
   }
+  function poner(on){
+    encendido = on;
+    gain.gain.cancelScheduledValues(actx.currentTime);
+    gain.gain.linearRampToValueAtTime(on ? 0.06 : 0, actx.currentTime + 1.2);
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.querySelector('.etiqueta').textContent = on ? 'Sonido on' : 'Sonido';
+  }
+  // Si la persona lo apaga, se respeta durante esa visita (sessionStorage); en la siguiente vuelve a encenderse solo.
+  var APAGADO = 'kairal_sonido_off';
+  function apagadoAntes(){ try { return sessionStorage.getItem(APAGADO) === '1'; } catch(e) { return false; } }
+  function recordarApagado(v){ try { if (v) sessionStorage.setItem(APAGADO, '1'); else sessionStorage.removeItem(APAGADO); } catch(e) {} }
+
   btn.addEventListener('click', function(){
     try{
       if (!actx) crear();
       if (actx.state === 'suspended') actx.resume();
-      encendido = !encendido;
-      gain.gain.cancelScheduledValues(actx.currentTime);
-      gain.gain.linearRampToValueAtTime(encendido ? 0.06 : 0, actx.currentTime + 1.2);
-      btn.classList.toggle('on', encendido);
-      btn.setAttribute('aria-pressed', String(encendido));
-      btn.querySelector('.etiqueta').textContent = encendido ? 'Sonido on' : 'Sonido';
+      poner(!encendido);
+      recordarApagado(!encendido);
     }catch(err){
       console.warn('Kairal: sonido ambiental no disponible en este navegador.', err);
       btn.style.display = 'none';
     }
   });
+
+  // Sonido encendido al entrar. Los navegadores no dejan sonar nada antes del primer toque, clic o tecla,
+  // así que se intenta ya y, si no se puede, arranca con el primer gesto de la persona (un scroll solo no cuenta).
+  if (!apagadoAntes()){
+    var gestos = ['pointerup', 'touchend', 'keydown', 'click'];
+    var listo = false;
+    var quitar = function(){ gestos.forEach(function(g){ window.removeEventListener(g, intentar, true); }); };
+    var intentar = function(e){
+      if (listo) return;
+      // si el primer toque es sobre el propio botón, que decida él (evita encender y apagar de golpe)
+      if (e && e.target && btn.contains(e.target)){ quitar(); return; }
+      try{
+        if (!actx) crear();
+        var r = actx.resume();
+        var revisar = function(){
+          if (listo || actx.state !== 'running' || apagadoAntes()) return;
+          listo = true; quitar(); poner(true);
+        };
+        if (r && r.then) r.then(revisar, function(){}); else revisar();
+      }catch(err){ quitar(); }
+    };
+    gestos.forEach(function(g){ window.addEventListener(g, intentar, { capture: true, passive: true }); });
+    intentar();   // por si el navegador ya permite sonido (por ejemplo, quien visita seguido)
+  }
 })();
 
 /* ============================================================
@@ -2148,8 +2187,8 @@ try{ (function(){
    11 áreas alrededor. Un recorrido automático (6.5s por área, pausable)
    lleva el trazo de arena de área en área -pasando siempre por la
    palabra- y el panel muestra el área activa; tocar un área lleva el
-   trazo ahí. Después de la última, la palabra se dispersa y la frase de
-   cierre ocupa su lugar; luego vuelve a empezar. Es su propia IIFE -sin
+   trazo ahí. Después de la última viene «Medicina funcional», la palabra del
+   centro (que también se puede tocar), con su definición; luego vuelve a empezar. Es su propia IIFE -sin
    acceso por clausura a gsapOK/DPR/etc de otras secciones-, así que todo
    se recalcula localmente.
 ============================================================ */
@@ -2160,12 +2199,11 @@ try{ (function(){
   var fijo = document.getElementById('motor-fijo');
   var orbita = document.getElementById('motor-orbita');
   var panel = document.getElementById('motor-panel');
-  var frase = document.getElementById('motor-frase');
   var kickerEl = document.getElementById('motor-kicker-texto');
   var tituloEl = document.getElementById('motor-titulo');
   var descEl = document.getElementById('motor-desc');
   var progreso = document.getElementById('motor-progreso');
-  if (!fijo || !orbita || !panel || !frase) return;
+  if (!fijo || !orbita || !panel) return;
   var areas = [].slice.call(orbita.querySelectorAll('.motor-area'));
   var barra = progreso && progreso.querySelector('span');
 
@@ -2676,12 +2714,10 @@ try{ (function(){
       desc:'Su trabajo es distinguir amigo de enemigo. Cuando pierde esa claridad, aparecen alergias, sensibilidades y enfermedad autoinmune.' },
     { kicker:'El reflejo', titulo:'Salud cardiovascular', lado:'izq',
       desc:'El corazón no trabaja aislado: refleja la inflamación y el desgaste metabólico y hormonal acumulados durante años.' },
-    // Cierre: la frase toma el lugar de "MEDICINA FUNCIONAL" (que se
-    // dispersa, ver dispersarEtiqueta) y es la protagonista, con la misma
-    // tipografía del H1 del hero: negrita + caligrafía en el <em>.
-    { kicker:'', titulo:'', lado:'centro',
-      desc:'Una mirada integral para comprender qué está detrás de tus síntomas.',
-      descHtml:'Una mirada integral <em>para comprender qué está detrás de tus síntomas.</em>' }
+    // Última escena: la palabra del centro, «Medicina funcional». El trazo la rodea y el panel muestra su
+    // definición, igual que en las demás áreas. También se llega tocando la palabra.
+    { kicker:'El enfoque', titulo:'Medicina funcional', lado:'centro',
+      desc:'La medicina funcional integra la evaluación clínica convencional con una mirada amplia de los factores biológicos, nutricionales, psicológicos y ambientales que influyen en la salud.' }
   ];
 
   // La etiqueta permanente se parte en letras para poder dispersarla al
@@ -2774,8 +2810,8 @@ try{ (function(){
   window.addEventListener('load', ubicarAreas);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(ubicarAreas);
 
-  var CIERRE = escenas.length - 1;   // la última escena es la frase de cierre
-  var DUR_AREA = 6500, DUR_CIERRE = 8000;
+  var CIERRE = escenas.length - 1;   // la última escena es «Medicina funcional» (la palabra del centro)
+  var DUR_AREA = 6500, DUR_CIERRE = 6500;
   var actual = 0;
 
   function marcarArea(i){
@@ -2796,31 +2832,23 @@ try{ (function(){
   // oculto) y aparece cuando está por llegar (mostrar) -ver viajar() en
   // construirPolvoAro.
   function ir(i){
-    var e = escenas[i], esCierre = i === CIERRE, veniaDelCierre = actual === CIERRE;
+    var e = escenas[i], esCierre = i === CIERRE;
     actual = i;
     transcurrido = 0;
     marcarArea(esCierre ? -1 : i);
-    if (veniaDelCierre && !esCierre){
-      // la palabra se rearma ya: el trazo va a pasar por ella
-      dispersarEtiqueta(false);
-      frase.classList.remove('visible');
-      orbita.classList.remove('en-cierre'); fijo.classList.remove('en-cierre');
+    if (etiqueta){
+      etiqueta.classList.toggle('activa', esCierre);
+      etiqueta.setAttribute('aria-pressed', esCierre ? 'true' : 'false');
     }
     panel.classList.remove('visible');
     polvoAro.viajar(function(){
-      if (esCierre){
-        // el trazo está rodeando la palabra: se dispersa y la frase toma su lugar
-        dispersarEtiqueta(true);
-        orbita.classList.add('en-cierre'); fijo.classList.add('en-cierre');
-        frase.classList.add('sin-transicion');
-        return frase;
-      }
       kickerEl.textContent = e.kicker;
       tituloEl.textContent = e.titulo;
       descEl.textContent = e.desc;
       panel.classList.add('sin-transicion');
-      return areas[i];
-    }, function(){ aparecer(esCierre ? frase : panel); });
+      // en la última escena el trazo rodea la palabra del centro
+      return esCierre && etiqueta ? etiqueta : areas[i];
+    }, function(){ aparecer(panel); });
   }
 
   // ---------- Recorrido automático ----------
@@ -2873,6 +2901,20 @@ try{ (function(){
       if (i !== actual) ir(i);
     });
   });
+  // La palabra del centro también se toca: muestra la definición de la medicina funcional, como las áreas
+  if (etiqueta){
+    etiqueta.setAttribute('role', 'button');
+    etiqueta.setAttribute('tabindex', '0');
+    etiqueta.setAttribute('aria-pressed', 'false');
+    var tocarEtiqueta = function(){
+      pausaHasta = performance.now() + 12000;
+      if (actual !== CIERRE) ir(CIERRE);
+    };
+    etiqueta.addEventListener('click', tocarEtiqueta);
+    etiqueta.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); tocarEtiqueta(); }
+    });
+  }
   [orbita, panel.parentNode].forEach(function(el){
     el.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') encima = true; });
     el.addEventListener('pointerleave', function(e){ if (e.pointerType === 'mouse') encima = false; });

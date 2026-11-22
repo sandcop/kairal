@@ -31,7 +31,7 @@ const SITIO = 'https://kairal.cl';
 const INCLUIR = [
   // Páginas
   'index.html', '404.html', 'autoevaluacion.html', 'blog.html', 'consulta-previa-ks24.html',
-  'cookies.html', 'privacidad.html', 'reservar.html', 'terminos.html',
+  'cookies.html', 'privacidad.html', 'reservar.html', 'terminos.html', 'primera-consulta.html', 'que-tratamos.html', 'examenes.html',
   // (El panel de reservas NO se publica como archivo: viaja dentro de la función netlify/functions/equipo.js y solo se
   // entrega tras el código de acceso + el del autenticador. Ver PANEL_ARCHIVOS más abajo.)
   // Estilos
@@ -52,7 +52,7 @@ const INCLUIR = [
 ];
 
 // Páginas que van al sitemap además de los artículos (las demás llevan noindex)
-const PAGINAS_SITEMAP = ['', 'reservar.html', 'autoevaluacion.html', 'blog.html', 'privacidad.html', 'terminos.html', 'cookies.html'];
+const PAGINAS_SITEMAP = ['', 'reservar.html', 'primera-consulta.html', 'que-tratamos.html', 'examenes.html', 'autoevaluacion.html', 'blog.html', 'privacidad.html', 'terminos.html', 'cookies.html'];
 
 // Archivos de la raíz que a propósito NO se publican (para que el aviso de
 // "archivo nuevo sin decidir" no salte con ellos).

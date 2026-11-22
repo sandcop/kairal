@@ -647,6 +647,11 @@ body.reduced .motor-polvo{display:none}
 /* Letras sueltas para la dispersión del cierre (ver dispersarEtiqueta) */
 .motor-permanente-letra{display:inline-block;white-space:pre}
 .motor-permanente-palabra{display:inline-block;white-space:nowrap}
+/* la palabra del centro se toca y muestra la definición de la medicina funcional, como las demás áreas */
+.motor-permanente{pointer-events:auto;cursor:pointer;transition:color .25s}
+.motor-permanente:hover{color:var(--teal)}
+.motor-permanente.activa{color:var(--texto-oscuro);font-weight:600}
+.motor-permanente:focus-visible{outline:2px solid var(--alba);outline-offset:8px;border-radius:6px}
 /* salto de línea solo para mobile: ahí los nombres de dos palabras van una arriba y otra abajo */
 .m-br{display:none}
 .motor-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -701,10 +706,6 @@ body.reduced .motor-polvo{display:none}
 .motor-frase.sin-transicion{transition:none}
 .motor-frase em{display:block;font-family:var(--script);font-style:normal;font-weight:400;letter-spacing:normal;
   font-size:1.15em;line-height:1.2;color:var(--teal);margin-top:.15em}
-/* la definición de la medicina funcional es más larga que la frase de antes: letra algo menor para que quepa dentro de la órbita */
-.motor-frase.motor-frase--definicion{width:min(40rem,92%);font-size:clamp(1.25rem,2.1vw,1.85rem);line-height:1.25}
-.motor-frase.motor-frase--definicion em{font-size:1.06em;line-height:1.3;margin-top:.3em}
-@media(max-width:920px){.motor-frase.motor-frase--definicion{font-size:clamp(1.05rem,4.6vw,1.4rem)}}
 
 body.reduced .motor-panel{opacity:1;transform:none}
 body.reduced .motor-progreso{display:none}
@@ -1342,7 +1343,7 @@ html.tier-bajo .fab-raiz{background:rgba(8,31,29,.62)}
   .recurso{position:sticky;top:5.4rem;transform-origin:50% 0;background:#102F2C;box-shadow:0 14px 34px rgba(3,14,12,.4)}
   .recurso:nth-child(2){top:6.4rem}
   .recurso:nth-child(3){top:7.4rem}
-  .recurso:hover{transform:none}
+  .recurso:hover{transform:none;background:#102F2C}   /* sin esto el :hover base las vuelve translúcidas y se ven las de atrás */
 }
 @media(max-width:920px) and (prefers-reduced-motion:reduce){.recurso{position:relative;top:auto}}
 

@@ -2187,8 +2187,8 @@ try{ (function(){
    11 áreas alrededor. Un recorrido automático (6.5s por área, pausable)
    lleva el trazo de arena de área en área -pasando siempre por la
    palabra- y el panel muestra el área activa; tocar un área lleva el
-   trazo ahí. Después de la última, la palabra se dispersa y la frase de
-   cierre ocupa su lugar; luego vuelve a empezar. Es su propia IIFE -sin
+   trazo ahí. Después de la última viene «Medicina funcional», la palabra del
+   centro (que también se puede tocar), con su definición; luego vuelve a empezar. Es su propia IIFE -sin
    acceso por clausura a gsapOK/DPR/etc de otras secciones-, así que todo
    se recalcula localmente.
 ============================================================ */
@@ -2199,12 +2199,11 @@ try{ (function(){
   var fijo = document.getElementById('motor-fijo');
   var orbita = document.getElementById('motor-orbita');
   var panel = document.getElementById('motor-panel');
-  var frase = document.getElementById('motor-frase');
   var kickerEl = document.getElementById('motor-kicker-texto');
   var tituloEl = document.getElementById('motor-titulo');
   var descEl = document.getElementById('motor-desc');
   var progreso = document.getElementById('motor-progreso');
-  if (!fijo || !orbita || !panel || !frase) return;
+  if (!fijo || !orbita || !panel) return;
   var areas = [].slice.call(orbita.querySelectorAll('.motor-area'));
   var barra = progreso && progreso.querySelector('span');
 
@@ -2715,12 +2714,10 @@ try{ (function(){
       desc:'Su trabajo es distinguir amigo de enemigo. Cuando pierde esa claridad, aparecen alergias, sensibilidades y enfermedad autoinmune.' },
     { kicker:'El reflejo', titulo:'Salud cardiovascular', lado:'izq',
       desc:'El corazón no trabaja aislado: refleja la inflamación y el desgaste metabólico y hormonal acumulados durante años.' },
-    // Cierre: la frase toma el lugar de "MEDICINA FUNCIONAL" (que se
-    // dispersa, ver dispersarEtiqueta) y es la protagonista, con la misma
-    // tipografía del H1 del hero: negrita + caligrafía en el <em>.
-    { kicker:'', titulo:'', lado:'centro',
-      desc:'La medicina funcional integra la evaluación clínica convencional con una mirada amplia de los factores biológicos, nutricionales, psicológicos y ambientales que influyen en la salud.',
-      descHtml:'La medicina funcional <em>integra la evaluación clínica convencional con una mirada amplia de los factores biológicos, nutricionales, psicológicos y ambientales que influyen en la salud.</em>' }
+    // Última escena: la palabra del centro, «Medicina funcional». El trazo la rodea y el panel muestra su
+    // definición, igual que en las demás áreas. También se llega tocando la palabra.
+    { kicker:'El enfoque', titulo:'Medicina funcional', lado:'centro',
+      desc:'La medicina funcional integra la evaluación clínica convencional con una mirada amplia de los factores biológicos, nutricionales, psicológicos y ambientales que influyen en la salud.' }
   ];
 
   // La etiqueta permanente se parte en letras para poder dispersarla al
@@ -2813,8 +2810,8 @@ try{ (function(){
   window.addEventListener('load', ubicarAreas);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(ubicarAreas);
 
-  var CIERRE = escenas.length - 1;   // la última escena es la frase de cierre
-  var DUR_AREA = 6500, DUR_CIERRE = 8000;
+  var CIERRE = escenas.length - 1;   // la última escena es «Medicina funcional» (la palabra del centro)
+  var DUR_AREA = 6500, DUR_CIERRE = 6500;
   var actual = 0;
 
   function marcarArea(i){
@@ -2835,31 +2832,23 @@ try{ (function(){
   // oculto) y aparece cuando está por llegar (mostrar) -ver viajar() en
   // construirPolvoAro.
   function ir(i){
-    var e = escenas[i], esCierre = i === CIERRE, veniaDelCierre = actual === CIERRE;
+    var e = escenas[i], esCierre = i === CIERRE;
     actual = i;
     transcurrido = 0;
     marcarArea(esCierre ? -1 : i);
-    if (veniaDelCierre && !esCierre){
-      // la palabra se rearma ya: el trazo va a pasar por ella
-      dispersarEtiqueta(false);
-      frase.classList.remove('visible');
-      orbita.classList.remove('en-cierre'); fijo.classList.remove('en-cierre');
+    if (etiqueta){
+      etiqueta.classList.toggle('activa', esCierre);
+      etiqueta.setAttribute('aria-pressed', esCierre ? 'true' : 'false');
     }
     panel.classList.remove('visible');
     polvoAro.viajar(function(){
-      if (esCierre){
-        // el trazo está rodeando la palabra: se dispersa y la frase toma su lugar
-        dispersarEtiqueta(true);
-        orbita.classList.add('en-cierre'); fijo.classList.add('en-cierre');
-        frase.classList.add('sin-transicion');
-        return frase;
-      }
       kickerEl.textContent = e.kicker;
       tituloEl.textContent = e.titulo;
       descEl.textContent = e.desc;
       panel.classList.add('sin-transicion');
-      return areas[i];
-    }, function(){ aparecer(esCierre ? frase : panel); });
+      // en la última escena el trazo rodea la palabra del centro
+      return esCierre && etiqueta ? etiqueta : areas[i];
+    }, function(){ aparecer(panel); });
   }
 
   // ---------- Recorrido automático ----------
@@ -2912,6 +2901,20 @@ try{ (function(){
       if (i !== actual) ir(i);
     });
   });
+  // La palabra del centro también se toca: muestra la definición de la medicina funcional, como las áreas
+  if (etiqueta){
+    etiqueta.setAttribute('role', 'button');
+    etiqueta.setAttribute('tabindex', '0');
+    etiqueta.setAttribute('aria-pressed', 'false');
+    var tocarEtiqueta = function(){
+      pausaHasta = performance.now() + 12000;
+      if (actual !== CIERRE) ir(CIERRE);
+    };
+    etiqueta.addEventListener('click', tocarEtiqueta);
+    etiqueta.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); tocarEtiqueta(); }
+    });
+  }
   [orbita, panel.parentNode].forEach(function(el){
     el.addEventListener('pointerenter', function(e){ if (e.pointerType === 'mouse') encima = true; });
     el.addEventListener('pointerleave', function(e){ if (e.pointerType === 'mouse') encima = false; });

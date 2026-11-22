@@ -2719,8 +2719,8 @@ try{ (function(){
     // dispersa, ver dispersarEtiqueta) y es la protagonista, con la misma
     // tipografía del H1 del hero: negrita + caligrafía en el <em>.
     { kicker:'', titulo:'', lado:'centro',
-      desc:'Una mirada integral para comprender qué está detrás de tus síntomas.',
-      descHtml:'Una mirada integral <em>para comprender qué está detrás de tus síntomas.</em>' }
+      desc:'La medicina funcional integra la evaluación clínica convencional con una mirada amplia de los factores biológicos, nutricionales, psicológicos y ambientales que influyen en la salud.',
+      descHtml:'La medicina funcional <em>integra la evaluación clínica convencional con una mirada amplia de los factores biológicos, nutricionales, psicológicos y ambientales que influyen en la salud.</em>' }
   ];
 
   // La etiqueta permanente se parte en letras para poder dispersarla al

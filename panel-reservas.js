@@ -2,7 +2,7 @@
 window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEKU61qyeH74B1SWiE0AvljFKnzwW3vRvSEbawevV91WTPPIwuO/exec";
 (function () {
   'use strict';
-  var S = { sesion: null, items: [], hoy: '', desfase: 0, pestana: 'confirmar', tarjeta: false, seguimiento: false, q: '', estado: '', cargando: false, abiertas: {} };
+  var S = { sesion: null, items: [], hoy: '', desfase: 0, pestana: 'confirmar', tarjeta: false, seguimiento: false, segHab: [], q: '', estado: '', cargando: false, abiertas: {} };
   var $ = function (id) { return document.getElementById(id); };
 
   // ── DOM seguro: todo lo que viene de pacientes se inserta como TEXTO, nunca como HTML ──
@@ -167,7 +167,7 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
         falloCarga('No pude cargar las reservas: ' + (r.mensaje || 'el servidor respondió con un error') + ' Prueba con "Actualizar".');
         return;
       }
-      S.items = r.items; S.tarjeta = r.tarjeta === true; S.seguimiento = r.seguimiento === true; S.hoy = r.hoy; S.desfase = r.ahora - Date.now();
+      S.items = r.items; S.tarjeta = r.tarjeta === true; S.seguimiento = r.seguimiento === true; S.segHab = (r.seguimientoHabilitados || []).map(function (c) { return String(c).trim().toLowerCase(); }); S.hoy = r.hoy; S.desfase = r.ahora - Date.now();
       $('usuario').textContent = r.usuario || '';
       $('avatarUsuario').textContent = String(r.usuario || '').charAt(0).toUpperCase();
       var h = new Date(r.ahora);
@@ -308,6 +308,10 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     if (r.correo) c.push(el('a', { href: 'mailto:' + r.correo, clase: 'chip' }, [icono('correo'), el('span', { texto: r.correo })]));
     if (r.meet && r.estado === 'Confirmada') c.push(el('a', { href: r.meet, target: '_blank', rel: 'noopener noreferrer', clase: 'chip meet' }, [icono('meet'), el('span', { texto: 'Abrir Meet' })]));
     if (r.control) c.push(el('span', { clase: 'chip' }, [icono('control'), el('span', { texto: r.control === 'sin' ? 'Sin control programado' : 'Control: ' + fechaCorta(r.control) })]));
+    // Mi seguimiento: la Dra. decide a quién se lo envía (solo pacientes con reserva confirmada o realizada)
+    var segOk = S.seguimiento && (r.estado === 'Confirmada' || r.estado === 'Realizada') && r.correo;
+    var segCon = segOk && S.segHab.indexOf(String(r.correo).trim().toLowerCase()) >= 0;
+    if (segCon) c.push(el('span', { clase: 'chip chip-seg', texto: 'Seguimiento habilitado' }));
     if (c.length) hijos.push(el('div', { clase: 'contacto' }, c));
 
     var acc = [];
@@ -327,6 +331,7 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     if (r.acciones.indexOf('reembolsada') >= 0) acc.push(el('button', { type: 'button', clase: 'btn btn-ok', texto: 'Marcar reembolsada', click: function () {
       pedir('¿Ya devolviste el dinero?', 'Se le envía a ' + r.nombre + ' un correo avisando que el reembolso fue realizado. El dinero lo devuelves tú desde tu banco: aquí solo se registra y se avisa.', 'Sí, ya lo devolví y avisar', 'ok', function () { hacer(r, 'reembolsada'); }); } }));
     if (S.tarjeta && r.puedeControl) acc.push(el('button', { type: 'button', clase: 'btn btn-sec', texto: r.control ? 'Cambiar próximo control' : 'Próximo control', click: function () { pedirControl(r); } }));
+    if (segOk) acc.push(el('button', { type: 'button', clase: 'btn btn-sec btn-seg', texto: segCon ? 'Reenviar seguimiento' : 'Enviar seguimiento', click: function () { pedirSeguimiento(r, segCon); } }));
     if (acc.length) hijos.push(el('div', { clase: 'acciones' }, acc));
 
     if (r.notas) hijos.push(el('div', { clase: 'notatxt', texto: r.notas }));
@@ -342,6 +347,20 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
     return el('article', { clase: 'reserva r-' + slug(r.estado) + (urgente ? ' urgente' : '') }, [hora, el('div', { clase: 'r-cuerpo' }, hijos)]);
   }
 
+  // Enviar (o reenviar) Mi seguimiento: habilita al paciente y le llega el enlace por correo
+  function pedirSeguimiento(r, reenvio) {
+    pedir((reenvio ? 'Reenviar' : 'Enviar') + ' Mi seguimiento a ' + r.nombre,
+      'Le llega un correo a ' + r.correo + ' con el enlace para entrar a Mi seguimiento y los pasos para elegir su clave. Solo entran quienes tú habilitas. Lo que anote no lo verás hasta que decida enviártelo.',
+      reenvio ? 'Sí, reenviar' : 'Sí, enviar', 'ok', function () {
+        llamar('panelSeguimientoHabilitar', [S.sesion, r.correo], function (res) {
+          if (sesionCaida(res)) return;
+          mostrar(res.mensaje, !res.ok);
+          if (res.ok) { var k = String(r.correo).trim().toLowerCase(); if (S.segHab.indexOf(k) < 0) S.segHab.push(k); pintar(); }
+          // Siempre se recargan los datos: si quedó habilitada pero el correo falló, aparecen el chip y «Reenviar seguimiento»
+          cargar();
+        }, function () { mostrar('No pude comunicarme con el servidor. Revisa tu conexión e inténtalo de nuevo.', true); cargar(); });
+      });
+  }
   function sesionCaida(res) { if (res && res.error === 'sesion') { irAEntrada(res.mensaje); return true; } return false; }
   function hacer(r, accion, texto) {
     llamar('panelAccion', [S.sesion, r.codigo, accion, texto || ''], function (res) {
@@ -507,12 +526,87 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
       if (S.pestana !== 'seguimientos') return;
       if (sesionCaida(r) || avisoExtra(x, r, 'El seguimiento todavía no está activo: ejecuta seguimientoPreparar() en Apps Script.')) return;
       x.appendChild(el('p', { clase: 'extra-aviso', texto: 'Aquí solo aparece lo que cada paciente decidió enviarte. Lo que anota sin enviar no lo ves.' }));
+      pintarHabilitados(x, r.habilitados || []);
       if (!r.envios.length) { x.appendChild(el('p', { clase: 'vacio seg-vacio' }, [icono('vacio'), el('span', { texto: 'Aún no hay envíos.' })])); return; }
-      // r.dias: cuántos días tiene cada alimento (el último es el de descanso)
-      r.envios.forEach(function (e) { x.appendChild(articuloSeguimiento(e, r.dias || 4)); });
+      // Un paciente = un correo (sin mayúsculas ni espacios); cada uno con sus envíos, el más nuevo primero
+      var porCorreo = {}, pacientes = [];
+      r.envios.forEach(function (e) {
+        var k = String(e.correo || '').trim().toLowerCase();
+        if (!porCorreo[k]) { porCorreo[k] = { clave: k, nombre: e.nombre, correo: e.correo, envios: [] }; pacientes.push(porCorreo[k]); }
+        porCorreo[k].envios.push(e);
+      });
+      pacientes.forEach(function (p) { p.envios.sort(function (a, b) { return b.fecha - a.fecha; }); p.ultimo = p.envios[0].fecha; p.nombre = p.envios[0].nombre; p.correo = p.envios[0].correo; });
+      pacientes.sort(function (a, b) { return b.ultimo - a.ultimo; });
+      pintarSegPacientes(x, pacientes, r.dias || 4);   // r.dias: cuántos días tiene cada alimento (el último es el de descanso)
     });
   }
-  function articuloSeguimiento(e, dias) {
+  // Pacientes a quienes la Dra. les envió el acceso: solo ellos pueden entrar a Mi seguimiento
+  function pintarHabilitados(x, lista) {
+    var caja = el('section', { clase: 'seg-hab', 'aria-label': 'Pacientes con acceso a Mi seguimiento' }, [el('h2', { clase: 'dia', texto: 'Pacientes con acceso a Mi seguimiento' })]);
+    if (!lista.length) caja.appendChild(el('p', { clase: 'seg-hab-vacio', texto: 'Aún no has habilitado a nadie. Hazlo desde la reserva de la paciente con «Enviar seguimiento».' }));
+    lista.forEach(function (h) {
+      caja.appendChild(el('article', { clase: 'pac seg-hab-fila' }, [
+        el('p', { clase: 'pac-nombre', texto: h.nombre }),
+        el('div', { clase: 'pac-acc' }, [el('button', { type: 'button', clase: 'btn btn-peligro', texto: 'Quitar acceso', click: function () {
+          pedir('Quitar el acceso de ' + h.nombre, 'Ya no podrá pedir su clave ni usar Mi seguimiento, y si tiene la sesión abierta se cierra. Si entra con su clave, solo podrá borrar su cuenta y su diario. Lo que ya te envió se conserva. Puedes volver a habilitarla cuando quieras.', 'Sí, quitar acceso', 'peligro', function () {
+            llamar('panelSeguimientoQuitar', [S.sesion, h.correo], function (res) {
+              if (sesionCaida(res)) return;
+              mostrar(res.mensaje, !res.ok);
+              if (res.ok) { var k = String(h.correo).trim().toLowerCase(); S.segHab = S.segHab.filter(function (c) { return c !== k; }); }
+              pintarSeguimientos(); cargar();   // siempre: la lista muestra lo que de verdad quedó guardado
+            }, function () { mostrar('No pude comunicarme con el servidor. Revisa tu conexión e inténtalo de nuevo.', true); pintarSeguimientos(); cargar(); });
+          });
+        } })]),
+        el('p', { clase: 'pac-meta', texto: h.correo + ' · desde ' + (h.fecha ? fechaHora(h.fecha) : '—') })
+      ]));
+    });
+    x.appendChild(caja);
+  }
+  // Buscador + una tarjeta cerrada por paciente. Lo abierto y lo escrito se guarda en S, así sobrevive a «Actualizar».
+  function pintarSegPacientes(x, pacientes, dias) {
+    S.segQ = S.segQ || ''; S.segAbre = S.segAbre || {}; S.segAbreEnv = S.segAbreEnv || {};
+    var conteo = el('p', { clase: 'seg-conteo', id: 'segConteo', 'aria-live': 'polite' });
+    var campo = el('input', { type: 'search', id: 'segBuscar', placeholder: 'Buscar por nombre o correo', autocomplete: 'off' });
+    campo.value = S.segQ;
+    x.appendChild(el('div', { clase: 'seg-buscar' }, [el('label', { 'for': 'segBuscar', texto: 'Buscar paciente' }), campo, conteo]));
+    var lista = el('div', { clase: 'seg-lista' });
+    x.appendChild(lista);
+    var tarjetas = pacientes.map(function (p) {
+      var t = tarjetaSeguimiento(p, dias, function () { aplicar(); });
+      lista.appendChild(t.nodo);
+      return { p: p, t: t, texto: normal(p.nombre + ' ' + p.correo) };
+    });
+    function aplicar() {
+      var q = normal(S.segQ).trim();
+      var vistos = tarjetas.filter(function (c) { return !q || c.texto.indexOf(q) >= 0; });
+      tarjetas.forEach(function (c) {
+        var visible = vistos.indexOf(c) >= 0;
+        c.t.nodo.classList.toggle('oculto', !visible);
+        // Un solo paciente (en total o por la búsqueda): se abre solo, salvo que la Dra. lo haya cerrado a mano
+        var auto = visible && (tarjetas.length === 1 || (q && vistos.length === 1));
+        var abierto = S.segAbre[c.p.clave] !== undefined ? S.segAbre[c.p.clave] : auto;
+        c.t.poner(abierto);
+      });
+      conteo.textContent = q && !vistos.length ? 'Sin resultados para «' + S.segQ.trim() + '»' : vistos.length + ' de ' + tarjetas.length + ' pacientes';
+    }
+    campo.addEventListener('input', function () { S.segQ = campo.value; aplicar(); });
+    aplicar();
+  }
+  function tarjetaSeguimiento(p, dias, alCambiar) {
+    var cuenta = (p.envios.length === 1 ? '1 envío' : p.envios.length + ' envíos') + ' · último ' + fechaHora(p.ultimo);
+    var cab = el('button', { type: 'button', clase: 'seg-pac-cab', 'aria-expanded': 'false' }, [
+      el('span', { clase: 'seg-pac-nombre', texto: p.nombre }),
+      el('span', { clase: 'seg-pac-correo', texto: p.correo }),
+      el('span', { clase: 'seg-pac-cuenta', texto: cuenta }),
+      el('span', { clase: 'seg-flecha', 'aria-hidden': 'true', texto: '›' })
+    ]);
+    var cuerpo = el('div', { clase: 'seg-pac-cuerpo oculto' }, p.envios.map(function (e, i) { return articuloSeguimiento(e, dias, i === 0); }));
+    var nodo = el('section', { clase: 'seg-pac' }, [cab, cuerpo]);
+    function poner(abierto) { cab.setAttribute('aria-expanded', abierto ? 'true' : 'false'); cuerpo.classList.toggle('oculto', !abierto); nodo.classList.toggle('seg-abierto', abierto); }
+    cab.addEventListener('click', function () { S.segAbre[p.clave] = cab.getAttribute('aria-expanded') !== 'true'; alCambiar(); });
+    return { nodo: nodo, poner: poner };
+  }
+  function articuloSeguimiento(e, dias, masNuevo) {
     var porAlimento = {}, orden = [];
     e.diario.forEach(function (d) { if (!porAlimento[d.alimento]) { porAlimento[d.alimento] = []; orden.push(d.alimento); } porAlimento[d.alimento].push(d); });
     var cuerpo = [];
@@ -528,7 +622,9 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
         if (d.nota) cuerpo.push(el('p', { clase: 'seg-nota', texto: 'Nota: ' + d.nota }));
       });
     });
-    var art = el('article', { clase: 'pac seg-envio' }, [
+    var abierto = S.segAbreEnv[e.id] !== undefined ? S.segAbreEnv[e.id] : !!masNuevo;
+    var cab = el('button', { type: 'button', clase: 'seg-env-cab', 'aria-expanded': abierto ? 'true' : 'false', texto: 'Envío del ' + fechaHora(e.fecha) });
+    var art = el('article', { clase: 'seg-envio' + (abierto ? ' seg-env-abierto' : '') }, [cab, el('div', { clase: 'seg-env-cuerpo' }, [
       el('p', { clase: 'pac-nombre', texto: e.nombre }),
       el('button', { type: 'button', clase: 'btn btn-sec', texto: 'Descargar PDF', click: function () {
         var cadena = [], n = art.parentNode;
@@ -547,7 +643,11 @@ window.KAIRAL_API = "https://script.google.com/macros/s/AKfycbznoR3keSxp58PBxbEK
       el('p', { clase: 'pac-meta', texto: e.correo + ' · Enviado el ' + fechaHora(e.fecha) }),
       el('p', { clase: 'pac-meta', texto: 'Autorizó el envío: «' + e.consentimiento + '»' }),
       el('div', { clase: 'seg-detalle' }, cuerpo)
-    ]);
+    ])]);
+    cab.addEventListener('click', function () {
+      var ab = cab.getAttribute('aria-expanded') !== 'true';
+      S.segAbreEnv[e.id] = ab; cab.setAttribute('aria-expanded', ab ? 'true' : 'false'); art.classList.toggle('seg-env-abierto', ab);
+    });
     return art;
   }
 

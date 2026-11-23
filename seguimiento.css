@@ -46,3 +46,8 @@
 .sg-boton:disabled{opacity:.5;cursor:not-allowed}
 .sg-lista-envios{list-style:none;margin:.4rem 0 0;font-size:.9rem;color:rgba(26,36,33,.7)}
 .sg-peligro{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid rgba(199,92,132,.3)}
+/* Botones secundarios sobre las tarjetas claras (el .btn-ghost del sitio está pensado para fondos oscuros: aquí no se leía) */
+#sg-app .btn-ghost{color:var(--teal);border-color:rgba(14,124,107,.45)}
+#sg-app .btn-ghost:hover{border-color:var(--teal)}
+#sg-app .sg-peligro .btn-ghost{color:#9E2F5A;border-color:rgba(199,92,132,.55)}
+#sg-app .sg-peligro .btn-ghost:hover{border-color:#9E2F5A}

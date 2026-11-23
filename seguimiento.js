@@ -34,12 +34,14 @@ function post(accion, cuerpo){
   var datos = {}; Object.keys(cuerpo || {}).forEach(function(k){ datos[k] = cuerpo[k]; }); datos.action = accion;
   return fetch(API, { method: 'POST', body: JSON.stringify(datos) }).then(function(r){ return r.json(); }).catch(sinConexion);
 }
-// Llamadas con sesión: si la sesión terminó, vuelve a la entrada y no sigue
+// Llamadas con sesión: si la sesión terminó, vuelve a la entrada y no sigue. Si la Dra. quitó el acceso (sin_acceso), muestra la
+// pantalla donde solo se puede borrar la cuenta o salir.
 function conSesion(accion, cuerpo){
   var c = {}; Object.keys(cuerpo || {}).forEach(function(k){ c[k] = cuerpo[k]; }); c.sesion = S.sesion;
   return post(accion, c).then(function(r){
     if (r && r.error === 'sesion'){ cerrarLocal('Tu sesión terminó. Vuelve a entrar.'); return null; }
     if (r && r.error === 'debe_cambiar'){ vistaCambiar(true); return null; }
+    if (r && r.error === 'sin_acceso'){ vistaSinAcceso(); return null; }
     return r;
   });
 }
@@ -83,7 +85,8 @@ function vistaEntrada(aviso){
       entrar.disabled = false;
       if (!r.ok){ err.textContent = r.mensaje || 'No pudimos entrar.'; err.hidden = false; return; }
       S.sesion = r.sesion; S.nombre = r.nombre; guardarSesion(r.sesion);
-      if (r.temporal) vistaCambiar(true); else cargar();
+      if (r.sinAcceso) vistaSinAcceso();
+      else if (r.temporal) vistaCambiar(true); else cargar();
     });
   });
   raiz.appendChild(tarjeta('Entra a tu seguimiento', [err, correo.nodo, clave.nodo, entrar]));
@@ -141,12 +144,15 @@ function cargar(){
     pintar();
   });
 }
+function barraArriba(){
+  var barra = el('div', 'sg-barra');
+  barra.appendChild(el('p', 'sg-hola', S.nombre ? 'Hola, ' + S.nombre.split(/\s+/)[0] : ''));
+  barra.appendChild(boton('Salir', function(){ post('seg_salir', { sesion: S.sesion }); cerrarLocal('Cerraste tu sesión.'); }, 'sg-salir'));
+  return barra;
+}
 function pintar(){
   limpiar();
-  var barra = el('div', 'sg-barra');
-  barra.appendChild(el('p', 'sg-hola', 'Hola, ' + S.nombre.split(/\s+/)[0]));
-  barra.appendChild(boton('Salir', function(){ post('seg_salir', { sesion: S.sesion }); cerrarLocal('Cerraste tu sesión.'); }, 'sg-salir'));
-  raiz.appendChild(barra);
+  raiz.appendChild(barraArriba());
   raiz.appendChild(el('p', 'sg-aviso-seguridad', 'Este espacio es un apoyo entre consultas: no reemplaza las indicaciones de la Dra. ni la atención médica. Si tienes una urgencia, busca atención de inmediato.'));
   var menu = el('nav', 'sg-menu'); menu.setAttribute('aria-label', 'Secciones');
   [['diario', 'Mi diario'], ['guias', 'Guías'], ['enviar', 'Enviar a la Dra.'], ['cuenta', 'Mi cuenta']].forEach(function(v){
@@ -340,6 +346,10 @@ function pintarEnviar(){
 /* ─── Mi cuenta ─── */
 function pintarCuenta(){
   raiz.appendChild(vistaCambiar(false));
+  raiz.appendChild(tarjetaBorrar());
+}
+// Borrar la cuenta y el diario (con la clave). También está en la pantalla de quien ya no tiene acceso.
+function tarjetaBorrar(){
   var err = mensaje('rv-error', ''); err.hidden = true;
   var clave = campo('sg-borrar-clave', 'Tu clave', 'password', null, { autocomplete: 'current-password' });
   var borrar = boton('Borrar mi cuenta y mi diario', function(){
@@ -353,7 +363,21 @@ function pintarCuenta(){
   }, 'btn btn-ghost');
   var tarj = tarjeta('Borrar mi cuenta', [el('p', 'rv-sub', 'Se borran tu cuenta y tu diario. Los envíos que ya hiciste a la Dra. no se borran.'), err, clave.nodo, borrar]);
   tarj.classList.add('sg-peligro');
-  raiz.appendChild(tarj);
+  return tarj;
+}
+
+/* ─── Sin acceso (la Dra. lo quitó): solo borrar la cuenta y el diario, o salir ─── */
+function vistaSinAcceso(){
+  S.datos = null; S.vista = 'diario'; S.alimento = '';
+  limpiar();
+  raiz.appendChild(barraArriba());
+  var aviso = tarjeta('La Dra. quitó tu acceso a Mi seguimiento', [
+    el('p', 'rv-sub', 'Ya no puedes anotar ni enviar tu seguimiento. Lo que ya le enviaste a la Dra. queda con ella.'),
+    el('p', 'rv-sub', 'Tu cuenta y tu diario siguen guardados. Si quieres, puedes borrarlos aquí con tu clave. Si crees que es un error, escríbele a la Dra.')
+  ]);
+  aviso.classList.add('sg-sin-acceso');
+  raiz.appendChild(aviso);
+  raiz.appendChild(tarjetaBorrar());
 }
 
 /* ─── Arranque ─── */

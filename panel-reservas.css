@@ -319,8 +319,26 @@
   .extra-aviso{margin:0 0 14px;padding:12px 16px;border-radius:12px;background:#FFF6E0;color:#6B4A00;font-size:13.5px}
   .pac{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:14px 16px;border:1px solid var(--borde);border-radius:14px;background:#fff;margin:0 0 10px}
   .pac-nombre{flex:1 1 220px;margin:0;font-weight:600;color:var(--tinta)}
-  .seg-envio{display:block}
+  .seg-envio{display:block;border-top:1px solid var(--borde)}
   .seg-envio .pac-nombre{display:inline-block;margin-right:12px}
+  .seg-buscar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 14px}
+  .seg-buscar label{flex:1 1 100%;font-size:13px;font-weight:600;color:var(--tinta)}
+  .seg-buscar input{flex:1 1 240px;min-width:0;box-sizing:border-box;padding:10px 14px;border:1px solid var(--borde2);border-radius:12px;background:#fff;font:inherit;font-size:14px;color:var(--tinta)}
+  .seg-conteo{flex:0 0 auto;margin:0;font-size:12.5px;color:var(--suave)}
+  .seg-pac{border:1px solid var(--borde);border-radius:14px;background:#fff;margin:0 0 10px;overflow:hidden}
+  .seg-pac-cab{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;width:100%;box-sizing:border-box;padding:14px 16px;border:0;background:none;font:inherit;text-align:left;color:var(--tinta);cursor:pointer}
+  .seg-pac-cab:hover{background:var(--papel)}
+  .seg-pac-nombre{grid-column:1;font-weight:600;overflow-wrap:anywhere}
+  .seg-pac-correo{grid-column:1;font-size:12.5px;color:var(--tenue);overflow-wrap:anywhere}
+  .seg-pac-cuenta{grid-column:1;font-size:12.5px;color:var(--suave)}
+  .seg-flecha{grid-column:2;grid-row:1 / span 3;font-size:22px;line-height:1;color:var(--suave);transition:transform .15s}
+  .seg-abierto>.seg-pac-cab .seg-flecha{transform:rotate(90deg)}
+  .seg-pac-cab:focus-visible,.seg-env-cab:focus-visible{outline:2px solid var(--teal);outline-offset:-2px}
+  .seg-env-cab{display:block;width:100%;box-sizing:border-box;padding:11px 16px;border:0;background:var(--papel);font:inherit;font-size:13.5px;font-weight:600;text-align:left;color:var(--tinta);cursor:pointer}
+  .seg-env-cab::before{content:'▸ ';color:var(--suave)}
+  .seg-env-cab[aria-expanded="true"]::before{content:'▾ '}
+  .seg-env-cuerpo{display:none;padding:12px 16px 14px}
+  .seg-env-abierto>.seg-env-cuerpo{display:block}
   .seg-detalle{margin-top:10px;padding-top:10px;border-top:1px solid var(--borde)}
   .seg-alimento{margin:12px 0 4px;font-size:15px;color:var(--tinta)}
   .seg-dia{margin:2px 0;font-size:13.5px}
@@ -329,10 +347,19 @@
     body.imprimiendo-seg::before{display:none}
     body.imprimiendo-seg,body.imprimiendo-seg .cadena-imp,body.imprimiendo-seg #panel.cadena-imp{display:block;position:static;width:auto;max-width:none;height:auto;min-height:0;margin:0;padding:0;overflow:visible;background:#fff;border:0;box-shadow:none;transform:none}
     body.imprimiendo-seg *:not(.cadena-imp):not(.imprimir):not(.imprimir *){display:none !important}
+    body.imprimiendo-seg .seg-envio.imprimir .seg-env-cuerpo{display:block !important;padding:0}
+    body.imprimiendo-seg .seg-envio.imprimir .seg-env-cab{display:none !important}
+    body.imprimiendo-seg .seg-pac.cadena-imp{overflow:visible;border:0;border-radius:0}
+    body.imprimiendo-seg .seg-pac-cuerpo.cadena-imp{display:block !important}
     body.imprimiendo-seg .seg-envio.imprimir{display:block;position:static;width:100%;box-sizing:border-box;margin:0;padding:0;border:0;border-radius:0;box-shadow:none;background:#fff;color:#000}
     body.imprimiendo-seg .seg-envio.imprimir *{color:#000}
     body.imprimiendo-seg .seg-envio.imprimir button{display:none}
   }
+  .seg-hab{margin:0 0 18px}
+  .seg-hab-vacio{margin:0 2px 8px;font-size:13.5px;color:var(--tenue)}
+  .seg-hab .pac-meta{overflow-wrap:anywhere}
+  .seg-hab-fila .pac-nombre{flex:1 1 9em;min-width:0;overflow-wrap:anywhere}
+  .seg-hab-fila .pac-acc{margin-left:auto}
   .pac-meta{flex:1 1 100%;margin:0;font-size:12.5px;color:var(--tenue)}
   .pac-acc{display:flex;gap:8px;flex-wrap:wrap}
   .av-form{display:grid;gap:10px;padding:16px;border:1px solid var(--borde);border-radius:14px;background:#fff;margin:0 0 18px}
